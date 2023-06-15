@@ -11,57 +11,50 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: 'Flutter Demo',
-      theme: ThemeData(
-        primarySwatch: Colors.blue,
-      ),
-      home: const MyHomePage(title: 'Flutter Demo Home Page'),
-    );
-  }
-}
-
-class MyHomePage extends StatefulWidget {
-  const MyHomePage({super.key, required this.title});
-  final String title;
-
-  @override
-  State<MyHomePage> createState() => _MyHomePageState();
-}
-
-class _MyHomePageState extends State<MyHomePage> {
-  int _counter = 0;
-
-  void _incrementCounter() {
-    setState(() {
-      _counter++;
-    });
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: Text(widget.title),
-      ),
-      body: Center(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: <Widget>[
-            const Text(
-              'You have pushed the button this many times:',
+        debugShowCheckedModeBanner: false,
+        theme: ThemeData(
+          primaryColor: const Color(0XFF21579C),
+          colorScheme: ColorScheme.fromSwatch()
+              .copyWith(secondary: const Color(0XFF6188D3)),
+          highlightColor: const Color(0XFFD6A319),
+          shadowColor: const Color(0XFFE4F0FF),
+          textTheme: const TextTheme(
+            displayLarge: TextStyle(
+              fontSize: 35.0,
+              fontWeight: FontWeight.bold,
+              color: Color(0xFFFFFFFF),
             ),
-            Text(
-              '$_counter',
-              style: Theme.of(context).textTheme.headlineMedium,
+            displayMedium: TextStyle(
+              fontSize: 36.0,
+              fontWeight: FontWeight.bold,
+              color: Color(0xFF2196F3),
             ),
-          ],
+            displaySmall: TextStyle(
+              fontSize: 20.0,
+              fontWeight: FontWeight.bold,
+              color: Color(0xFF589FDE),
+            ),
+            bodyLarge: TextStyle(
+              fontSize: 20.0,
+              color: Color(0XFFB7B7D2),
+            ),
+            bodyMedium: TextStyle(
+              fontSize: 16.0,
+              fontWeight: FontWeight.w600,
+              color: Color(0xFF2196F3),
+            ),
+            titleMedium: TextStyle(
+              fontSize: 16.0,
+              fontWeight: FontWeight.w600,
+              color: Color.fromARGB(255, 0, 0, 0),
+            ),
+            titleSmall: TextStyle(
+              fontSize: 16.0,
+              fontWeight: FontWeight.w600,
+              color: Color.fromARGB(255, 255, 255, 255),
+            ),
+          ),
         ),
-      ),
-      floatingActionButton: FloatingActionButton(
-        onPressed: _incrementCounter,
-        tooltip: 'Increment',
-        child: const Icon(Icons.add),
-      ), // This trailing comma makes auto-formatting nicer for build methods.
-    );
+        home: null);
   }
 }
