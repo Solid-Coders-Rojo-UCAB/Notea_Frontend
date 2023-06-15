@@ -59,7 +59,7 @@
 //         home: const LoginScreen());
 //   }
 // }
-
+            //TODO esto se esta haciendo porque tenemos problemas para manejar el API
 
 import 'package:flutter/material.dart';
 import 'package:notea_frontend/presentacion/provider/providerNota.dart';
@@ -97,12 +97,12 @@ class MyScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    // final notaProvider = Provider.of<NotaProvider>(context, listen: true);
+    final notaProvider = Provider.of<NotaProvider>(context, listen: true);
     final usuarioProvider = Provider.of<UsuarioProvider>(context, listen: true);
 
     // Llama al método getNotas() cuando la pantalla se inicie
     Future.delayed(Duration.zero, () => usuarioProvider.getUsuarios());
-    // Future.delayed(Duration.zero, () => notaProvider.getNotas());
+    Future.delayed(Duration.zero, () => notaProvider.getNotas());
 
     return Scaffold(
       appBar: AppBar(

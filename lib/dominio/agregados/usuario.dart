@@ -40,12 +40,12 @@ class Usuario {
 
   factory Usuario.fromJson(Map<String, dynamic> json) {
     return Usuario(
-      nombre: NombreUsuario.crearNombreUsuario(json['nombre']),
-      apellido: ApellidoUsuario.crearApellidoUsuario(json['apellido']),
-      email: EmailUsuario.crearEmailUsuario(json['email']),
-      clave: ClaveUsuario.crearClaveUsuario(json['clave']),
+      nombre: NombreUsuario.crearNombreUsuario(json['nombre']['name']),
+      apellido: ApellidoUsuario.crearApellidoUsuario(json['apellido']['apellido']),
+      email: EmailUsuario.crearEmailUsuario(json['email']['email']),
+      clave: ClaveUsuario.crearClaveUsuario(json['clave']['clave']),
       suscripcion: json['suscripcion'],
-      id: json['id'],
+      id: json['id']['id'],
     );
   }
 

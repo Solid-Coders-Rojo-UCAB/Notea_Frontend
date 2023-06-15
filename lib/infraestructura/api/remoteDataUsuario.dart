@@ -23,27 +23,21 @@ class RemoteDataUsuarioImp implements RemoteDataUsuario {
     if (await const ConectivityCheck().checkConectivity()) {
       final response =
           await client.get(Uri.parse('http://localhost:3000/usuario/all'));
-      print('------');
-      print('Luego de la peticion');
-      print('------');
-      
-      print('------');
-      print(response.body);
-      print('------');
       if (response.statusCode == 200) {
-        print('------');
-        print('Todo kuls');
-        print('------');
-        final data = jsonDecode(response.body);
-        print('------');
-        print(data);
-        print('------');
-        final usuarioeeeee = parseUsuario(data);
-        final usuarioList = parseUsuarioList(data);
-        print('----');
-        print(usuarioeeeee);
-        print('----');
-        return Left(usuarioList);
+
+
+
+
+          print('USUARIOS de la API -> ');
+          print(response.body);
+
+
+
+
+
+
+        final usuariofinal = parseUsuario(response.body);
+        return Left(usuariofinal);
       } else {
         return Right(Exception("Error al buscar los usuarios"));
       }
@@ -76,17 +70,33 @@ class RemoteDataUsuarioImp implements RemoteDataUsuario {
     }
   }
 
-  // List<Usuario> parseUsuario(String responseBody) {
-  //   final parsed = jsonDecode(responseBody).cast<Map<String, dynamic>>();
-  //   return parsed.map<Usuario>((json) => Usuario.fromJson(json)).toList();
-  // }
+  List<Usuario> parseUsuario(String responseBody) {
+    final json = jsonDecode(responseBody);
+    final valueList = json['value'] as List;
+     final item = valueList[0];
 
-  List<Usuario> parseUsuarioList(dynamic data) {
-    final valueList = data['value'] as List<dynamic>;
-    return valueList.map((value) => Usuario.fromJson(value)).toList();
-  }
-  Usuario parseUsuario(dynamic data) {
-    final usuario = Usuario.fromJson(data);
-    return usuario;
-  }
-}
+      final id = item['id']['id'];
+      final nombre = item['nombre']['name'];
+      final apellido = item['apellido']['apellido'];
+      final email = item['email']['email'];
+      final clave = item['clave']['clave'];
+      final bool suscripcion = item['suscripcion'];
+
+      final user = Usuario.crearUsuario(nombre, apellido, email, clave, suscripcion, id);   //CAMBIAR ESTO ESTA FEO (┬┬﹏┬┬)
+      //debemos usar el metodo fromJson
+      final lista = <Usuario>[];
+      lista.add(user);
+
+      return lista;
+      //// return item.map((json) => Usuario.fromJson(json)).toList();
+   }
+
+  // List<Usuario> parseUsuarioList(dynamic data) {
+  //   final valueList = data['value'] as List<dynamic>;
+  //   return valueList.map((value) => Usuario.fromJson(value)).toList();
+  // }
+  // Usuario parseUsuario(dynamic data) {
+  //   final usuario = Usuario.fromJson(data);
+  //   return usuario;
+  //}
+} 

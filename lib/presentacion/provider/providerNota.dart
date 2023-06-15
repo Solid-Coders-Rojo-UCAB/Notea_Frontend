@@ -22,10 +22,7 @@ final GetNotas getNotesAnswer = GetNotas(RepositorioNotaImpl(
 
 
   Future<void> getNotas() async{
-    print('Esta ENTRANDO - NOTAS');
     final notesAnswer = await getNotesAnswer.repository.buscarNotas();
-    print(notesAnswer);
-    print('Esta SALIENDO - NOTAS');
     // notes = [];
     // notes.addAll();
     // notifyListeners();
