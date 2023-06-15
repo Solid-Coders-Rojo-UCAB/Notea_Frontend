@@ -21,7 +21,7 @@ class RemoteDataNotaImp implements RemoteDataNota {
   Future<Either<List<Nota>, Exception>> buscarNotasApi() async {
     if (await const ConectivityCheck().checkConectivity()) {
       final response =
-          await client.get(Uri.parse('http://localhost:3000/notas/all'));
+          await client.get(Uri.parse('http://localhost:3000/nota/all'));
       if (response.statusCode == 200) {
         return Left(parseNota(response.body));
       } else {
@@ -38,7 +38,7 @@ class RemoteDataNotaImp implements RemoteDataNota {
       Map<String, dynamic> jsonString) async {
     if (await const ConectivityCheck().checkConectivity()) {
       final response = await client.post(
-        Uri.parse('http://localhost:3000/notas'),
+        Uri.parse('http://localhost:3000/nota'),
         body: jsonString,
         headers: <String, String>{
           'Content-Type': 'application/json; charset=UTF-8',

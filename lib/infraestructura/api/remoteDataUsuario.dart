@@ -22,9 +22,28 @@ class RemoteDataUsuarioImp implements RemoteDataUsuario {
     //  deberia devolver un Either
     if (await const ConectivityCheck().checkConectivity()) {
       final response =
-          await client.get(Uri.parse('http://localhost:3000/usuarios/all'));
+          await client.get(Uri.parse('http://localhost:3000/usuario/all'));
+      print('------');
+      print('Luego de la peticion');
+      print('------');
+      
+      print('------');
+      print(response.body);
+      print('------');
       if (response.statusCode == 200) {
-        return Left(parseUsuario(response.body));
+        print('------');
+        print('Todo kuls');
+        print('------');
+        final data = jsonDecode(response.body);
+        print('------');
+        print(data);
+        print('------');
+        final usuarioeeeee = parseUsuario(data);
+        final usuarioList = parseUsuarioList(data);
+        print('----');
+        print(usuarioeeeee);
+        print('----');
+        return Left(usuarioList);
       } else {
         return Right(Exception("Error al buscar los usuarios"));
       }
@@ -40,7 +59,7 @@ class RemoteDataUsuarioImp implements RemoteDataUsuario {
     //deberia devolver un Either
     if (await const ConectivityCheck().checkConectivity()) {
       final response = await client.post(
-        Uri.parse('http://localhost:3000/usuarios'),
+        Uri.parse('http://localhost:3000/usuario'),
         body: jsonString,
         headers: <String, String>{
           'Content-Type': 'application/json; charset=UTF-8',
@@ -57,8 +76,17 @@ class RemoteDataUsuarioImp implements RemoteDataUsuario {
     }
   }
 
-  List<Usuario> parseUsuario(String responseBody) {
-    final parsed = jsonDecode(responseBody).cast<Map<String, dynamic>>();
-    return parsed.map<Usuario>((json) => Usuario.fromJson(json)).toList();
+  // List<Usuario> parseUsuario(String responseBody) {
+  //   final parsed = jsonDecode(responseBody).cast<Map<String, dynamic>>();
+  //   return parsed.map<Usuario>((json) => Usuario.fromJson(json)).toList();
+  // }
+
+  List<Usuario> parseUsuarioList(dynamic data) {
+    final valueList = data['value'] as List<dynamic>;
+    return valueList.map((value) => Usuario.fromJson(value)).toList();
+  }
+  Usuario parseUsuario(dynamic data) {
+    final usuario = Usuario.fromJson(data);
+    return usuario;
   }
 }
