@@ -65,11 +65,10 @@ import 'package:flutter/material.dart';
 import 'package:notea_frontend/presentacion/provider/providerNota.dart';
 import 'package:notea_frontend/presentacion/provider/providerUsuario.dart';
 import 'package:provider/provider.dart';
-
 // Importa las clases y archivos necesarios
 
 
-void main() {
+Future<void> main() async {
   runApp(
     MultiProvider(
       providers: [
