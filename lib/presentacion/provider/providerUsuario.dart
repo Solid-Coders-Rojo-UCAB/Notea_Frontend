@@ -9,6 +9,8 @@ import 'package:notea_frontend/infraestructura/api/remoteDataUsuario.dart';
 
 import 'package:http/http.dart' as http;
 
+import '../../utils/Either.dart';
+
 
 
 
@@ -21,13 +23,14 @@ class UsuarioProvider extends ChangeNotifier{
   List<Usuario> usuarios = [];
 
 
-  Future<void> getUsuarios() async{
+  Future<Either<List<Usuario>, Exception>> getUsuarios() async{
     final usuariosAnswer = await getUsuariosAnswer.repository.buscarUsuario();
-    print(usuariosAnswer);
+    print("instance porque es el objeto completo -> " + usuariosAnswer.toString());
 
     // usuarios = [];
     // usuarios.addAll();
     // notifyListeners();
+    return usuariosAnswer;
   }
 
 }

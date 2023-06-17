@@ -6,11 +6,10 @@ import 'package:notea_frontend/dominio/agregados/nota.dart';
 
 import '../../infraestructura/Repositorio/repositorioNotaImpl.dart';
 import '../../infraestructura/api/remoteDataNota.dart';
+import '../../utils/Either.dart';
+
 
 import 'package:http/http.dart' as http;
-
-
-
 
 class NotaProvider extends ChangeNotifier{
 
@@ -20,12 +19,12 @@ final GetNotas getNotesAnswer = GetNotas(RepositorioNotaImpl(
 
   List<Nota> notes = [];
 
-
-  Future<void> getNotas() async{
+  Future<Either<List<Nota>, Exception>> getNotas() async{
     final notesAnswer = await getNotesAnswer.repository.buscarNotas();
     // notes = [];
     // notes.addAll();
-    // notifyListeners();
+    //notifyListeners();
+    return notesAnswer;
   }
 
 }

@@ -1,6 +1,7 @@
-import 'package:dartz/dartz.dart';
 import 'package:notea_frontend/dominio/agregados/usuario.dart';
 import 'package:notea_frontend/dominio/repositorio/repositorioUsuario.dart';
+
+import '../utils/Either.dart';
 
 
 class GetUsuarios {

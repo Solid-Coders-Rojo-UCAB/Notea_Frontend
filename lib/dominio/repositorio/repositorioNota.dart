@@ -1,5 +1,5 @@
-import 'package:dartz/dartz.dart';
 
+import '../../utils/Either.dart';
 import '../agregados/nota.dart';
 
 abstract class INotaRepository {

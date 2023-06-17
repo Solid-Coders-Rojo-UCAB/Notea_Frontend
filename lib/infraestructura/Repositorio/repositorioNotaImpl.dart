@@ -1,8 +1,8 @@
-import 'package:dartz/dartz.dart';
 
 import '../../dominio/agregados/nota.dart';
 import '../../dominio/repositorio/repositorioNota.dart';
 import '../../infraestructura/api/remoteDataNota.dart';
+import '../../utils/Either.dart';
 
 class RepositorioNotaImpl implements INotaRepository {
   final RemoteDataNotaImp remoteDataSource;

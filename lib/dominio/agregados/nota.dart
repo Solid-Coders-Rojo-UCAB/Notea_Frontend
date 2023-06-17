@@ -24,15 +24,15 @@ class Nota {
   });
 
   factory Nota.fromJson(Map<String, dynamic> json) {
+
     return Nota(
-      titulo: VOTituloNota.crearTituloNota(json['titulo']),
-      contenido: VOContenidoNota.crearContenidoNota(json['contenido']),
+      titulo: VOTituloNota.crearTituloNota(json['titulo']['titulo']),
+      contenido: VOContenidoNota.crearContenidoNota(json['contenido']['contenido']),
       fechaCreacion: DateTime.parse(json['fechaCreacion']),
-      estado:
-          EstadoEnum.values.firstWhere((e) => e.toString() == json['estado']),
+      estado: EstadoEnum.values.byName(json['estado']),
       ubicacion:
-          VOUbicacionNota.crearUbicacionNota(json['latitud'], json['longitud']),
-      id: json['id'],
+          VOUbicacionNota.crearUbicacionNota(json['ubicacion']['latitud'], json['ubicacion']['longitud']),
+      id: json['id']['id'],
       //tareas: json['tareas'],
     );
   }

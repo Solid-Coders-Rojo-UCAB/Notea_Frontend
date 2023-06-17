@@ -1,6 +1,7 @@
-import 'package:dartz/dartz.dart';
 import 'package:notea_frontend/dominio/agregados/nota.dart';
 import 'package:notea_frontend/dominio/repositorio/repositorioNota.dart';
+
+import '../utils/Either.dart';
 
 
 class GetNotas {

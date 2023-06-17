@@ -1,7 +1,6 @@
 // ignore_for_file: unused_local_variable
 
-import 'package:dartz/dartz.dart';
-
+import '../../utils/Either.dart';
 import '../agregados/usuario.dart';
 
 abstract class IUsuarioRepository {

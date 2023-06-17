@@ -1,7 +1,7 @@
 // ignore: file_names
-import 'package:dartz/dartz.dart';
 
 import '../../dominio/repositorio/repositorioUsuario.dart';
+import '../../utils/Either.dart';
 import '../api/remoteDataUsuario.dart';
 import '/dominio/agregados/usuario.dart';
 

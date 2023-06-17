@@ -62,6 +62,7 @@
             //TODO esto se esta haciendo porque tenemos problemas para manejar el API
 
 import 'package:flutter/material.dart';
+import 'package:notea_frontend/dominio/agregados/nota.dart';
 import 'package:notea_frontend/presentacion/provider/providerNota.dart';
 import 'package:notea_frontend/presentacion/provider/providerUsuario.dart';
 import 'package:provider/provider.dart';
@@ -108,9 +109,28 @@ class MyScreen extends StatelessWidget {
       appBar: AppBar(
         title: const Text('My Screen'),
       ),
-      body: Container(
-        // Contenido de la pantalla
-      ),
+      body:  null
+      // Container(
+      //   child: Column(
+      //     children: [
+      //       // Muestra el nombre del usuario
+      //       const Text('notas'),
+      //       // Muestra la lista de notas
+      //       Expanded(
+      //         child: ListView.builder(
+      //           itemCount: notas.length,
+      //           itemBuilder: (context, index) {
+      //             return ListTile(
+      //               title: Text(notas[index].getTitulo()),
+      //               subtitle: Text(notas[index].getContenido()),
+      //             );
+      //           },
+      //         ),
+      //       ),
+      //     ],
+      //   ),
+      // ),
     );
   }
+
 }

@@ -1,10 +1,11 @@
 // ignore: file_names
 import 'dart:convert';
 
-import 'package:dartz/dartz.dart';
 import 'package:http/http.dart' as http;
+import 'package:notea_frontend/dominio/agregados/nota.dart';
 
 import '../../dominio/agregados/usuario.dart';
+import '../../utils/Either.dart';
 import '../conectivityChecker/checker.dart';
 
 abstract class RemoteDataUsuario {
@@ -24,25 +25,13 @@ class RemoteDataUsuarioImp implements RemoteDataUsuario {
       final response =
           await client.get(Uri.parse('http://localhost:3000/usuario/all'));
       if (response.statusCode == 200) {
-
-
-
-
-          print('USUARIOS de la API -> ');
-          print(response.body);
-
-
-
-
-
-
         final usuariofinal = parseUsuario(response.body);
-        return Left(usuariofinal);
+        return Either.left(usuariofinal);
       } else {
-        return Right(Exception("Error al buscar los usuarios"));
+        return Either.right(Exception("Error al buscar los usuarios"));
       }
     } else {
-      return Right(Exception(
+      return Either.right(Exception(
           "No hay conexion a internet")); //guardado en la base de datos local
     }
   }
@@ -60,43 +49,27 @@ class RemoteDataUsuarioImp implements RemoteDataUsuario {
         },
       );
       if (response.statusCode == 200) {
-        return Left(response.statusCode);
+        return Either.left(response.statusCode);
       } else {
-        return Right(Exception("Error al crear el usuario en el servidor"));
+        return Either.right(Exception("Error al crear el usuario en el servidor"));
       }
     } else {
-      return Right(Exception(
+      return Either.right(Exception(
           "No hay conexion a internet")); //guardado en la base de datos local
     }
   }
 
   List<Usuario> parseUsuario(String responseBody) {
-    final json = jsonDecode(responseBody);
-    final valueList = json['value'] as List;
-     final item = valueList[0];
+    // Parse the JSON string to a Map.
+    Map<String, dynamic> jsonMap = jsonDecode(responseBody);
 
-      final id = item['id']['id'];
-      final nombre = item['nombre']['name'];
-      final apellido = item['apellido']['apellido'];
-      final email = item['email']['email'];
-      final clave = item['clave']['clave'];
-      final bool suscripcion = item['suscripcion'];
+    // Get the value list.
+    List<dynamic> valueList = jsonMap['value'];
 
-      final user = Usuario.crearUsuario(nombre, apellido, email, clave, suscripcion, id);   //CAMBIAR ESTO ESTA FEO (┬┬﹏┬┬)
-      //debemos usar el metodo fromJson
-      final lista = <Usuario>[];
-      lista.add(user);
+    // iteramos por cada valor de la lista y creamos un objeto Nota para cada valor.
+    List<Usuario> usuarios = valueList.map((value) => Usuario.fromJson(value)).toList();
 
-      return lista;
-      //// return item.map((json) => Usuario.fromJson(json)).toList();
-   }
+    return usuarios;
+  }
 
-  // List<Usuario> parseUsuarioList(dynamic data) {
-  //   final valueList = data['value'] as List<dynamic>;
-  //   return valueList.map((value) => Usuario.fromJson(value)).toList();
-  // }
-  // Usuario parseUsuario(dynamic data) {
-  //   final usuario = Usuario.fromJson(data);
-  //   return usuario;
-  //}
 } 
