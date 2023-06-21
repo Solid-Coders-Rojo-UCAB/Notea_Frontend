@@ -30,4 +30,16 @@ class RepositorioUsuarioImpl implements IUsuarioRepository {
     //   jsonUsuarioToBd(result);
     //   return Right(result);
   }
+
+  @override
+  Future<Either<Usuario, Exception>> loginUsuario(
+      String email, String clave) async {
+    final result = await remoteDataSource.loginUsuarioApi(email, clave);
+    return result;
+  }
+
+  // @override
+  // Future<Either<int, Exception>> eliminarUsuario(int id) async {
+  //   return await remoteDataSource.eliminarUsuarioApi(id);
+  // }
 }

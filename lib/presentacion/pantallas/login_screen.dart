@@ -1,5 +1,8 @@
-// ignore_for_file: use_build_context_synchronously
+// ignore_for_file: use_build_context_synchronously, sort_child_properties_last
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:notea_frontend/infraestructura/bloc/usuario/usuario_bloc.dart';
+
 import 'package:notea_frontend/presentacion/pantallas/register_screen.dart';
 import 'package:notea_frontend/presentacion/widgets/email_field.dart';
 import 'package:notea_frontend/presentacion/widgets/password_field.dart';
@@ -19,8 +22,6 @@ class _LoginScreenState extends State<LoginScreen> {
   late TextEditingController emailController;
   late TextEditingController passwordController;
   final double _elementsOpacity = 1;
-  bool loadingBallAppear = false;
-  double loadingBallSize = 1;
   final _formKey =GlobalKey<FormState>(); //Para validar el formulario
   ButtonState buttonState = ButtonState.idle;
   String userStrJSON = '';
@@ -35,10 +36,6 @@ class _LoginScreenState extends State<LoginScreen> {
     super.initState();
   }
 
-  void validateUser(String user, String password) async {
-
-  }
-
   //Funcion que valida el formulario
   //los await son para mostrar los estados del boton y que se vea mas bonito
   void validacion() async {
@@ -47,7 +44,6 @@ class _LoginScreenState extends State<LoginScreen> {
     });
     await Future.delayed(const Duration(seconds: 2), () {});
     setState(() {
-      loadingBallAppear = true;
     });
     // String username = emailController.text;
     // String password = passwordController.text;
@@ -84,134 +80,163 @@ class _LoginScreenState extends State<LoginScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      resizeToAvoidBottomInset: true,
-      body: SafeArea(
-        bottom: false,
-        child: loadingBallAppear
-            ?  const Padding(
-                padding: EdgeInsets.symmetric(vertical: 20, horizontal: 30.0),
-                child: MessagesScreen(
-                ))
-            : Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 50.0),
-                child: SingleChildScrollView(
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      const SizedBox(height: 50),
-                      TweenAnimationBuilder<double>(
-                        duration: const Duration(milliseconds: 300),
-                        tween: Tween(begin: 1, end: _elementsOpacity),
-                        builder: (_, value, __) => Opacity(
-                          opacity: value,
-                          child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              Row(
-                                mainAxisAlignment: MainAxisAlignment.start,
-                                children: const [
-                                  Icon(
-                                    Icons.flutter_dash_sharp,
-                                    size: 60,
-                                    color: Color(0xff21579C),
-                                  ),
-                                  Text(
-                                    "Notea",
-                                    style: TextStyle(
-                                        color: Colors.black, fontSize: 35),
-                                  ),
-                                ],
-                              ),
-                              const SizedBox(height: 30),
-                              const Text(
-                                "Bienvenido,",
-                                style: TextStyle(
-                                    color: Colors.black, fontSize: 30),
-                              ),
-                              Text(
-                                "Identificate",
-                                style: TextStyle(
-                                    color: Colors.black.withOpacity(0.7),
-                                    fontSize: 30),
-                              ),
-                            ],
-                          ),
-                        ),
-                      ),
-                      const SizedBox(height: 25),
+    return BlocBuilder<UsuarioBloc, UsuarioState>( //siempre va el Bloc y el State
+      builder: (context, state) {
+        //se muestra una pantalla diferente dependiendo del estado del bloc
+        if (state is UsuarioLoadingState) {
+          return const Center(child: CircularProgressIndicator());
+        }
+        if (state is UsuarioFailureState) {
+          return const Center(child: Text('Error al iniciar sesión')); 
+            //se debe modificar el mensaje por el que viene del backend
+        }
+        if (state is UsuarioSuccessState) {
+          return MessagesScreen(usuario : state.usuario); //pagina principal
+        }
+        if (state is UsuarioInitialState) {
+          return Scaffold(
+                    resizeToAvoidBottomInset: true,
+                    body: SafeArea(
+                      bottom: false,
+                      child:  Padding(
+                              padding: const EdgeInsets.symmetric(horizontal: 50.0),
+                              child: SingleChildScrollView(
+                                child: Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    const SizedBox(height: 50),
+                                    TweenAnimationBuilder<double>(
+                                      duration: const Duration(milliseconds: 300),
+                                      tween: Tween(begin: 1, end: _elementsOpacity),
+                                      builder: (_, value, __) => Opacity(
+                                        opacity: value,
+                                        child: Column(
+                                          crossAxisAlignment: CrossAxisAlignment.start,
+                                          children: [
+                                            Row(
+                                              mainAxisAlignment: MainAxisAlignment.start,
+                                              children: const [
+                                                Icon(
+                                                  Icons.flutter_dash_sharp,
+                                                  size: 60,
+                                                  color: Color(0xff21579C),
+                                                ),
+                                                Text(
+                                                  "Notea",
+                                                  style: TextStyle(
+                                                      color: Colors.black, fontSize: 35),
+                                                ),
+                                              ],
+                                            ),
+                                            const SizedBox(height: 30),
+                                            const Text(
+                                              "Bienvenido,",
+                                              style: TextStyle(
+                                                  color: Colors.black, fontSize: 30),
+                                            ),
+                                            Text(
+                                              "Identificate",
+                                              style: TextStyle(
+                                                  color: Colors.black.withOpacity(0.7),
+                                                  fontSize: 30),
+                                            ),
+                                          ],
+                                        ),
+                                      ),
+                                    ),
+                                    const SizedBox(height: 25),
 
-                      //Formulario para validación
-                      Form(
-                        key: _formKey,
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.center,
-                          children: [
-                            EmailField(fadeEmail: _elementsOpacity == 0,emailController: emailController),
-                            const SizedBox(height: 30),
-                            PasswordField(fadePassword: _elementsOpacity == 0, passwordController: passwordController),
-                            const SizedBox(height: 32),
-                            ProgressButton.icon(iconedButtons: {
-                              ButtonState.idle: const IconedButton(
-                                  text: "Iniciar Sesion",
-                                  icon: Icon(Icons.send, color: Colors.white, size: 18),
-                                  color: Colors.blueGrey),
-                              ButtonState.loading: IconedButton(
-                                  text: "Validando", color: Colors.blueGrey.shade200),
-                              ButtonState.fail: IconedButton(
-                                  text: "Fallido",
-                                  icon: const Icon(Icons.cancel, color: Colors.white),
-                                  color: Colors.red.shade300),
-                              ButtonState.success: IconedButton(
-                                  text: "Validado",
-                                  icon: const Icon(
-                                    Icons.check_circle,
-                                    color: Colors.white,
-                                  ),
-                                  color: Colors.green.shade400)
-                            },
-                            onPressed: validacion,
-                            state: buttonState,
-                            maxWidth: 150,
-                            height: 40,
-                            progressIndicator: const CircularProgressIndicator(
-                              valueColor: AlwaysStoppedAnimation<Color>(Colors.white),
-                              strokeWidth: 3,
-                            ),
-                            ),
-                            const SizedBox(height: 15),
-                              Text(
-                              "¿No tienes una cuenta?",
-                              style: TextStyle(
-                                  color: Colors.black.withOpacity(0.7),
-                                  fontSize: 15),
-                            ),
-                            const SizedBox(height: 7),
-                            GestureDetector(
-                              onTap: () {
-                                Navigator.push(
-                                  context,
-                                  MaterialPageRoute(
-                                      builder: (context) => const RegisterScreen()),
-                                );
-                              },
-                              child: const Text(
-                                "Registrate",
-                                style: TextStyle(
-                                    color: Color(0xff21579C),
-                                    fontSize: 15,
-                                    fontWeight: FontWeight.bold),
+                                    //Formulario para validación
+                                    Form(
+                                      key: _formKey,
+                                      child: Column(
+                                        crossAxisAlignment: CrossAxisAlignment.center,
+                                        children: [
+                                          EmailField(fadeEmail: _elementsOpacity == 0,emailController: emailController),
+                                          const SizedBox(height: 30),
+                                          PasswordField(fadePassword: _elementsOpacity == 0, passwordController: passwordController),
+                                          const SizedBox(height: 32),
+                                          MaterialButton(
+                                            child: Text('Iniciar Sesión', 
+                                                      style: TextStyle(fontSize: 16, 
+                                                                      color: Colors.grey[200]
+                                                    ),),
+                                            shape: RoundedRectangleBorder(
+                                              borderRadius: BorderRadius.circular(6),
+                                            ),
+                                            padding: const EdgeInsets.all(14),
+                                            color : Theme.of(context).primaryColor,
+                                            onPressed: () {
+                                              BlocProvider.of<UsuarioBloc>(context).add(LoginEvent(
+                                                email: emailController.text,
+                                                password: passwordController.text,
+                                              ));
+                                            },
+                                          ),
+                                          const SizedBox(height: 15),
+                                            Text(
+                                            "¿No tienes una cuenta?",
+                                            style: TextStyle(
+                                                color: Colors.black.withOpacity(0.7),
+                                                fontSize: 15),
+                                          ),
+                                          const SizedBox(height: 7),
+                                          GestureDetector(
+                                            onTap: () {
+                                              Navigator.push(
+                                                context,
+                                                MaterialPageRoute(
+                                                    builder: (context) => const RegisterScreen()),
+                                              );
+                                            },
+                                            child: const Text(
+                                              "Registrate",
+                                              style: TextStyle(
+                                                  color: Color(0xff21579C),
+                                                  fontSize: 15,
+                                                  fontWeight: FontWeight.bold),
+                                            ),
+                                          ),
+                                        ],
+                                      ),
+                                    ),
+                                  ],
+                                ),
                               ),
                             ),
-                          ],
-                        ),
-                      ),
-                    ],
-                  ),
-                ),
-              ),
-      ),
-    );
+                    ),
+                );
+        }
+        return const Center(child: CircularProgressIndicator());
+      });
   }
 }
-
+        //boton de validacion que cambia 
+                            // ProgressButton.icon(iconedButtons: {
+                            //   ButtonState.idle: const IconedButton(
+                            //       text: "Iniciar Sesion",
+                            //       icon: Icon(Icons.send, color: Colors.white, size: 18),
+                            //       color: Colors.blueGrey),
+                            //   ButtonState.loading: IconedButton(
+                            //       text: "Validando", color: Colors.blueGrey.shade200),
+                            //   ButtonState.fail: IconedButton(
+                            //       text: "Fallido",
+                            //       icon: const Icon(Icons.cancel, color: Colors.white),
+                            //       color: Colors.red.shade300),
+                            //   ButtonState.success: IconedButton(
+                            //       text: "Validado",
+                            //       icon: const Icon(
+                            //         Icons.check_circle,
+                            //         color: Colors.white,
+                            //       ),
+                            //       color: Colors.green.shade400)
+                            // },
+                            // onPressed: validacion,
+                            // state: buttonState,
+                            // maxWidth: 150,
+                            // height: 40,
+                            // progressIndicator: const CircularProgressIndicator(
+                            //   valueColor: AlwaysStoppedAnimation<Color>(Colors.white),
+                            //   strokeWidth: 3,
+                            // ),
+                            // )

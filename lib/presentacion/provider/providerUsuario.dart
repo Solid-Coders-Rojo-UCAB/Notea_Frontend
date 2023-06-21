@@ -11,9 +11,6 @@ import 'package:http/http.dart' as http;
 
 import '../../utils/Either.dart';
 
-
-
-
 class UsuarioProvider extends ChangeNotifier{
 
   final GetUsuarios getUsuariosAnswer = GetUsuarios(RepositorioUsuarioImpl(

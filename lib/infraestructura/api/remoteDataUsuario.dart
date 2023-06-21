@@ -12,6 +12,10 @@ abstract class RemoteDataUsuario {
   Future<Either<List<Usuario>, Exception>> buscarUsuarioApi();
   Future<Either<int, Exception>> crearUsuarioApi(
       Map<String, dynamic> jsonString);
+  Future<Either<Usuario, Exception>> loginUsuarioApi(
+      String email, String password);
+  //Future<Either<int, Exception>> eliminarUsuarioApi(int id);
+
 }
 
 class RemoteDataUsuarioImp implements RemoteDataUsuario {
@@ -59,6 +63,36 @@ class RemoteDataUsuarioImp implements RemoteDataUsuario {
     }
   }
 
+  @override
+  Future<Either<Usuario, Exception>> loginUsuarioApi(
+      String email, String clave) async {
+    if (await const ConectivityCheck().checkConectivity()) {
+      final response = await client.post(
+        Uri.parse('http://localhost:3000/usuario/login'),
+        body: jsonEncode(<String, String>{
+          'email': email,
+          'clave': clave,
+        }),
+        headers: <String, String>{
+          'Content-Type': 'application/json; charset=UTF-8',
+        },
+      );
+      if (response.statusCode == 200) {
+        final usuariofinal = Usuario.fromJson(jsonDecode(response.body));
+        print(usuariofinal.getNombre() + " " + usuariofinal.getApellido());
+        return Either.left(usuariofinal);
+      } else {
+        return Either.right(Exception("Error al loguear el usuario"));
+      }
+    } else {
+      return Either.right(Exception("No hay conexion a internet")); //guardado en la base de datos local
+    }
+  }
+
+
+  // @override
+  // Future<Either<int, Exception>> eliminarUsuarioApi(int id) {}
+
   List<Usuario> parseUsuario(String responseBody) {
     // Parse the JSON string to a Map.
     Map<String, dynamic> jsonMap = jsonDecode(responseBody);
@@ -71,5 +105,6 @@ class RemoteDataUsuarioImp implements RemoteDataUsuario {
 
     return usuarios;
   }
+
 
 } 
