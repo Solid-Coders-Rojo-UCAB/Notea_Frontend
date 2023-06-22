@@ -118,7 +118,7 @@ class _MessagesScreenState extends State<MessagesScreen> {
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
                           Text(
-                            'Hola, ${widget.usuario.nombre.value}',
+                            'Hola, ${widget.usuario.nombre.value} ${widget.usuario.apellido.value}',
                             style: TextStyle(
                                 color: Colors.black.withOpacity(0.85),
                                 fontSize: 30,

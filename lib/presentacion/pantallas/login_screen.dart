@@ -26,8 +26,6 @@ class _LoginScreenState extends State<LoginScreen> {
   ButtonState buttonState = ButtonState.idle;
   String userStrJSON = '';
 
-
-
   @override
   void initState() {
     emailController = TextEditingController();
@@ -45,37 +43,6 @@ class _LoginScreenState extends State<LoginScreen> {
     await Future.delayed(const Duration(seconds: 2), () {});
     setState(() {
     });
-    // String username = emailController.text;
-    // String password = passwordController.text;
-    // if (username.isNotEmpty && password.isNotEmpty) {
-    //     setState(() {
-    //       buttonState = ButtonState.loading;
-    //     });
-    //     await Future.delayed(const Duration(milliseconds: 30), () {});
-    //   if (true) {
-    //   // if (await validateUser(username, password)) {
-    //       setState(() {
-    //         buttonState = ButtonState.success;
-    //       });
-
-    //   // ignore: dead_code
-    //   } else {
-    //       setState(() {
-    //         buttonState = ButtonState.fail;
-    //       });
-    //       ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
-    //       content: Text('Nombre de Usuario o Contraseña incorrectos'),
-    //     ));
-    //     await Future.delayed(const Duration(seconds: 3), () {});
-    //   }
-    // } else {
-    //   ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
-    //     content: Text('Debe llenar todos los campos'),
-    //   ));
-    // }
-    // setState(() {
-    //   buttonState = ButtonState.idle;
-    // });
   }
 
   @override
@@ -167,7 +134,8 @@ class _LoginScreenState extends State<LoginScreen> {
                                             padding: const EdgeInsets.all(14),
                                             color : Theme.of(context).primaryColor,
                                             onPressed: () {
-                                              BlocProvider.of<UsuarioBloc>(context).add(LoginEvent(
+                                              BlocProvider.of<UsuarioBloc>(context).add(
+                                                LoginEvent(
                                                 email: emailController.text,
                                                 password: passwordController.text,
                                               ));
@@ -240,3 +208,35 @@ class _LoginScreenState extends State<LoginScreen> {
                             //   strokeWidth: 3,
                             // ),
                             // )
+
+                                // String username = emailController.text;
+    // String password = passwordController.text;
+    // if (username.isNotEmpty && password.isNotEmpty) {
+    //     setState(() {
+    //       buttonState = ButtonState.loading;
+    //     });
+    //     await Future.delayed(const Duration(milliseconds: 30), () {});
+    //   if (true) {
+    //   // if (await validateUser(username, password)) {
+    //       setState(() {
+    //         buttonState = ButtonState.success;
+    //       });
+
+    //   // ignore: dead_code
+    //   } else {
+    //       setState(() {
+    //         buttonState = ButtonState.fail;
+    //       });
+    //       ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
+    //       content: Text('Nombre de Usuario o Contraseña incorrectos'),
+    //     ));
+    //     await Future.delayed(const Duration(seconds: 3), () {});
+    //   }
+    // } else {
+    //   ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
+    //     content: Text('Debe llenar todos los campos'),
+    //   ));
+    // }
+    // setState(() {
+    //   buttonState = ButtonState.idle;
+    // });

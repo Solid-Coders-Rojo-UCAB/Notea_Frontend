@@ -59,14 +59,10 @@ class RemoteDataNotaImp implements RemoteDataNota {
 
  List<Nota> parseNota(String responseBody) {
 
-  // Parse the JSON string to a Map.
-    Map<String, dynamic> jsonMap = jsonDecode(responseBody);
-
-    // Get the value list.
-    List<dynamic> valueList = jsonMap['value'];
+    List<dynamic> jsonMap = jsonDecode(responseBody);
 
     // iteramos por cada valor de la lista y creamos un objeto Nota para cada valor.
-    List<Nota> notas = valueList.map((value) => Nota.fromJson(value)).toList();
+    List<Nota> notas = jsonMap.map((value) => Nota.fromJson(value)).toList();
 
     return notas;
  }
