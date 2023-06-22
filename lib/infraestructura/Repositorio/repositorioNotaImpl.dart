@@ -1,4 +1,4 @@
-
+// ignore_for_file: file_names
 import '../../dominio/agregados/nota.dart';
 import '../../dominio/repositorio/repositorioNota.dart';
 import '../../infraestructura/api/remoteDataNota.dart';
@@ -23,7 +23,8 @@ class RepositorioNotaImpl implements INotaRepository {
       "contenido": nota.getContenido(),
       "fechaCreacion": nota.getFechaCreacion(),
       "getEstado": nota.getEstado(),
-      "getUbicacion": nota.getUbicacion()
+      "getUbicacion": nota.getUbicacion(),
+      "idGrupo" : nota.getIdGrupoNota(),
     };
     var result = await remoteDataSource.crearNotaApi(notaDTO);
     return result;

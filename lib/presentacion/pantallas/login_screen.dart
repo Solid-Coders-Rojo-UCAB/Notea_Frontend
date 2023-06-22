@@ -30,7 +30,8 @@ class _LoginScreenState extends State<LoginScreen> {
   void initState() {
     emailController = TextEditingController();
     passwordController = TextEditingController();
-
+    emailController.text = 'angel@gmail.com';
+    passwordController.text = '1234';
     super.initState();
   }
 
@@ -54,11 +55,16 @@ class _LoginScreenState extends State<LoginScreen> {
           return const Center(child: CircularProgressIndicator());
         }
         if (state is UsuarioFailureState) {
-          return const Center(child: Text('Error al iniciar sesión')); 
-            //se debe modificar el mensaje por el que viene del backend
+          return const Scaffold(
+            resizeToAvoidBottomInset: true,
+            body: Center(child: Text('Error al iniciar sesión')),
+          );
         }
         if (state is UsuarioSuccessState) {
-          return MessagesScreen(usuario : state.usuario); //pagina principal
+          return Scaffold(
+            resizeToAvoidBottomInset: true,
+            body: Center(child: MessagesScreen(usuario : state.usuario)),
+          ); //pagina principal
         }
         if (state is UsuarioInitialState) {
           return Scaffold(
@@ -179,6 +185,37 @@ class _LoginScreenState extends State<LoginScreen> {
       });
   }
 }
+
+//boton de validacion que cambia 
+    // ProgressButton.icon(iconedButtons: {
+    //   ButtonState.idle: const IconedButton(
+    //       text: "Iniciar Sesion",
+    //       icon: Icon(Icons.send, color: Colors.white, size: 18),
+    //       color: Colors.blueGrey),
+    //   ButtonState.loading: IconedButton(
+    //       text: "Validando", color: Colors.blueGrey.shade200),
+    //   ButtonState.fail: IconedButton(
+    //       text: "Fallido",
+    //       icon: const Icon(Icons.cancel, color: Colors.white),
+    //       color: Colors.red.shade300),
+    //   ButtonState.success: IconedButton(
+    //       text: "Validado",
+    //       icon: const Icon(
+    //         Icons.check_circle,
+    //         color: Colors.white,
+    //       ),
+    //       color: Colors.green.shade400)
+    // },
+    // onPressed: validacion,
+    // state: buttonState,
+    // maxWidth: 150,
+    // height: 40,
+    // progressIndicator: const CircularProgressIndicator(
+    //   valueColor: AlwaysStoppedAnimation<Color>(Colors.white),
+    //   strokeWidth: 3,
+    // ),
+    // )
+
         //boton de validacion que cambia 
                             // ProgressButton.icon(iconedButtons: {
                             //   ButtonState.idle: const IconedButton(
@@ -240,3 +277,4 @@ class _LoginScreenState extends State<LoginScreen> {
     // setState(() {
     //   buttonState = ButtonState.idle;
     // });
+

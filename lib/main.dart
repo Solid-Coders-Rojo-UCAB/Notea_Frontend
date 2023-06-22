@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:notea_frontend/infraestructura/bloc/Grupo/grupo_bloc.dart';
+import 'package:notea_frontend/infraestructura/bloc/nota/nota_bloc.dart';
 import 'package:notea_frontend/infraestructura/bloc/usuario/usuario_bloc.dart';
 import 'package:notea_frontend/presentacion/pantallas/login_screen.dart';
 
@@ -12,7 +14,9 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MultiBlocProvider(
       providers: [ //aca se agregan todos los blocs que se van a usar en la app
-        BlocProvider(create: ( _ ) => UsuarioBloc()) //las instancias pasan al contexto
+        BlocProvider(create: ( _ ) => UsuarioBloc()), //las instancias pasan al contexto
+        BlocProvider(create: ( _ ) => GrupoBloc()), //las instancias pasan al contexto
+        BlocProvider(create: ( _ ) => NotaBloc()), //las instancias pasan al contexto
       ],
       child: MaterialApp(
           debugShowCheckedModeBanner: false,
@@ -64,57 +68,112 @@ class MyApp extends StatelessWidget {
     );
   }
 }
-            //TODO esto se esta haciendo porque tenemos problemas para manejar el API
 
 // import 'package:flutter/material.dart';
-// import 'package:notea_frontend/dominio/agregados/nota.dart';
-// import 'package:notea_frontend/presentacion/provider/providerNota.dart';
-// import 'package:notea_frontend/presentacion/provider/providerUsuario.dart';
-// import 'package:provider/provider.dart';
-// // Importa las clases y archivos necesarios
 
+// class Desplegable extends StatefulWidget {
+//   final String titulo;
+//   final Widget contenido;
 
-// Future<void> main() async {
-//   runApp(
-//     MultiProvider(
-//       providers: [
-//         ChangeNotifierProvider(create: (_) => NotaProvider()),
-//         ChangeNotifierProvider(create: (_) => UsuarioProvider()),
-//       ],
-//       child: const MyApp(),
-//     ),
-//   );
+//   Desplegable({required this.titulo, required this.contenido});
+
+//   @override
+//   _DesplegableState createState() => _DesplegableState();
 // }
 
-// class MyApp extends StatelessWidget {
-//   const MyApp({super.key});
+// class _DesplegableState extends State<Desplegable> {
+//   bool _mostrarContenido = false;
 
 //   @override
 //   Widget build(BuildContext context) {
-//     return const MaterialApp(
-//       title: 'My App',
-//       home: MyScreen(),
+//     return Column(
+//       crossAxisAlignment: CrossAxisAlignment.start,
+//       children: <Widget>[
+//         GestureDetector(
+//           onTap: () {
+//             setState(() {
+//               _mostrarContenido = !_mostrarContenido;
+//             });
+//           },
+//           child: Container(
+//             width: MediaQuery.of(context).size.width * 0.7,
+//             color: Colors.grey[200],
+//             padding: EdgeInsets.all(16.0),
+//             child: Row(
+//               mainAxisAlignment: MainAxisAlignment.spaceBetween,
+//               children: <Widget>[
+//                 Flexible(
+//                   child: Text(
+//                     widget.titulo,
+//                     style: TextStyle(
+//                       fontSize: _mostrarContenido ? 16.0 : 18.0,
+//                       fontWeight: FontWeight.bold,
+//                     ),
+//                   ),
+//                 ),
+//                 Icon(
+//                   _mostrarContenido ? Icons.expand_less : Icons.expand_more,
+//                   size: 30.0,
+//                 ),
+//               ],
+//             ),
+//           ),
+//         ),
+//         if (_mostrarContenido)
+//           Padding(
+//             padding: EdgeInsets.symmetric(horizontal: 16.0),
+//             child: widget.contenido,
+//           ),
+//         SizedBox(height: 16.0), // Separación entre los desplegables
+//       ],
 //     );
 //   }
 // }
 
-// class MyScreen extends StatelessWidget {
-//   const MyScreen({super.key});
+// void main() {
+//   runApp(MyApp());
+// }
 
+// class MyApp extends StatelessWidget {
 //   @override
 //   Widget build(BuildContext context) {
-//     final notaProvider = Provider.of<NotaProvider>(context, listen: true);
-//     final usuarioProvider = Provider.of<UsuarioProvider>(context, listen: true);
-
-//     // Llama al método getNotas() cuando la pantalla se inicie
-//     Future.delayed(Duration.zero, () => usuarioProvider.getUsuarios());
-//     Future.delayed(Duration.zero, () => notaProvider.getNotas());
-
-//     return Scaffold(
-//       appBar: AppBar(
-//         title: const Text('My Screen'),
+//     return MaterialApp(
+//       title: 'Componente Desplegable',
+//       theme: ThemeData(
+//         primarySwatch: Colors.blue,
 //       ),
-//       body:  null
+//       home: Scaffold(
+//         appBar: AppBar(
+//           title: Text('Componente Desplegable'),
+//         ),
+//         body: Center(
+//           child: Column(
+//             children: <Widget>[
+//               Desplegable(
+//                 titulo: 'Desplegable 1',
+//                 contenido: Column(
+//                   children: <Widget>[
+//                     Text('Componente 1'),
+//                     Text('Componente 2'),
+//                     Text('Componente 3'),
+//                   ],
+//                 ),
+//               ),
+//               SizedBox(height: 8.0), // Separación entre los desplegables
+//               Desplegable(
+//                 titulo: 'Desplegable 2',
+//                 contenido: Column(
+//                   children: <Widget>[
+//                     Text('Componente 4'),
+//                     Text('Componente 5'),
+//                     Text('Componente 6'),
+//                   ],
+//                 ),
+//               ),
+//             ],
+//           ),
+//         ),
+//       ),
 //     );
 //   }
 // }
