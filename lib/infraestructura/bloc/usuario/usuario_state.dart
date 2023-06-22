@@ -1,3 +1,5 @@
+// ignore_for_file: overridden_fields, annotate_overrides
+
 part of 'usuario_bloc.dart';
 
 @immutable

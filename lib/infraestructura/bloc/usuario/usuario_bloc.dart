@@ -14,13 +14,12 @@ class UsuarioBloc extends  Bloc<UsuarioEvent, UsuarioState> {
   UsuarioBloc() : super(const UsuarioInitialState()){
 
    //generamos los comportamientos del bloc
-
     on<LoginEvent>((event, emit) async { //para que el bloc escuche el evento Login
-      print('estoy llamando al evento login');
-      emit(const UsuarioLoadingState()); //emitimos el estado de cargando
       
-      //realizamos la logica de negocio para el login
+      emit(const UsuarioLoadingState()); //emitimos el estado de cargando
       await Future.delayed(const Duration(seconds: 2));
+       
+       //realizamos la logica de negocio para el login
       final repositorio = RepositorioUsuarioImpl(remoteDataSource: RemoteDataUsuarioImp(client: http.Client()));
       final usuario = await repositorio.loginUsuario(event.email, event.password);
 
