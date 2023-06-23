@@ -7,7 +7,7 @@ import 'package:notea_frontend/infraestructura/bloc/Grupo/grupo_bloc.dart';
 import 'package:notea_frontend/presentacion/pantallas/lista_notas_screen.dart';
 import 'package:notea_frontend/presentacion/widgets/BottomBar.dart';
 import 'package:notea_frontend/presentacion/widgets/MenuDesplegable.dart';
-import 'package:notea_frontend/presentacion/widgets/angel/floating_button.dart';
+import 'package:notea_frontend/presentacion/widgets/floating_button.dart';
 
 
 class MessagesScreen extends StatefulWidget {
