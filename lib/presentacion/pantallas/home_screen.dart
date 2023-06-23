@@ -68,8 +68,8 @@ Widget build(BuildContext context) {
         ),
         bottomNavigationBar: BottomBar(scaffoldKey: _scaffoldKey),
         drawer: CustomDrawer(
-          username: 'John Doe',
-          email: 'johndoe@example.com',
+          username: capitalizeFirstLetter(widget.usuario.getNombre()),
+          email: widget.usuario.getEmail(),
           onBackButtonPressed: () {
             Navigator.pop(context); // Volver a la pantalla anterior
           },
@@ -173,3 +173,12 @@ Widget build(BuildContext context) {
 }
 
 
+
+
+String capitalizeFirstLetter(String input) {
+  if (input.isEmpty) {
+    return input; // Si el string está vacío, retorna el mismo string
+  }
+
+  return input[0].toUpperCase() + input.substring(1).toLowerCase();
+}
