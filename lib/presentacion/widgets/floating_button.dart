@@ -2,8 +2,7 @@ import 'package:flutter/material.dart';
 
 
 class MyFloatingButton extends StatefulWidget {
-  final Function callback;
-  const MyFloatingButton({super.key, required this.callback});
+  const MyFloatingButton({super.key, required Null Function() onPressed});
 
   @override
   State<MyFloatingButton> createState() => FloatingButtonState();
@@ -20,10 +19,11 @@ class FloatingButtonState extends State<MyFloatingButton> {
           showModalBottomSheet(
               context: context,
               builder: (BuildContext context) {
-                return const Text('hola');
+                return const Text('aca se llamaria a la pantalla de creación de Nota');
               });
         },
-        child: const Icon(Icons.add),
+        // child: const Icon(Icons.addchart_sharp),
+        child: const Icon(Icons.post_add_rounded),
       ),
     );
   }

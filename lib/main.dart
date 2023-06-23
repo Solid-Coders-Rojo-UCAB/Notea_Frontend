@@ -21,6 +21,10 @@ class MyApp extends StatelessWidget {
       child: MaterialApp(
           debugShowCheckedModeBanner: false,
           title: 'Notea App',
+          routes: {
+            '/login': (context) => const MyApp(),
+            // Otras rutas de tu aplicación
+          },
           theme: ThemeData(
             primaryColor: const Color(0XFF21579C),
             colorScheme: ColorScheme.fromSwatch()
