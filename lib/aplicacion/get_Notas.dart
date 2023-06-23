@@ -9,7 +9,5 @@ class GetNotas {
 
   GetNotas(this.repository);
 
-  Future<Either<List<Nota>, Exception>> execute() {
-    return repository.buscarNotas();
-  }
+
 }

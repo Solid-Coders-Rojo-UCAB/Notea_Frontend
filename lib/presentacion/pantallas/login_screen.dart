@@ -4,9 +4,9 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:notea_frontend/infraestructura/bloc/usuario/usuario_bloc.dart';
 
 import 'package:notea_frontend/presentacion/pantallas/register_screen.dart';
-import 'package:notea_frontend/presentacion/widgets/email_field.dart';
-import 'package:notea_frontend/presentacion/widgets/password_field.dart';
-import 'package:notea_frontend/presentacion/pantallas/messages_screen.dart';
+import 'package:notea_frontend/presentacion/widgets/oldCode/email_field.dart';
+import 'package:notea_frontend/presentacion/widgets/oldCode/password_field.dart';
+import 'package:notea_frontend/presentacion/pantallas/home_screen.dart';
 
 import 'package:progress_state_button/iconed_button.dart';
 import 'package:progress_state_button/progress_button.dart';
@@ -26,13 +26,12 @@ class _LoginScreenState extends State<LoginScreen> {
   ButtonState buttonState = ButtonState.idle;
   String userStrJSON = '';
 
-
-
   @override
   void initState() {
     emailController = TextEditingController();
     passwordController = TextEditingController();
-
+    emailController.text = 'angel@gmail.com';
+    passwordController.text = '1234';
     super.initState();
   }
 
@@ -45,37 +44,6 @@ class _LoginScreenState extends State<LoginScreen> {
     await Future.delayed(const Duration(seconds: 2), () {});
     setState(() {
     });
-    // String username = emailController.text;
-    // String password = passwordController.text;
-    // if (username.isNotEmpty && password.isNotEmpty) {
-    //     setState(() {
-    //       buttonState = ButtonState.loading;
-    //     });
-    //     await Future.delayed(const Duration(milliseconds: 30), () {});
-    //   if (true) {
-    //   // if (await validateUser(username, password)) {
-    //       setState(() {
-    //         buttonState = ButtonState.success;
-    //       });
-
-    //   // ignore: dead_code
-    //   } else {
-    //       setState(() {
-    //         buttonState = ButtonState.fail;
-    //       });
-    //       ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
-    //       content: Text('Nombre de Usuario o Contraseña incorrectos'),
-    //     ));
-    //     await Future.delayed(const Duration(seconds: 3), () {});
-    //   }
-    // } else {
-    //   ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
-    //     content: Text('Debe llenar todos los campos'),
-    //   ));
-    // }
-    // setState(() {
-    //   buttonState = ButtonState.idle;
-    // });
   }
 
   @override
@@ -87,11 +55,16 @@ class _LoginScreenState extends State<LoginScreen> {
           return const Center(child: CircularProgressIndicator());
         }
         if (state is UsuarioFailureState) {
-          return const Center(child: Text('Error al iniciar sesión')); 
-            //se debe modificar el mensaje por el que viene del backend
+          return const Scaffold(
+            resizeToAvoidBottomInset: true,
+            body: Center(child: Text('Error al iniciar sesión')),
+          );
         }
         if (state is UsuarioSuccessState) {
-          return MessagesScreen(usuario : state.usuario); //pagina principal
+          return Scaffold(
+            resizeToAvoidBottomInset: true,
+            body: Center(child: MessagesScreen(usuario : state.usuario)),
+          ); //pagina principal
         }
         if (state is UsuarioInitialState) {
           return Scaffold(
@@ -167,7 +140,8 @@ class _LoginScreenState extends State<LoginScreen> {
                                             padding: const EdgeInsets.all(14),
                                             color : Theme.of(context).primaryColor,
                                             onPressed: () {
-                                              BlocProvider.of<UsuarioBloc>(context).add(LoginEvent(
+                                              BlocProvider.of<UsuarioBloc>(context).add(
+                                                LoginEvent(
                                                 email: emailController.text,
                                                 password: passwordController.text,
                                               ));
@@ -211,6 +185,37 @@ class _LoginScreenState extends State<LoginScreen> {
       });
   }
 }
+
+//boton de validacion que cambia 
+    // ProgressButton.icon(iconedButtons: {
+    //   ButtonState.idle: const IconedButton(
+    //       text: "Iniciar Sesion",
+    //       icon: Icon(Icons.send, color: Colors.white, size: 18),
+    //       color: Colors.blueGrey),
+    //   ButtonState.loading: IconedButton(
+    //       text: "Validando", color: Colors.blueGrey.shade200),
+    //   ButtonState.fail: IconedButton(
+    //       text: "Fallido",
+    //       icon: const Icon(Icons.cancel, color: Colors.white),
+    //       color: Colors.red.shade300),
+    //   ButtonState.success: IconedButton(
+    //       text: "Validado",
+    //       icon: const Icon(
+    //         Icons.check_circle,
+    //         color: Colors.white,
+    //       ),
+    //       color: Colors.green.shade400)
+    // },
+    // onPressed: validacion,
+    // state: buttonState,
+    // maxWidth: 150,
+    // height: 40,
+    // progressIndicator: const CircularProgressIndicator(
+    //   valueColor: AlwaysStoppedAnimation<Color>(Colors.white),
+    //   strokeWidth: 3,
+    // ),
+    // )
+
         //boton de validacion que cambia 
                             // ProgressButton.icon(iconedButtons: {
                             //   ButtonState.idle: const IconedButton(
@@ -240,3 +245,36 @@ class _LoginScreenState extends State<LoginScreen> {
                             //   strokeWidth: 3,
                             // ),
                             // )
+
+                                // String username = emailController.text;
+    // String password = passwordController.text;
+    // if (username.isNotEmpty && password.isNotEmpty) {
+    //     setState(() {
+    //       buttonState = ButtonState.loading;
+    //     });
+    //     await Future.delayed(const Duration(milliseconds: 30), () {});
+    //   if (true) {
+    //   // if (await validateUser(username, password)) {
+    //       setState(() {
+    //         buttonState = ButtonState.success;
+    //       });
+
+    //   // ignore: dead_code
+    //   } else {
+    //       setState(() {
+    //         buttonState = ButtonState.fail;
+    //       });
+    //       ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
+    //       content: Text('Nombre de Usuario o Contraseña incorrectos'),
+    //     ));
+    //     await Future.delayed(const Duration(seconds: 3), () {});
+    //   }
+    // } else {
+    //   ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
+    //     content: Text('Debe llenar todos los campos'),
+    //   ));
+    // }
+    // setState(() {
+    //   buttonState = ButtonState.idle;
+    // });
+

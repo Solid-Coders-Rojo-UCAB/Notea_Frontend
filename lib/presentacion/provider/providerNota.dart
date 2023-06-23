@@ -19,12 +19,12 @@ final GetNotas getNotesAnswer = GetNotas(RepositorioNotaImpl(
 
   List<Nota> notes = [];
 
-  Future<Either<List<Nota>, Exception>> getNotas() async{
-    final notesAnswer = await getNotesAnswer.repository.buscarNotas();
-    // notes = [];
-    // notes.addAll();
-    //notifyListeners();
-    return notesAnswer;
-  }
+  // Future<Either<List<Nota>, Exception>> getNotas() async{
+  //   final notesAnswer = await getNotesAnswer.repository.buscarNotas();
+  //   // notes = [];
+  //   // notes.addAll();
+  //   //notifyListeners();
+  //   return notesAnswer;
+  // }
 
 }

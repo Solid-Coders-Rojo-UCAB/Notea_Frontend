@@ -1,11 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:notea_frontend/presentacion/pantallas/login_screen.dart';
-import 'package:notea_frontend/presentacion/widgets/email_field.dart';
-import 'package:notea_frontend/presentacion/widgets/email_field2.dart';
-import 'package:notea_frontend/presentacion/widgets/email_field3.dart';
-import 'package:notea_frontend/presentacion/widgets/get_started_button2.dart';
-import 'package:notea_frontend/presentacion/widgets/password_field.dart';
-import 'package:notea_frontend/presentacion/widgets/password_field2.dart';
+import 'package:notea_frontend/presentacion/widgets/oldCode/email_field.dart';
+import 'package:notea_frontend/presentacion/widgets/oldCode/email_field2.dart';
+import 'package:notea_frontend/presentacion/widgets/oldCode/email_field3.dart';
+import 'package:notea_frontend/presentacion/widgets/oldCode/get_started_button2.dart';
+import 'package:notea_frontend/presentacion/widgets/oldCode/password_field.dart';
+import 'package:notea_frontend/presentacion/widgets/oldCode/password_field2.dart';
+
 
 
 class RegisterScreen extends StatefulWidget {

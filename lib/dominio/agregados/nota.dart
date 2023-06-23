@@ -1,3 +1,5 @@
+import 'package:notea_frontend/dominio/agregados/VONota/VOidGrupo.dart';
+
 import 'Entidades/EntidadTarea.dart';
 import 'VONota/EstadoEnum.dart';
 import 'VONota/VOContenidoNota.dart';
@@ -12,6 +14,7 @@ class Nota {
   late VOUbicacionNota ubicacion;
   late EstadoEnum estado;
   //late List<Tarea> tareas;
+  late VOIdGrupoNota idGrupo;
 
   Nota({
     required this.titulo,
@@ -21,6 +24,7 @@ class Nota {
     required this.ubicacion,
     required this.id,
     /*required this.tareas*/
+    required this.idGrupo,
   });
 
   factory Nota.fromJson(Map<String, dynamic> json) {
@@ -34,11 +38,12 @@ class Nota {
           VOUbicacionNota.crearUbicacionNota(json['ubicacion']['latitud'], json['ubicacion']['longitud']),
       id: json['id']['id'],
       //tareas: json['tareas'],
+      idGrupo: VOIdGrupoNota.crearIdGrupoNota(json['idGrupo']['idGrupo']),
     );
   }
 
   static Nota crearNota(String titulo, String contenido, DateTime fechaCreacion,
-      EstadoEnum estado, int latitud, int longitud, String id) {
+      EstadoEnum estado, int latitud, int longitud, String id, String idGrupo) {
     return Nota(
       titulo: VOTituloNota.crearTituloNota(titulo),
       contenido: VOContenidoNota.crearContenidoNota(contenido),
@@ -47,11 +52,16 @@ class Nota {
       ubicacion: VOUbicacionNota.crearUbicacionNota(latitud, longitud),
       id: id,
       //tareas: [],
+      idGrupo: VOIdGrupoNota.crearIdGrupoNota(idGrupo),
     );
   }
 
   String getTitulo() {
     return titulo.getTituloNota();
+  }
+
+  String getIdGrupoNota() {
+    return idGrupo.getIdGrupoNota();
   }
 
   String getContenido() {
@@ -91,5 +101,9 @@ class Nota {
 
   void setContenido(VOContenidoNota contenido) {
     this.contenido = contenido;
+  }
+
+    void setIdGrupoNota(VOIdGrupoNota idGrupo) {
+    this.idGrupo = idGrupo;
   }
 }
