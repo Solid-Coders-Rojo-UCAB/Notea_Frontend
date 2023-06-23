@@ -26,8 +26,11 @@ class _DesplegableState extends State<Desplegable> {
           },
           child: Container(
             width: MediaQuery.of(context).size.width * 0.7,
-            color: Colors.grey[200],
-            padding: EdgeInsets.all(16.0),
+            padding: const EdgeInsets.all(16.0),
+            decoration: BoxDecoration(
+              color: Colors.grey[200],
+              borderRadius: BorderRadius.circular(10.0), // Establece el radio de los bordes
+            ),
             child: Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: <Widget>[
@@ -35,6 +38,7 @@ class _DesplegableState extends State<Desplegable> {
                   child: Text(
                     widget.titulo,
                     style: TextStyle(
+                      color: Colors.black,
                       fontSize: _mostrarContenido ? 16.0 : 18.0,
                       fontWeight: FontWeight.bold,
                     ),

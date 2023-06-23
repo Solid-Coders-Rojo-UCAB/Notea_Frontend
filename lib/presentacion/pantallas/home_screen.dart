@@ -4,8 +4,11 @@ import 'package:notea_frontend/dominio/agregados/VOUsuario/nombreUsuario.dart';
 import 'package:notea_frontend/dominio/agregados/grupo.dart';
 import 'package:notea_frontend/dominio/agregados/usuario.dart';
 import 'package:notea_frontend/infraestructura/bloc/Grupo/grupo_bloc.dart';
-import 'package:notea_frontend/infraestructura/bloc/usuario/usuario_bloc.dart';
-import 'package:notea_frontend/presentacion/pantallas/notas_list.dart';
+import 'package:notea_frontend/presentacion/pantallas/lista_notas_screen.dart';
+import 'package:notea_frontend/presentacion/widgets/BottomBar.dart';
+import 'package:notea_frontend/presentacion/widgets/MenuDesplegable.dart';
+import 'package:notea_frontend/presentacion/widgets/floating_button.dart';
+
 
 class MessagesScreen extends StatefulWidget {
   final Usuario usuario;
@@ -17,6 +20,7 @@ class MessagesScreen extends StatefulWidget {
 }
 
 class _MessagesScreenState extends State<MessagesScreen> {
+  final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
   double loadingBallSize = 1;
   AlignmentGeometry _alignment = Alignment.center;
   bool stopScaleAnimtion = false;
@@ -24,6 +28,7 @@ class _MessagesScreenState extends State<MessagesScreen> {
   int notesCount = 0;
   bool showNotesCount = true;
   List<Grupo>? grupos = [];
+
 
   @override
   void initState() {
@@ -53,7 +58,65 @@ Widget build(BuildContext context) {
         grupos = state.grupos;
         // print(context.read<NombreUsuario>);
       }
-      return Padding(
+      return Scaffold(
+        key: _scaffoldKey,
+        floatingActionButton: MyFloatingButton(
+          onPressed: () {
+            // Acciones al presionar el botón de agregar nota
+            print('AGREGANDO UNA NOTA  MI PANA ');
+          },
+        ),
+        bottomNavigationBar: BottomBar(scaffoldKey: _scaffoldKey),
+        drawer: CustomDrawer(
+          username: 'John Doe',
+          email: 'johndoe@example.com',
+          onBackButtonPressed: () {
+            Navigator.pop(context); // Volver a la pantalla anterior
+          },
+          menuItems: [
+            MenuItem(
+              icon: Icons.home,
+              title: 'Inicio',
+              onPressed: () {
+                // Acción al presionar el botón de inicio
+              },
+            ),
+            MenuItem(
+              icon: Icons.settings,
+              title: 'Configuración',
+              onPressed: () {
+                // Acción al presionar el botón de configuración
+              },
+            ),
+            // Agregar más elementos de menú si es necesario
+          ],
+          onLogoutPressed: () {
+            showDialog(
+              context: context,
+              builder: (BuildContext context) {
+                return AlertDialog(
+                  title: const Text('Confirmación'),
+                  content: const Text('¿Estás seguro de que deseas cerrar la sesión?'),
+                  actions: [
+                    TextButton(
+                      child: const Text('Cancelar'),
+                      onPressed: () {
+                        Navigator.pop(context); // Cerrar el cuadro de diálogo
+                      },
+                    ),
+                    TextButton(
+                      child: const Text('Aceptar'),
+                      onPressed: () {
+                        Navigator.pushReplacementNamed(context, '/login'); // Cerrar sesión
+                      },
+                    ),
+                  ],
+                );
+              },
+            );
+          },
+        ),
+        body:  Padding(
         padding: const EdgeInsets.only(top: 60),
         child: Column(
           children: [
@@ -97,9 +160,16 @@ Widget build(BuildContext context) {
             ),
           ],
         ),
+      ),
+
+
+
+
       );
     },
   );
 }
 
 }
+
+

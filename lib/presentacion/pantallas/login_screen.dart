@@ -4,9 +4,9 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:notea_frontend/infraestructura/bloc/usuario/usuario_bloc.dart';
 
 import 'package:notea_frontend/presentacion/pantallas/register_screen.dart';
-import 'package:notea_frontend/presentacion/widgets/email_field.dart';
-import 'package:notea_frontend/presentacion/widgets/password_field.dart';
-import 'package:notea_frontend/presentacion/pantallas/messages_screen.dart';
+import 'package:notea_frontend/presentacion/widgets/oldCode/email_field.dart';
+import 'package:notea_frontend/presentacion/widgets/oldCode/password_field.dart';
+import 'package:notea_frontend/presentacion/pantallas/home_screen.dart';
 
 import 'package:progress_state_button/iconed_button.dart';
 import 'package:progress_state_button/progress_button.dart';

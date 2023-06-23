@@ -4,10 +4,10 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:notea_frontend/dominio/agregados/grupo.dart';
 import 'package:notea_frontend/dominio/agregados/nota.dart';
-import 'package:notea_frontend/infraestructura/bloc/Grupo/grupo_bloc.dart';
 import 'package:notea_frontend/infraestructura/bloc/nota/nota_bloc.dart';
-import 'package:notea_frontend/main.dart';
+import 'package:notea_frontend/presentacion/widgets/card.dart';
 import 'package:notea_frontend/presentacion/widgets/desplegable.dart';
+
 
 // ignore: must_be_immutable
 class MyDropdown extends StatefulWidget {
@@ -40,39 +40,11 @@ class _MyDropdownState extends State<MyDropdown> {
       builder: (context, state) {
         if (state is NotasSuccessState) {
           notas = state.notas;
-          notas?.forEach((nota) {
-            print('Título: ${nota.titulo.tituloNota}');
-            print('Contenido: ${nota.contenido.contenidoNota}');
-            print('Fecha de creación: ${nota.fechaCreacion}');
-            print('Estado: ${nota.estado.name}');
-            print('Ubicación Latitud: ${nota.ubicacion.latitud}');
-            print('Ubicación Longitud: ${nota.ubicacion.longitud}');
-            print('ID: ${nota.id}');
-            print('---------------------');
-          });
-          print('--------------------------');
-          print('--------------------------');
             return ListView.builder(
               itemCount: widget.grupos?.length,
               itemBuilder: (context, index) {
                 final grupo = widget.grupos![index]; //Tenemos el grupo que se renderizará
-                print('--------------');
-                print(grupo.idGrupo + '  ---    '+  grupo.nombre.getNombreGrupo());
-                print('--------------');
                 final notasDeGrupo = notas?.where((nota) => nota.idGrupo.getIdGrupoNota() == grupo.idGrupo).toList();
-                  notasDeGrupo?.forEach((nota) {
-                    print('Título: ${nota.titulo.tituloNota}');
-                    print('Contenido: ${nota.contenido.contenidoNota}');
-                    print('Fecha de creación: ${nota.fechaCreacion}');
-                    print('Estado: ${nota.estado.name}');
-                    print('Ubicación Latitud: ${nota.ubicacion.latitud}');
-                    print('Ubicación Longitud: ${nota.ubicacion.longitud}');
-                    print('ID grupo: ${nota.idGrupo.getIdGrupoNota()}');
-                    print('ID: ${nota.id}');
-                    print('---------------------');
-                  });
-
-
               if (notasDeGrupo != null && notasDeGrupo.isNotEmpty) {
                 return Column(
                   children: <Widget>[
@@ -81,7 +53,20 @@ class _MyDropdownState extends State<MyDropdown> {
                       child: Desplegable(
                         titulo: grupo.nombre.nombre,
                         contenido: Column(
-                          children: notasDeGrupo.map((nota) => Text(nota.titulo.tituloNota)).toList()
+                          children: notasDeGrupo.map((nota) {
+                            return SizedBox(
+                              child: CartaWidget(
+                                  fecha: nota.getFechaCreacion(),
+                                  titulo: nota.titulo.tituloNota,
+                                  contenido: nota.contenido.contenidoNota,
+                                  tags: const ['Tag1', 'Tag2', 'Tag3sssssss'],
+                                  onDeletePressed: () {
+                                    // Lógica para eliminar la nota
+                                  },
+                                )
+                              );
+                            }
+                          ).toList()
                         ),
                       ),
                     ),
@@ -101,3 +86,27 @@ class _MyDropdownState extends State<MyDropdown> {
   }
 }
 
+          // notas?.forEach((nota) {
+          //   print('Título: ${nota.titulo.tituloNota}');
+          //   print('Contenido: ${nota.contenido.contenidoNota}');
+          //   print('Fecha de creación: ${nota.fechaCreacion}');
+          //   print('Estado: ${nota.estado.name}');
+          //   print('Ubicación Latitud: ${nota.ubicacion.latitud}');
+          //   print('Ubicación Longitud: ${nota.ubicacion.longitud}');
+          //   print('ID: ${nota.id}');
+          //   print('---------------------');
+          // });
+          // print('--------------------------');
+          // print('--------------------------');
+
+                  //   notasDeGrupo?.forEach((nota) {
+                  //   print('Título: ${nota.titulo.tituloNota}');
+                  //   print('Contenido: ${nota.contenido.contenidoNota}');
+                  //   print('Fecha de creación: ${nota.fechaCreacion}');
+                  //   print('Estado: ${nota.estado.name}');
+                  //   print('Ubicación Latitud: ${nota.ubicacion.latitud}');
+                  //   print('Ubicación Longitud: ${nota.ubicacion.longitud}');
+                  //   print('ID grupo: ${nota.idGrupo.getIdGrupoNota()}');
+                  //   print('ID: ${nota.id}');
+                  //   print('---------------------');
+                  // });

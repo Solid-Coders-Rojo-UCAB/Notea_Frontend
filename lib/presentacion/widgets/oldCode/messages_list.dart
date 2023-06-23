@@ -3,7 +3,8 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'dart:math';
 
-import 'package:notea_frontend/presentacion/widgets/dialogs.dart';
+import 'package:notea_frontend/presentacion/widgets/oldCode/dialogs.dart';
+
 
 
 
