@@ -8,7 +8,6 @@ import 'package:notea_frontend/infraestructura/bloc/nota/nota_bloc.dart';
 import 'package:notea_frontend/presentacion/widgets/card.dart';
 import 'package:notea_frontend/presentacion/widgets/desplegable.dart';
 
-
 // ignore: must_be_immutable
 class MyDropdown extends StatefulWidget {
   List<Grupo>? grupos;
@@ -22,7 +21,6 @@ class MyDropdown extends StatefulWidget {
 class _MyDropdownState extends State<MyDropdown> {
   List<Nota>? notas = [];
 
-
   @override
   void initState() {
     super.initState();
@@ -30,21 +28,23 @@ class _MyDropdownState extends State<MyDropdown> {
       final notaBloc = BlocProvider.of<NotaBloc>(context);
       notaBloc.add(NotaCatchEvent());
     });
-
   }
 
   @override
   Widget build(BuildContext context) {
-    
-    return BlocBuilder<NotaBloc, NotaState>(
-      builder: (context, state) {
-        if (state is NotasSuccessState) {
-          notas = state.notas;
-            return ListView.builder(
-              itemCount: widget.grupos?.length,
-              itemBuilder: (context, index) {
-                final grupo = widget.grupos![index]; //Tenemos el grupo que se renderizará
-                final notasDeGrupo = notas?.where((nota) => nota.idGrupo.getIdGrupoNota() == grupo.idGrupo).toList();
+    return BlocBuilder<NotaBloc, NotaState>(builder: (context, state) {
+      if (state is NotasSuccessState) {
+        notas = state.notas;
+        return ListView.builder(
+            itemCount: widget.grupos?.length,
+            itemBuilder: (context, index) {
+              final grupo =
+                  widget.grupos![index]; //Tenemos el grupo que se renderizará
+              final notasDeGrupo = notas
+                  ?.where((nota) =>
+                      nota.idGrupo.getIdGrupoNota() == grupo.idGrupo &&
+                      nota.getEstado() != "PAPELERA")
+                  .toList();
               if (notasDeGrupo != null && notasDeGrupo.isNotEmpty) {
                 return Column(
                   children: <Widget>[
@@ -53,36 +53,32 @@ class _MyDropdownState extends State<MyDropdown> {
                       child: Desplegable(
                         titulo: grupo.nombre.nombre,
                         contenido: Column(
-                          children: notasDeGrupo.map((nota) {
-                            return SizedBox(
+                            children: notasDeGrupo.map((nota) {
+                          return SizedBox(
                               child: CartaWidget(
-                                  fecha: nota.getFechaCreacion(),
-                                  titulo: nota.titulo.tituloNota,
-                                  contenido: nota.contenido.contenidoNota,
-                                  tags: const ['Tag1', 'Tag2', 'Tag3sssssss'],
-                                  onDeletePressed: () {
-                                    // Lógica para eliminar la nota
-                                  },
-                                )
-                              );
-                            }
-                          ).toList()
-                        ),
+                            fecha: nota.getFechaCreacion(),
+                            titulo: nota.titulo.tituloNota,
+                            contenido: nota.contenido.contenidoNota,
+                            tags: const ['Tag1', 'Tag2', 'Tag3sssssss'],
+                            onDeletePressed: () {
+                              // Lógica para eliminar la nota
+                            },
+                          ));
+                        }).toList()),
                       ),
                     ),
 
-                    const SizedBox(height: 8.0), // Separación entre los desplegables
+                    const SizedBox(
+                        height: 8.0), // Separación entre los desplegables
                   ],
                 );
               }
-            }
-          );
-        } else {
-          // No mostrar el grupo si no tiene notas que pertenecen a él
-          return const SizedBox.shrink();
-        }
+            });
+      } else {
+        // No mostrar el grupo si no tiene notas que pertenecen a él
+        return const SizedBox.shrink();
       }
-    );
+    });
   }
 }
 
