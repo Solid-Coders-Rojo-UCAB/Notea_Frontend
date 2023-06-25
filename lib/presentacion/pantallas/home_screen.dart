@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:notea_frontend/dominio/agregados/VOUsuario/nombreUsuario.dart';
 import 'package:notea_frontend/dominio/agregados/grupo.dart';
 import 'package:notea_frontend/dominio/agregados/usuario.dart';
 import 'package:notea_frontend/infraestructura/bloc/Grupo/grupo_bloc.dart';
@@ -22,7 +21,7 @@ class MessagesScreen extends StatefulWidget {
 class _MessagesScreenState extends State<MessagesScreen> {
   final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
   double loadingBallSize = 1;
-  AlignmentGeometry _alignment = Alignment.center;
+  AlignmentGeometry alignment = Alignment.center;
   bool stopScaleAnimtion = false;
   bool showMessages = true;
   int notesCount = 0;
@@ -34,14 +33,14 @@ class _MessagesScreenState extends State<MessagesScreen> {
   void initState() {
     super.initState();
 
-    WidgetsBinding.instance?.addPostFrameCallback((_) {
+    WidgetsBinding.instance.addPostFrameCallback((_) {
       final grupoBloc = BlocProvider.of<GrupoBloc>(context);
       grupoBloc.add(GrupoCatchEvent(idUsuarioDueno: widget.usuario.id));
     });
 
     Future.delayed(const Duration(milliseconds: 2000), () {
       setState(() {
-        _alignment = Alignment.topRight;
+        alignment = Alignment.topRight;
         stopScaleAnimtion = true;
       });
     });
@@ -62,8 +61,6 @@ Widget build(BuildContext context) {
         key: _scaffoldKey,
         floatingActionButton: MyFloatingButton(
           onPressed: () {
-            // Acciones al presionar el botón de agregar nota
-            print('AGREGANDO UNA NOTA  MI PANA ');
           },
         ),
         bottomNavigationBar: BottomBar(scaffoldKey: _scaffoldKey),

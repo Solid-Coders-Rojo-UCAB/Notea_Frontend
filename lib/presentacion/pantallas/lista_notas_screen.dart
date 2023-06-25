@@ -26,7 +26,7 @@ class _MyDropdownState extends State<MyDropdown> {
   @override
   void initState() {
     super.initState();
-    WidgetsBinding.instance?.addPostFrameCallback((_) {
+    WidgetsBinding.instance.addPostFrameCallback((_) {
       final notaBloc = BlocProvider.of<NotaBloc>(context);
       notaBloc.add(NotaCatchEvent());
     });
@@ -42,7 +42,7 @@ class _MyDropdownState extends State<MyDropdown> {
           notas = state.notas;
             return ListView.builder(
               itemCount: widget.grupos?.length,
-              itemBuilder: (context, index) {
+              itemBuilder: (context, index){
                 final grupo = widget.grupos![index]; //Tenemos el grupo que se renderizará
                 final notasDeGrupo = notas?.where((nota) => nota.idGrupo.getIdGrupoNota() == grupo.idGrupo).toList();
               if (notasDeGrupo != null && notasDeGrupo.isNotEmpty) {
@@ -70,11 +70,11 @@ class _MyDropdownState extends State<MyDropdown> {
                         ),
                       ),
                     ),
-
                     const SizedBox(height: 8.0), // Separación entre los desplegables
                   ],
                 );
               }
+              return null;
             }
           );
         } else {
