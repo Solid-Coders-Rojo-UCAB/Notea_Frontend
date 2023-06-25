@@ -3,7 +3,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:notea_frontend/presentacion/pantallas/angel/ImageBlock.dart';
-import 'package:notea_frontend/presentacion/pantallas/angel/TareaBlock.dart';
 import 'package:notea_frontend/presentacion/pantallas/angel/TextBlock.dart';
 
 class ContainerEditorNota extends StatefulWidget {
@@ -124,10 +123,10 @@ class _ContainerEditorNotaState extends State<ContainerEditorNota> {
                   setState(() {
                     if (value == 'text_block') {
                       _children.add(TextBlock());
-                    } 
-                    // else if (value == 'image_block') {
-                    //   _children.add(ImageBlock());
-                    // }else if (value == 'tarea_block') {
+                    }else if (value == 'image_block') {
+                      _children.add(const ImageBlock());
+                    }
+                    //else if (value == 'tarea_block') {
                     //   _children.add(const TareaBlock());
                     // }
                   });
