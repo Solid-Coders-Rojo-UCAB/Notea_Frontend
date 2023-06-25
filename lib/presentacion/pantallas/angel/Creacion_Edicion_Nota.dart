@@ -2,6 +2,7 @@
 
 import 'package:flutter/material.dart';
 import 'package:notea_frontend/presentacion/pantallas/angel/Container_Editor_Nota.dart';
+import 'package:notea_frontend/presentacion/pantallas/angel/EtiquetaList.dart';
 // import 'package:notea_frontend/presentacion/pantallas/angel/EtiquetaList.dart';
 // import 'package:notea_frontend/presentacion/pantallas/angel/GrupoList.dart';
 class AccionesConNota extends StatefulWidget {
@@ -92,7 +93,7 @@ class _AccionesConNotaState extends State<AccionesConNota> {
                 const SizedBox(height: 24.0),
                 Column(
                   children: const [
-                    // EtiquetaList(),
+                    EtiquetaList(),
                     // GrupoList(),
                   ],
                 ),
