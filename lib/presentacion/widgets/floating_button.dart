@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:notea_frontend/presentacion/pantallas/angel/Creacion_Edicion_Nota.dart';
 
 
 class MyFloatingButton extends StatefulWidget {
@@ -16,11 +17,11 @@ class FloatingButtonState extends State<MyFloatingButton> {
       alignment: Alignment.bottomRight,
       child: FloatingActionButton(
         onPressed: () {
-          showModalBottomSheet(
-              context: context,
-              builder: (BuildContext context) {
-                return const Text('aca se llamaria a la pantalla de creación de Nota');
-              });
+          // Navegar a otra pantalla
+          Navigator.push(
+            context,
+            MaterialPageRoute(builder: (context) => const AccionesConNota(accion: 'Creando Nota')),
+          );
         },
         // child: const Icon(Icons.addchart_sharp),
         child: const Icon(Icons.post_add_rounded),
@@ -28,5 +29,4 @@ class FloatingButtonState extends State<MyFloatingButton> {
     );
   }
 }
-
 
