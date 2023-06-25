@@ -2,7 +2,6 @@
 
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:notea_frontend/presentacion/pantallas/angel/EtiquetaList.dart';
 
 const h1 = TextStyle(
   fontSize: 37,

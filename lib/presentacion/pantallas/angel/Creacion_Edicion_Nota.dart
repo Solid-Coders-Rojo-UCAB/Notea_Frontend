@@ -2,8 +2,8 @@
 
 import 'package:flutter/material.dart';
 import 'package:notea_frontend/presentacion/pantallas/angel/Container_Editor_Nota.dart';
-import 'package:notea_frontend/presentacion/pantallas/angel/EtiquetaList.dart';
-import 'package:notea_frontend/presentacion/pantallas/angel/GrupoList.dart';
+import 'package:notea_frontend/presentacion/widgets/EtiquetaList.dart';
+import 'package:notea_frontend/presentacion/widgets/GrupoList.dart';
 // import 'package:notea_frontend/presentacion/pantallas/angel/EtiquetaList.dart';
 // import 'package:notea_frontend/presentacion/pantallas/angel/GrupoList.dart';
 class AccionesConNota extends StatefulWidget {

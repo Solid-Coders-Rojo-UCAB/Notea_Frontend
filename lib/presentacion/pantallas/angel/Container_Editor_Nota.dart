@@ -2,9 +2,9 @@
 
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:notea_frontend/presentacion/pantallas/angel/ImageBlock.dart';
-import 'package:notea_frontend/presentacion/pantallas/angel/TareaBlock.dart';
-import 'package:notea_frontend/presentacion/pantallas/angel/TextBlock.dart';
+import 'package:notea_frontend/presentacion/widgets/ImageBlock.dart';
+import 'package:notea_frontend/presentacion/widgets/TareaBlock.dart';
+import 'package:notea_frontend/presentacion/widgets/TextBlock.dart';
 
 class ContainerEditorNota extends StatefulWidget {
   const ContainerEditorNota({super.key});
