@@ -24,7 +24,7 @@ class _MyDropdownState extends State<MyDropdown> {
   @override
   void initState() {
     super.initState();
-    WidgetsBinding.instance?.addPostFrameCallback((_) {
+    WidgetsBinding.instance.addPostFrameCallback((_) {
       final notaBloc = BlocProvider.of<NotaBloc>(context);
       notaBloc.add(NotaCatchEvent());
     });
@@ -32,19 +32,16 @@ class _MyDropdownState extends State<MyDropdown> {
 
   @override
   Widget build(BuildContext context) {
-    return BlocBuilder<NotaBloc, NotaState>(builder: (context, state) {
-      if (state is NotasSuccessState) {
-        notas = state.notas;
-        return ListView.builder(
-            itemCount: widget.grupos?.length,
-            itemBuilder: (context, index) {
-              final grupo =
-                  widget.grupos![index]; //Tenemos el grupo que se renderizará
-              final notasDeGrupo = notas
-                  ?.where((nota) =>
-                      nota.idGrupo.getIdGrupoNota() == grupo.idGrupo &&
-                      nota.getEstado() != "PAPELERA")
-                  .toList();
+    
+    return BlocBuilder<NotaBloc, NotaState>(
+      builder: (context, state) {
+        if (state is NotasSuccessState) {
+          notas = state.notas;
+            return ListView.builder(
+              itemCount: widget.grupos?.length,
+              itemBuilder: (context, index){
+                final grupo = widget.grupos![index]; //Tenemos el grupo que se renderizará
+                final notasDeGrupo = notas?.where((nota) => nota.idGrupo.getIdGrupoNota() == grupo.idGrupo).toList();
               if (notasDeGrupo != null && notasDeGrupo.isNotEmpty) {
                 return Column(
                   children: <Widget>[
@@ -68,17 +65,18 @@ class _MyDropdownState extends State<MyDropdown> {
                       ),
                     ),
 
-                    const SizedBox(
-                        height: 8.0), // Separación entre los desplegables
+                    const SizedBox(height: 8.0), // Separación entre los desplegables
                   ],
                 );
               }
-            });
-      } else {
-        // No mostrar el grupo si no tiene notas que pertenecen a él
-        return const SizedBox.shrink();
+            }
+          );
+        } else {
+          // No mostrar el grupo si no tiene notas que pertenecen a él
+          return const SizedBox.shrink();
+        }
       }
-    });
+    );
   }
 }
 
