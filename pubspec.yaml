@@ -20,12 +20,7 @@ dependencies:
   progress_state_button: ^1.0.4
   quiver: ^3.2.1
   uuid: ^3.0.7
-  http: ^0.13.6
-  connectivity_plus: ^4.0.1
-  progress_state_button: ^1.0.4
-
-  flutter_bloc: ^8.1.1
-  equatable: ^2.0.5
+ 
   image_picker: ^0.8.9
   multi_select_flutter: ^4.1.3
 
