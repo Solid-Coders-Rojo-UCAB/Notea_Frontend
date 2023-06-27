@@ -341,6 +341,30 @@ class _TextBlockState extends State<TextBlock> {
                           ],
                         ),
                       ),
+                      Expanded(
+                        child:Row(
+                          children: [
+                            Expanded(
+                              child: ListView(
+                                children: [
+                                 IconButton(icon: const Icon(Icons.image_search_rounded, color: Color.fromARGB(255, 206, 156, 5)), onPressed: () {    //Aca el boton del menu desplegable
+                                    print('Aca se habre la funcionalidad de imagen a texto');
+                                    // setState(() {
+                                    //   renderBlockChange = !renderBlockChange;   //Esto cambia el valor true o false
+                                    // });
+                                  }),
+                                  IconButton(icon: const Icon(Icons.mic, color: Color.fromARGB(255, 206, 156, 5)), onPressed: () {    //Aca el boton del menu desplegable
+                                    print('Aca se habre la funcionalidad de audio a texto');
+                                    // setState(() {
+                                    //   renderBlockChange = !renderBlockChange;   //Esto cambia el valor true o false
+                                    // });
+                                  }),
+                                ],
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
                       //Fila con el ultimo boton para salir del menu
                       Expanded(
                         child:Row(

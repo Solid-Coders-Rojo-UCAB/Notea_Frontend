@@ -32,20 +32,17 @@ class _MyDropdownState extends State<MyDropdown> {
 
   @override
   Widget build(BuildContext context) {
-    return BlocBuilder<NotaBloc, NotaState>(builder: (context, state) {
-      if (state is NotasSuccessState) {
-        notas = state.notas;
-        return ListView.builder(
-            itemCount: widget.grupos?.length,
-            itemBuilder: (context, index) {
-              final grupo =
-                  widget.grupos![index]; //Tenemos el grupo que se renderizará
-              final notasDeGrupo = notas
-                  ?.where((nota) =>
-                      nota.idGrupo.getIdGrupoNota() == grupo.idGrupo &&
-                      nota.getEstado() != "PAPELERA")
-                  .toList();
-
+    
+    return BlocBuilder<NotaBloc, NotaState>(
+      builder: (context, state) {
+        if (state is NotasSuccessState) {
+          notas = state.notas;
+            return ListView.builder(
+              itemCount: widget.grupos?.length,
+              itemBuilder: (context, index){
+                final grupo = widget.grupos![index]; //Tenemos el grupo que se renderizará
+                final notasDeGrupo = notas?.where((nota) => nota.idGrupo.getIdGrupoNota() == grupo.idGrupo
+                && !(nota.getEstado() == "PAPELERA")).toList();
               if (notasDeGrupo != null && notasDeGrupo.isNotEmpty) {
                 return Column(
                   children: <Widget>[
