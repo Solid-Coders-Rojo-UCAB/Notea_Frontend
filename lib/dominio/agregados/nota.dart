@@ -12,7 +12,7 @@ class Nota {
   late VOContenidoNota contenido;
   late DateTime fechaCreacion;
   late VOUbicacionNota ubicacion;
-  late EstadoEnum estado;
+  late String estado;
   //late List<Tarea> tareas;
   late VOIdGrupoNota idGrupo;
 
@@ -33,7 +33,7 @@ class Nota {
       titulo: VOTituloNota.crearTituloNota(json['titulo']['titulo']),
       contenido: VOContenidoNota.crearContenidoNota(json['contenido']['contenido']),
       fechaCreacion: DateTime.parse(json['fechaCreacion']),
-      estado: EstadoEnum.values.byName(json['estado']),
+      estado: (json['estado']['estado']),
       ubicacion:
           VOUbicacionNota.crearUbicacionNota(json['ubicacion']['latitud'], json['ubicacion']['longitud']),
       id: json['id']['id'],
@@ -43,7 +43,7 @@ class Nota {
   }
 
   static Nota crearNota(String titulo, String contenido, DateTime fechaCreacion,
-      EstadoEnum estado, int latitud, int longitud, String id, String idGrupo) {
+      String estado, int latitud, int longitud, String id, String idGrupo) {
     return Nota(
       titulo: VOTituloNota.crearTituloNota(titulo),
       contenido: VOContenidoNota.crearContenidoNota(contenido),
@@ -73,7 +73,7 @@ class Nota {
   }
 
   String getEstado() {
-    return estado.toString();
+    return estado;
   }
 
   Map<String, int> getUbicacion() {
@@ -91,7 +91,7 @@ class Nota {
     return ubicacion.getLongitud();
   }
 
-  void setEstado(EstadoEnum estado) {
+  void setEstado(String estado) {
     this.estado = estado;
   }
 
