@@ -1,6 +1,9 @@
 // ignore_for_file: file_names
 
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:notea_frontend/infraestructura/bloc/Grupo/grupo_bloc.dart';
+import 'package:notea_frontend/presentacion/pantallas/papelera_screen.dart';
 class BottomBar extends StatelessWidget {
   final GlobalKey<ScaffoldState> scaffoldKey;
 
@@ -26,7 +29,13 @@ class BottomBar extends StatelessWidget {
                 Icons.delete,
                 size: 30,
                 color: Colors.white,
-              ), onPressed: () {  },
+              ), onPressed: () {  
+
+                Navigator.push(
+      context,
+      MaterialPageRoute(builder: (context) => Papelera(grupos: context.read<GrupoBloc>().state.grupos)),
+    );
+              },
             ),
             IconButton(
               icon: const Icon(

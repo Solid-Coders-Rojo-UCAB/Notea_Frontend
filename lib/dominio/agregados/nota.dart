@@ -12,7 +12,7 @@ class Nota {
   late VOContenidoNota contenido;
   late DateTime fechaCreacion;
   late VOUbicacionNota ubicacion;
-  late String estado;
+  late EstadoEnum estado;
   //late List<Tarea> tareas;
   late VOIdGrupoNota idGrupo;
 
@@ -43,7 +43,7 @@ class Nota {
   }
 
   static Nota crearNota(String titulo, String contenido, DateTime fechaCreacion,
-      String estado, int latitud, int longitud, String id, String idGrupo) {
+      EstadoEnum estado, int latitud, int longitud, String id, String idGrupo) {
     return Nota(
       titulo: VOTituloNota.crearTituloNota(titulo),
       contenido: VOContenidoNota.crearContenidoNota(contenido),
@@ -73,7 +73,7 @@ class Nota {
   }
 
   String getEstado() {
-    return estado.toString();
+    return estado.name;
   }
 
   Map<String, int> getUbicacion() {
@@ -91,7 +91,7 @@ class Nota {
     return ubicacion.getLongitud();
   }
 
-  void setEstado(String estado) {
+  void setEstado(EstadoEnum estado) {
     this.estado = estado;
   }
 
