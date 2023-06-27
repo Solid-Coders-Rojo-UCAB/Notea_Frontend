@@ -28,14 +28,14 @@ class Nota {
   });
 
   factory Nota.fromJson(Map<String, dynamic> json) {
-
     return Nota(
       titulo: VOTituloNota.crearTituloNota(json['titulo']['titulo']),
-      contenido: VOContenidoNota.crearContenidoNota(json['contenido']['contenido']),
+      contenido:
+          VOContenidoNota.crearContenidoNota(json['contenido']['contenido']),
       fechaCreacion: DateTime.parse(json['fechaCreacion']),
       estado: EstadoEnum.values.byName(json['estado']),
-      ubicacion:
-          VOUbicacionNota.crearUbicacionNota(json['ubicacion']['latitud'], json['ubicacion']['longitud']),
+      ubicacion: VOUbicacionNota.crearUbicacionNota(
+          json['ubicacion']['latitud'], json['ubicacion']['longitud']),
       id: json['id']['id'],
       //tareas: json['tareas'],
       idGrupo: VOIdGrupoNota.crearIdGrupoNota(json['idGrupo']['idGrupo']),
@@ -73,7 +73,18 @@ class Nota {
   }
 
   String getEstado() {
-    return estado.toString();
+    return estado.name;
+  }
+
+  bool isEstado(String estado) {
+    bool isEqual = false;
+    for (EstadoEnum value in EstadoEnum.values) {
+      if (value.name == estado) {
+        isEqual = true;
+        return isEqual;
+      }
+    }
+    return isEqual;
   }
 
   Map<String, int> getUbicacion() {
@@ -103,7 +114,7 @@ class Nota {
     this.contenido = contenido;
   }
 
-    void setIdGrupoNota(VOIdGrupoNota idGrupo) {
+  void setIdGrupoNota(VOIdGrupoNota idGrupo) {
     this.idGrupo = idGrupo;
   }
 }

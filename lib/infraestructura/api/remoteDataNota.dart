@@ -8,7 +8,6 @@ import 'package:notea_frontend/dominio/agregados/VONota/VOTituloNota.dart';
 import 'package:notea_frontend/dominio/agregados/VONota/VOUbicacionNota.dart';
 import 'package:notea_frontend/dominio/agregados/VONota/VOidGrupo.dart';
 
-
 import '../../dominio/agregados/VONota/EstadoEnum.dart';
 import '../../dominio/agregados/nota.dart';
 import '../../utils/Either.dart';
@@ -27,15 +26,16 @@ class RemoteDataNotaImp implements RemoteDataNota {
   Future<Either<List<Nota>, Exception>> buscarNotasApi() async {
     print('-entra en remoteDataNota');
     if (await const ConectivityCheck().checkConectivity()) {
-      final response =
-          await client.get(Uri.parse('http://localhost:3000/nota/all'));          //Creo que esto no es lo mejor, porque treemos todas las notas
+      final response = await client.get(Uri.parse(
+          'http://localhost:3000/nota/all')); //Creo que esto no es lo mejor, porque treemos todas las notas
       if (response.statusCode == 200) {
         return Either.left(parseNota(response.body));
       } else {
         return Either.right(Exception("Error al buscar las notas"));
       }
     } else {
-      return  Either.right(Exception("No hay conexion a internet")); //guardado en la base de datos local
+      return Either.right(Exception(
+          "No hay conexion a internet")); //guardado en la base de datos local
     }
   }
 
@@ -51,12 +51,12 @@ class RemoteDataNotaImp implements RemoteDataNota {
         },
       );
       if (response.statusCode == 200) {
-        return  Either.left(response.statusCode);
+        return Either.left(response.statusCode);
       } else {
-        return  Either.right(Exception("Error al crear la nota en el servidor"));
+        return Either.right(Exception("Error al crear la nota en el servidor"));
       }
     } else {
-      return  Either.right(Exception(
+      return Either.right(Exception(
           "No hay conexion a internet")); //guardado en la base de datos local
     }
   }
@@ -65,17 +65,20 @@ class RemoteDataNotaImp implements RemoteDataNota {
     List<dynamic> decodedResponse = jsonDecode(responseBody);
     List<Nota> notas = [];
     for (var item in decodedResponse) {
-
-
       EstadoEnum estado = EstadoEnum.values.byName(item['estado']);
+      print('hola ' + estado.name);
 
       //hay que usar la funcion Nota.FromJson que lo hace de una
-      Nota nota = Nota(titulo: VOTituloNota(item['titulo']['titulo']), contenido: VOContenidoNota(item['contenido']['contenido']), 
-      fechaCreacion: DateTime.parse(item['fechaCreacion']), estado: estado, ubicacion: VOUbicacionNota(111, -11111), id: item['id']['id'], idGrupo: VOIdGrupoNota(item['grupo']['id']));
+      Nota nota = Nota(
+          titulo: VOTituloNota(item['titulo']['titulo']),
+          contenido: VOContenidoNota(item['contenido']['contenido']),
+          fechaCreacion: DateTime.parse(item['fechaCreacion']),
+          estado: estado,
+          ubicacion: VOUbicacionNota(111, -11111),
+          id: item['id']['id'],
+          idGrupo: VOIdGrupoNota(item['grupo']['id']));
       notas.add(nota);
     }
     return notas;
   }
-
 }
-
