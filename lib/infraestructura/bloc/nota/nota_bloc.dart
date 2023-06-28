@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:notea_frontend/infraestructura/Repositorio/repositorioNotaImpl.dart';
 import 'package:notea_frontend/infraestructura/api/remoteDataNota.dart';
+import '../../../dominio/agregados/grupo.dart';
 import '../../../dominio/agregados/nota.dart';
 
 part 'nota_event.dart';
@@ -14,17 +15,22 @@ class NotaBloc extends  Bloc<NotaEvent, NotaState> {
 
    //generamos los comportamientos del bloc
 
-    on<NotaCatchEvent>((event, emit) async { //para que el bloc escuche el evento Login
-      print('---------Llamando al evento de obtencion de notas---------');
-      emit(const NotaInitialState()); //emitimos el estado de cargando
-      
-      //Hacemos la peticion a nuestra API
-      // await Future.delayed(const Duration(seconds: 2));
+    on<NotaCatchEvent>((event, emit) async {
+      emit(const NotaInitialState());
       final repositorio = RepositorioNotaImpl(remoteDataSource: RemoteDataNotaImp(client: http.Client()));
       final notas = await repositorio.buscarNotas();
+      notas.isLeft() ?  emit(NotasCatchSuccessState(notas: notas.left!)): emit(const NotasFailureState());
+    });
 
-      notas.isLeft() ?  emit(NotasSuccessState(notas: notas.left!)): emit(const NotasFailureState());
-    }
-    );
+    on<CreateNotaEvent>((event, emit) async {
+      emit(const NotaInitialState());
+      // await Future.delayed(const Duration(seconds: 2));
+       
+      final repositorio = RepositorioNotaImpl(remoteDataSource: RemoteDataNotaImp(client: http.Client()));
+      // final notas = await repositorio.crearNota(event);
+
+      // usuario.isLeft() ?  emit(UsuarioSuccessState(usuario: usuario.left!))  //emitimos el estado de exito
+      //   : emit(const UsuarioFailureState()); //emitimos el estado de error
+    });
   }
 }

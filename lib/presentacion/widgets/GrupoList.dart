@@ -11,7 +11,9 @@ class Grupo {
 }
 
 class GrupoList extends StatefulWidget {
-  const GrupoList({Key? key}) : super(key: key);
+
+  final Function(Grupo) onDataReceived;
+  const GrupoList({Key? key, required this.onDataReceived}) : super(key: key);
 
   @override
   _GrupoListState createState() => _GrupoListState();
@@ -26,6 +28,11 @@ class _GrupoListState extends State<GrupoList> {
   ];
 
   Grupo? selectedGrupo;
+
+
+  void sendDataToWrapperWidget() {
+    widget.onDataReceived(selectedGrupo!);
+  }
 
   void _openBottomSheet(BuildContext context) async {
     await showModalBottomSheet(
@@ -48,7 +55,7 @@ class _GrupoListState extends State<GrupoList> {
                   ),
                   const SizedBox(height: 16.0),
                   SizedBox(
-                    height: 200, 
+                    height: 200,
                     child: ListView.builder(
                       itemCount: grupos.length,
                       itemBuilder: (context, index) {
@@ -62,6 +69,7 @@ class _GrupoListState extends State<GrupoList> {
                               setState(() {
                                 selectedGrupo = value;
                               });
+                              sendDataToWrapperWidget();
                             },
                           ),
                         );

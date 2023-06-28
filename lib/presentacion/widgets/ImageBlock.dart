@@ -4,15 +4,21 @@ import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 
 class ImageBlock extends StatefulWidget {
-  const ImageBlock({Key? key}) : super(key: key);
+
+  final ImageBlockController controller = ImageBlockController();
+  
+  ImageBlock({Key? key}) : super(key: key);
 
   @override
   _ImageBlockState createState() => _ImageBlockState();
+
 }
 
 class _ImageBlockState extends State<ImageBlock> {
   final ImagePicker _imagePicker = ImagePicker();
   Image? _selectedImage;
+  
+
 
   Future<void> _pickImageFromGallery() async {
     final pickedImage = await _imagePicker.pickImage(source: ImageSource.gallery);
@@ -23,6 +29,7 @@ class _ImageBlockState extends State<ImageBlock> {
           fit: BoxFit.cover,
         );
       });
+        widget.controller.setImage(_selectedImage, pickedImage.name);
     }
   }
 
@@ -94,5 +101,24 @@ class _ImageBlockState extends State<ImageBlock> {
           ),
       ],
     );
+  }
+}
+
+
+class ImageBlockController {
+  Image? _selectedImage;
+  String? _imageName;
+
+  void setImage(Image? image, String? imageName) {
+    _selectedImage = image;
+    _imageName = imageName;
+  }
+
+  Image? getSelectedImage() {
+    return _selectedImage;
+  }
+
+  String? getImageName() {
+    return _imageName;
   }
 }
