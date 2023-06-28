@@ -2,6 +2,9 @@
 
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:image_picker/image_picker.dart';
+import 'package:notea_frontend/aplicacion/ImagenATexto.dart';
+import 'package:file_picker/file_picker.dart';
 
 const h1 = TextStyle(
   fontSize: 37,
@@ -83,7 +86,8 @@ class _TextBlockState extends State<TextBlock> {
   String dropdownValue = 'One';
   Color backgroundColor = Colors.transparent;
   double opacity = 0;
-  bool renderBlockChange = false;                     //Esta es la variable que se encarga de mostrar o no el  menu desplegable de NEGRITAS, IMAGENES
+  bool renderBlockChange =
+      false; //Esta es la variable que se encarga de mostrar o no el  menu desplegable de NEGRITAS, IMAGENES
   TextStyle activeStyle = text;
 
   List<FocusNode> styleNodes = [
@@ -97,11 +101,11 @@ class _TextBlockState extends State<TextBlock> {
   void initState() {
     super.initState();
     widget.focus.addListener(() {
-      if (!widget.focus.hasFocus
-          && !styleNodes[0].hasFocus
-          && !styleNodes[1].hasFocus
-          && !styleNodes[2].hasFocus
-          && !styleNodes[3].hasFocus) {
+      if (!widget.focus.hasFocus &&
+          !styleNodes[0].hasFocus &&
+          !styleNodes[1].hasFocus &&
+          !styleNodes[2].hasFocus &&
+          !styleNodes[3].hasFocus) {
         setState(() {
           renderBlockChange = false;
           backgroundColor = Colors.transparent;
@@ -124,7 +128,8 @@ class _TextBlockState extends State<TextBlock> {
 
   _onEnter(e) {
     setState(() {
-      backgroundColor = Colors.black12;       //Cuando se le pasa el mouse por encima cambia de color (es un HOVER de csss)
+      backgroundColor = Colors
+          .black12; //Cuando se le pasa el mouse por encima cambia de color (es un HOVER de csss)
       opacity = 1;
     });
   }
@@ -132,7 +137,8 @@ class _TextBlockState extends State<TextBlock> {
   _onExit(e) {
     setState(() {
       if (!renderBlockChange) {
-        backgroundColor = Colors.transparent; //Cuando se le pasa el mouse por encima cambia de color (es un HOVER de csss)
+        backgroundColor = Colors
+            .transparent; //Cuando se le pasa el mouse por encima cambia de color (es un HOVER de csss)
         opacity = 0;
       }
     });
@@ -140,15 +146,18 @@ class _TextBlockState extends State<TextBlock> {
 
   handleKey(key) {
     if (key.runtimeType == RawKeyDownEvent) {
-      if (key.data.keyLabel == 'Escape' || key.logicalKey.keyLabel == 'Escape') {
+      if (key.data.keyLabel == 'Escape' ||
+          key.logicalKey.keyLabel == 'Escape') {
         setState(() {
-          renderBlockChange = !renderBlockChange;                       //Setea al valor contrario al que estaba
-          if (renderBlockChange) {                                      //Si es true, pone el fondo con negro
-            backgroundColor = Colors.black12; 
+          renderBlockChange =
+              !renderBlockChange; //Setea al valor contrario al que estaba
+          if (renderBlockChange) {
+            //Si es true, pone el fondo con negro
+            backgroundColor = Colors.black12;
             opacity = 1;
-          }
-          else {
-            backgroundColor = Colors.transparent;                     //Si es false, pone el fondo trasnparente
+          } else {
+            backgroundColor =
+                Colors.transparent; //Si es false, pone el fondo trasnparente
             opacity = 0;
             widget.focus.requestFocus();
           }
@@ -157,7 +166,7 @@ class _TextBlockState extends State<TextBlock> {
     }
   }
 
-  TextStyle?  activarEstilo(String estilo) {
+  TextStyle? activarEstilo(String estilo) {
     final Map<String, TextStyle> estilos = {
       'negrita': negrita,
       'cursiva': cursiva,
@@ -166,7 +175,7 @@ class _TextBlockState extends State<TextBlock> {
     };
     renderBlockChange = renderBlockChange;
     return estilos[estilo];
-}
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -174,8 +183,8 @@ class _TextBlockState extends State<TextBlock> {
       focusNode: widget.rawKeyboardFocus,
       onKey: (RawKeyEvent key) => handleKey(key),
       child: MouseRegion(
-        onEnter: (e) => _onEnter(e),        //HOVER
-        onExit: (e) => _onExit(e),          //HOVER
+        onEnter: (e) => _onEnter(e), //HOVER
+        onExit: (e) => _onExit(e), //HOVER
         child: AnimatedContainer(
           margin: const EdgeInsets.only(bottom: 20),
           height: renderBlockChange ? 180 : 105,
@@ -193,17 +202,21 @@ class _TextBlockState extends State<TextBlock> {
                       opacity: opacity,
                       duration: const Duration(milliseconds: 200),
                       child: Container(
-                        margin: const EdgeInsets.only(right: 20),
-                        child: Column(
-                          children: [
-                            IconButton(icon: const Icon(Icons.menu, color: Colors.black38), onPressed: () {    //Aca el boton del menu desplegable
-                              setState(() {
-                                renderBlockChange = !renderBlockChange;   //Esto cambia el valor true o false
-                              });
-                            }),
-                          ],
-                        )
-                      )),
+                          margin: const EdgeInsets.only(right: 20),
+                          child: Column(
+                            children: [
+                              IconButton(
+                                  icon: const Icon(Icons.menu,
+                                      color: Colors.black38),
+                                  onPressed: () {
+                                    //Aca el boton del menu desplegable
+                                    setState(() {
+                                      renderBlockChange =
+                                          !renderBlockChange; //Esto cambia el valor true o false
+                                    });
+                                  }),
+                            ],
+                          ))),
                   Flexible(
                     child: TextField(
                       cursorColor: Colors.black12,
@@ -234,14 +247,14 @@ class _TextBlockState extends State<TextBlock> {
                 child: AnimatedContainer(
                   margin: const EdgeInsets.only(top: 12, left: 60),
                   duration: const Duration(milliseconds: 200),
-                  height: renderBlockChange ?  70 : 0,
+                  height: renderBlockChange ? 70 : 0,
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.start,
                     crossAxisAlignment: CrossAxisAlignment.end,
                     children: [
                       //Fila con los primeros botones
                       Expanded(
-                        child:Row(
+                        child: Row(
                           children: [
                             Expanded(
                               child: ListView(
@@ -292,7 +305,7 @@ class _TextBlockState extends State<TextBlock> {
                       ),
                       //Fila con los segundos botones
                       Expanded(
-                        child:Row(
+                        child: Row(
                           children: [
                             Expanded(
                               child: ListView(
@@ -327,7 +340,8 @@ class _TextBlockState extends State<TextBlock> {
                                     ),
                                     onPressed: () {
                                       setState(() {
-                                        activeStyle = activarEstilo('subrayado')!;
+                                        activeStyle =
+                                            activarEstilo('subrayado')!;
                                         renderBlockChange = true;
                                         opacity = 0;
                                         backgroundColor = Colors.transparent;
@@ -342,23 +356,52 @@ class _TextBlockState extends State<TextBlock> {
                         ),
                       ),
                       Expanded(
-                        child:Row(
+                        child: Row(
                           children: [
                             Expanded(
                               child: ListView(
                                 children: [
-                                 IconButton(icon: const Icon(Icons.image_search_rounded, color: Color.fromARGB(255, 206, 156, 5)), onPressed: () {    //Aca el boton del menu desplegable
-                                    print('Aca se habre la funcionalidad de imagen a texto');
-                                    // setState(() {
-                                    //   renderBlockChange = !renderBlockChange;   //Esto cambia el valor true o false
-                                    // });
-                                  }),
-                                  IconButton(icon: const Icon(Icons.mic, color: Color.fromARGB(255, 206, 156, 5)), onPressed: () {    //Aca el boton del menu desplegable
-                                    print('Aca se habre la funcionalidad de audio a texto');
-                                    // setState(() {
-                                    //   renderBlockChange = !renderBlockChange;   //Esto cambia el valor true o false
-                                    // });
-                                  }),
+                                  IconButton(
+                                      icon: const Icon(
+                                          Icons.image_search_rounded,
+                                          color:
+                                              Color.fromARGB(255, 206, 156, 5)),
+                                      onPressed: () async {
+                                        //Aca el boton del menu desplegable
+                                        print(
+                                            'Aca se habre la funcionalidad de imagen a texto');
+                                        Future<String> future = imagenATexto()
+                                            .EscanearTexto(await ImagePicker()
+                                                .pickImage(
+                                                    source: ImageSource
+                                                        .gallery)); //Aqui se selecciona una imagen desde la galeria, y se envia a la funcion para ser escaneada
+
+                                        // Future<String> future = imagenATexto()
+                                        //    .EscanearTexto(
+                                        //         (await seleccionarImagen())
+                                        //             as XFile?);
+
+                                        //Se guarda el texto escaneado en esta variable y se setea.
+                                        print(future);
+                                        widget.controller.text = await future;
+
+                                        setState(() async {
+                                          renderBlockChange =
+                                              !renderBlockChange; //Esto cambia el valor true o false
+                                        });
+                                      }),
+                                  IconButton(
+                                      icon: const Icon(Icons.mic,
+                                          color:
+                                              Color.fromARGB(255, 206, 156, 5)),
+                                      onPressed: () {
+                                        //Aca el boton del menu desplegable
+                                        print(
+                                            'Aca se habre la funcionalidad de audio a texto');
+                                        // setState(() {
+                                        //   renderBlockChange = !renderBlockChange;   //Esto cambia el valor true o false
+                                        // });
+                                      }),
                                 ],
                               ),
                             ),
@@ -367,16 +410,21 @@ class _TextBlockState extends State<TextBlock> {
                       ),
                       //Fila con el ultimo boton para salir del menu
                       Expanded(
-                        child:Row(
+                        child: Row(
                           children: [
                             Expanded(
                               child: ListView(
                                 children: [
-                                  IconButton(icon: const Icon(Icons.close, color: Colors.red), onPressed: () {    //Aca el boton del menu desplegable
-                                    setState(() {
-                                      renderBlockChange = !renderBlockChange;   //Esto cambia el valor true o false
-                                    });
-                                  }),
+                                  IconButton(
+                                      icon: const Icon(Icons.close,
+                                          color: Colors.red),
+                                      onPressed: () {
+                                        //Aca el boton del menu desplegable
+                                        setState(() {
+                                          renderBlockChange =
+                                              !renderBlockChange; //Esto cambia el valor true o false
+                                        });
+                                      }),
                                 ],
                               ),
                             ),
@@ -392,5 +440,20 @@ class _TextBlockState extends State<TextBlock> {
         ),
       ),
     );
+  }
+}
+
+Future<String?> seleccionarImagen() async {
+  FilePickerResult? result = await FilePicker.platform.pickFiles(
+    type: FileType.image,
+    allowMultiple: false,
+  );
+
+  if (result != null) {
+    PlatformFile file = result.files.first;
+    String? imagePath = file.path;
+    return imagePath;
+  } else {
+    throw Exception('No se seleccionó ninguna imagen');
   }
 }
