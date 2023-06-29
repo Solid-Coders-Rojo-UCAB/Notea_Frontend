@@ -16,6 +16,8 @@ import '../conectivityChecker/checker.dart';
 abstract class RemoteDataNota {
   Future<Either<List<Nota>, Exception>> buscarNotasApi();
   Future<Either<int, Exception>> crearNotaApi(Map<String, dynamic> jsonString);
+  Future<Either<int, Exception>> changeStateNotaApi(
+      Map<String, dynamic> jsonString);
 }
 
 class RemoteDataNotaImp implements RemoteDataNota {
@@ -61,17 +63,44 @@ class RemoteDataNotaImp implements RemoteDataNota {
     }
   }
 
+  @override
+  Future<Either<int, Exception>> changeStateNotaApi(
+      Map<String, dynamic> jsonString) async {
+    if (await const ConectivityCheck().checkConectivity()) {
+      final response = await client.patch(
+        Uri.parse('http://localhost:3000/nota'),
+        body: jsonEncode(jsonString),
+        headers: <String, String>{
+          'Content-Type': 'application/json; charset=UTF-8',
+        },
+      );
+      if (response.statusCode == 200) {
+        return Either.left(response.statusCode);
+      } else {
+        return Either.right(
+            Exception("Error al modificar la nota en el servidor"));
+      }
+    } else {
+      return Either.right(Exception(
+          "No hay conexion a internet")); //guardado en la base de datos local
+    }
+  }
+
   List<Nota> parseNota(String responseBody) {
     List<dynamic> decodedResponse = jsonDecode(responseBody);
     List<Nota> notas = [];
     for (var item in decodedResponse) {
-
-
       EstadoEnum estado = EstadoEnum.values.byName(item['estado']);
 
       //hay que usar la funcion Nota.FromJson que lo hace de una
-      Nota nota = Nota(titulo: VOTituloNota(item['titulo']['titulo']), contenido: VOContenidoNota(item['contenido']['contenido']), 
-      fechaCreacion: DateTime.parse(item['fechaCreacion']), estado: estado, ubicacion: VOUbicacionNota(111, -11111), id: item['id']['id'], idGrupo: VOIdGrupoNota(item['grupo']['id']));
+      Nota nota = Nota(
+          titulo: VOTituloNota(item['titulo']['titulo']),
+          contenido: VOContenidoNota(item['contenido']['contenido']),
+          fechaCreacion: DateTime.parse(item['fechaCreacion']),
+          estado: estado,
+          ubicacion: VOUbicacionNota(111, -11111),
+          id: item['id']['id'],
+          idGrupo: VOIdGrupoNota(item['grupo']['id']));
       notas.add(nota);
     }
     return notas;

@@ -30,3 +30,11 @@ class NotasCreateSuccessState extends NotaState {
   final Nota nota;
   const NotasCreateSuccessState({required this.nota}) : super(existeNota: true);
 }
+
+class NotaModifyStateSuccessSate extends NotaState {
+  @override
+    final bool status;
+
+  const NotaModifyStateSuccessSate({required this.status})
+      : super(existeNota: true);
+}

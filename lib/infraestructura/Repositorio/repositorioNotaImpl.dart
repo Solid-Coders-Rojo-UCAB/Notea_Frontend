@@ -24,9 +24,21 @@ class RepositorioNotaImpl implements INotaRepository {
       "fechaCreacion": nota.getFechaCreacion(),
       "getEstado": nota.getEstado(),
       "getUbicacion": nota.getUbicacion(),
-      "idGrupo" : nota.getIdGrupoNota(),
+      "idGrupo": nota.getIdGrupoNota(),
     };
     var result = await remoteDataSource.crearNotaApi(notaDTO);
+    return result;
+  }
+
+  @override
+  Future<Either<int, Exception>> modificarEstadoNota(
+      String id, String grupo, String estado) async {
+    Map<String, dynamic> notaDTO = {
+      "id": id,
+      "grupo": grupo,
+      "estado": estado,
+    };
+    var result = await remoteDataSource.changeStateNotaApi(notaDTO);
     return result;
   }
 }

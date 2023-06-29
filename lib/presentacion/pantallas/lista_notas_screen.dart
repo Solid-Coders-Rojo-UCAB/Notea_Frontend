@@ -2,6 +2,7 @@
 
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:notea_frontend/dominio/agregados/VONota/EstadoEnum.dart';
 import 'package:notea_frontend/dominio/agregados/grupo.dart';
 import 'package:notea_frontend/dominio/agregados/nota.dart';
 import 'package:notea_frontend/infraestructura/bloc/nota/nota_bloc.dart';
@@ -32,17 +33,19 @@ class _MyDropdownState extends State<MyDropdown> {
 
   @override
   Widget build(BuildContext context) {
-    
-    return BlocBuilder<NotaBloc, NotaState>(
-      builder: (context, state) {
-        if (state is NotasCatchSuccessState) {
-          notas = state.notas;
-            return ListView.builder(
-              itemCount: widget.grupos?.length,
-              itemBuilder: (context, index){
-                final grupo = widget.grupos![index]; //Tenemos el grupo que se renderizará
-                final notasDeGrupo = notas?.where((nota) => nota.idGrupo.getIdGrupoNota() == grupo.idGrupo
-                && !(nota.getEstado() == "PAPELERA")).toList();
+    return BlocBuilder<NotaBloc, NotaState>(builder: (context, state) {
+      if (state is NotasCatchSuccessState) {
+        notas = state.notas;
+        return ListView.builder(
+            itemCount: widget.grupos?.length,
+            itemBuilder: (context, index) {
+              final grupo =
+                  widget.grupos![index]; //Tenemos el grupo que se renderizará
+              final notasDeGrupo = notas
+                  ?.where((nota) =>
+                      nota.idGrupo.getIdGrupoNota() == grupo.idGrupo &&
+                      !(nota.getEstado() == "PAPELERA"))
+                  .toList();
               if (notasDeGrupo != null && notasDeGrupo.isNotEmpty) {
                 return Column(
                   children: <Widget>[
@@ -59,6 +62,37 @@ class _MyDropdownState extends State<MyDropdown> {
                             contenido: nota.contenido.contenidoNota,
                             tags: const ['Tag1', 'Tag2', 'Tag3sssssss'],
                             onDeletePressed: () {
+                              showDialog(
+                                context: context,
+                                builder: (BuildContext context) {
+                                  return AlertDialog(
+                                    title: const Text('Confirmación'),
+                                    content: const Text(
+                                        '¿Estás seguro de que deseas mover a la papelera?'),
+                                    actions: [
+                                      TextButton(
+                                        child: const Text('Cancelar'),
+                                        onPressed: () {
+                                          Navigator.pop(
+                                              context); // Cerrar el cuadro de diálogo
+                                        },
+                                      ),
+                                      TextButton(
+                                        child: const Text('Aceptar'),
+                                        onPressed: () {
+                                          BlocProvider.of<NotaBloc>(context)
+                                              .add(ModificarEstadoNotaEvent(
+                                                  idNota: nota.id,
+                                                  grupo: grupo.idGrupo,
+                                                  estado: "PAPELERA"));
+                                          Navigator.pop(context);
+                                          // mover a la papelera
+                                        },
+                                      ),
+                                    ],
+                                  );
+                                },
+                              );
                               // Lógica para eliminar la nota
                             },
                           ));
