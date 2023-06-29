@@ -118,6 +118,17 @@ class CartaWidget extends StatelessWidget {
                       ),
                       onPressed: onDeletePressed,
                     ),
+
+                    IconButton(
+                      icon: const Tooltip(
+                        message: 'Devolver',
+                        child: Icon(
+                          Icons.autorenew,
+                          color: Colors.black,
+                        ),
+                      ),
+                      onPressed: onDeletePressed,
+                    ),
                   ],
                 ),
               ],
