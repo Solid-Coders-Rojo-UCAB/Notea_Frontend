@@ -128,6 +128,46 @@ class _PapeleraState extends State<Papelera> {
                                           onDeletePressed: () {
                                             // Lógica para eliminar la nota
                                           },
+                                          onChangePressed: () {
+                                            showDialog(
+                                              context: context,
+                                              builder: (BuildContext context) {
+                                                return AlertDialog(
+                                                  title: const Text(
+                                                      'Confirmación'),
+                                                  content: const Text(
+                                                      '¿Estás seguro de que deseas regresar la nota a la lista de notas?'),
+                                                  actions: [
+                                                    TextButton(
+                                                      child: const Text(
+                                                          'Cancelar'),
+                                                      onPressed: () {
+                                                        Navigator.pop(
+                                                            context); // Cerrar el cuadro de diálogo
+                                                      },
+                                                    ),
+                                                    TextButton(
+                                                      child:
+                                                          const Text('Aceptar'),
+                                                      onPressed: () {
+                                                        BlocProvider.of<
+                                                                    NotaBloc>(
+                                                                context)
+                                                            .add(ModificarEstadoNotaEvent(
+                                                                idNota: nota.id,
+                                                                grupo: grupo
+                                                                    .idGrupo,
+                                                                estado:
+                                                                    "GUARDADO"));
+                                                        Navigator.pop(context);
+                                                        // mover a la papelera
+                                                      },
+                                                    ),
+                                                  ],
+                                                );
+                                              },
+                                            );
+                                          },
                                         ));
                                       }).toList()),
                                     ),
