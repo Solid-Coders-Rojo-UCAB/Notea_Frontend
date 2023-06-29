@@ -30,7 +30,7 @@ class NotaBloc extends  Bloc<NotaEvent, NotaState> {
       final repositorio = RepositorioNotaImpl(remoteDataSource: RemoteDataNotaImp(client: http.Client()));
       final nota = await repositorio.crearNota(event.tituloNota, event.listInfo, event.etiquetas, event.grupo);
 
-      await Future.delayed(const Duration(seconds: 1));
+      await Future.delayed(const Duration(milliseconds: 300));
       nota!.isLeft() ?  emit(const NotasCreateSuccessState()): emit(const NotasFailureState());//emitimos el estado de error
     });
   }

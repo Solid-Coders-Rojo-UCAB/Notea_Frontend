@@ -4,6 +4,7 @@ import 'dart:io';
 import 'package:flutter/widgets.dart';
 import 'package:http/http.dart' as http;
 import 'package:intl/intl.dart';
+import 'package:notea_frontend/dominio/agregados/grupo.dart';
 import 'package:path_provider/path_provider.dart';
 import 'dart:io' as io;
 import 'dart:ui' as ui;
@@ -31,7 +32,7 @@ class RepositorioNotaImpl implements INotaRepository {
   }
 
   @override
-  Future<Either<int, Exception>?> crearNota(String titulo, List<dynamic> listInfoContenido, List<dynamic> etiquetas, dynamic grupo) async {
+  Future<Either<int, Exception>?> crearNota(String titulo, List<dynamic> listInfoContenido, List<dynamic> etiquetas, Grupo grupo) async {
     final now = DateTime.now();
     var datetimeString = DateFormat('yyyy-MM-ddTHH:mm:ssZ').format(now);// Formato de fecha 'dd/MM/yyyy'
     // List<File>? listaImagen= await imageToFile(listInfoContenido);
@@ -42,7 +43,7 @@ class RepositorioNotaImpl implements INotaRepository {
       "fechaCreacion": datetimeString.toString(),
       "latitud": '40.0238823',        //Colocar aca lo de la ubicacion
       "longitud": '20.0238823',
-      "grupo": grupo.nombre,
+      "grupo": grupo.idGrupo,
       "tareas": crearEstructuraTareasJson(listInfoContenido),
     };
     print(notaDTO);

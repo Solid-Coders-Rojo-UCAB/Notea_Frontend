@@ -55,9 +55,9 @@ Widget build(BuildContext context) {
         return const Center(child: Text('Error al cargar los grupos'));
       }
       if(state is GrupoInitialState) {
-        // final grupoBloc = BlocProvider.of<GrupoBloc>(context);
-        // grupoBloc.add(GrupoCatchEvent(idUsuarioDueno: widget.usuario.id));
-        // Future.delayed(const Duration(milliseconds: 2000), () {
+        final grupoBloc = BlocProvider.of<GrupoBloc>(context);
+        grupoBloc.add(GrupoCatchEvent(idUsuarioDueno: widget.usuario.id));
+        // Future.delayed(const Duration(milliseconds: 300), () {
         //   setState(() {
         //     alignment = Alignment.topRight;
         //     stopScaleAnimtion = true;
@@ -72,6 +72,7 @@ Widget build(BuildContext context) {
           floatingActionButton: MyFloatingButton(
             onPressed: () {
             },
+            grupos: grupos,
           ),
           bottomNavigationBar: BottomBar(scaffoldKey: _scaffoldKey),
           drawer: CustomDrawer(

@@ -7,6 +7,8 @@ import 'dart:typed_data';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 import 'package:flutter/material.dart';
+import 'package:notea_frontend/dominio/agregados/grupo.dart';
+import 'package:notea_frontend/infraestructura/bloc/Grupo/grupo_bloc.dart';
 import 'package:notea_frontend/infraestructura/bloc/nota/nota_bloc.dart';
 import 'package:notea_frontend/infraestructura/bloc/usuario/usuario_bloc.dart';
 import 'package:notea_frontend/presentacion/pantallas/Container_Editor_Nota.dart';
@@ -18,10 +20,11 @@ import 'package:notea_frontend/presentacion/widgets/ImageBlock.dart';
 import 'package:notea_frontend/presentacion/widgets/TareaBlock.dart';
 import 'package:notea_frontend/presentacion/widgets/TextBlock.dart';
 
+
 class AccionesConNota extends StatefulWidget {
   final String accion;
-
-  const AccionesConNota({Key? key, required this.accion}) : super(key: key);
+  final List<Grupo>? grupos;
+  const AccionesConNota({Key? key, required this.accion, required this.grupos}) : super(key: key);
 
   @override
   _AccionesConNotaState createState() => _AccionesConNotaState();
@@ -30,6 +33,7 @@ class AccionesConNota extends StatefulWidget {
 class _AccionesConNotaState extends State<AccionesConNota> {
   late TextEditingController _tituloController;
   String receivedData = '';
+
 
   late List<dynamic> recivedDataList = [];
   late List<dynamic> recivedDataEitquetas = [];
@@ -41,6 +45,9 @@ class _AccionesConNotaState extends State<AccionesConNota> {
   void initState() {
     super.initState();
     _tituloController = TextEditingController();
+    print('---');
+    print(widget.grupos);
+    print('-----');
   }
 
   @override
@@ -120,13 +127,13 @@ class _AccionesConNotaState extends State<AccionesConNota> {
   void handleDataGrupo(Grupo dataGrupo) {
     receivedDataGrupo = dataGrupo;
   }
-  void printGrupo() {
-    print('-----');
-    print(receivedDataGrupo.id);
-    print(receivedDataGrupo.nombre);
-    print(receivedDataGrupo.usuario);
-    print('-----');
-  }
+  // void printGrupo() {
+  //   print('-----');
+  //   print(receivedDataGrupo.id);
+  //   print(receivedDataGrupo.nombre);
+  //   print(receivedDataGrupo.usuario);
+  //   print('-----');
+  // }
 
 
   Future<Uint8List?> downloadImage(String imageUrl) async {
@@ -230,19 +237,13 @@ class _AccionesConNotaState extends State<AccionesConNota> {
                       ),
                       GrupoList(
                         onDataReceived: handleDataGrupo,
+                        grupos: widget.grupos,
                       ),
                     ],
                   ),
                   const SizedBox(height: 24.0),
                   FloatingActionButton(
                     onPressed: () {
-                      // pintaLista();
-                      // print('-----');
-                      // print('-----');
-                      // printEtiquetas();
-                      // print('-----');
-                      // print('-----');
-                      // printGrupo();
                       BlocProvider.of<NotaBloc>(context).add(
                         CreateNotaEvent(
                           tituloNota: _tituloController.text,
