@@ -3,7 +3,7 @@
 import '../../dominio/repositorio/repositorioUsuario.dart';
 import '../../utils/Either.dart';
 import '../api/remoteDataUsuario.dart';
-import '/dominio/agregados/usuario.dart';
+import '/dominio/agregados/usuario.dart';             //Esto es de dominio, se pude tener aca?
 
 class RepositorioUsuarioImpl implements IUsuarioRepository {
   final RemoteDataUsuarioImp remoteDataSource;

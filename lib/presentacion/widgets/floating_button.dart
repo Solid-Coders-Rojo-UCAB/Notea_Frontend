@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:notea_frontend/infraestructura/bloc/Grupo/grupo_bloc.dart';
 import 'package:notea_frontend/presentacion/pantallas/Creacion_Edicion_Nota.dart';
 
 
@@ -18,6 +20,10 @@ class FloatingButtonState extends State<MyFloatingButton> {
       child: FloatingActionButton(
         onPressed: () {
           // Navegar a otra pantalla
+
+          final grupoBloc = BlocProvider.of<GrupoBloc>(context);
+          grupoBloc.add(GrupoReload());
+
           Navigator.push(
             context,
             MaterialPageRoute(builder: (context) => const AccionesConNota(accion: 'Creando Nota')),

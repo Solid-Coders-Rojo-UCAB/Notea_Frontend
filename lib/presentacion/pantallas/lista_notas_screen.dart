@@ -1,4 +1,4 @@
-// ignore_for_file: unrelated_type_equality_checks
+// ignore_for_file: unrelated_type_equality_checks, unnecessary_null_comparison
 
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -21,6 +21,7 @@ class MyDropdown extends StatefulWidget {
 
 class _MyDropdownState extends State<MyDropdown> {
   List<Nota>? notas = [];
+  String  cantNotas = '';
 
 
   @override
@@ -35,7 +36,6 @@ class _MyDropdownState extends State<MyDropdown> {
 
   @override
   Widget build(BuildContext context) {
-    
     return BlocBuilder<NotaBloc, NotaState>(
       builder: (context, state) {
         if (state is NotasCatchSuccessState) {
@@ -45,6 +45,7 @@ class _MyDropdownState extends State<MyDropdown> {
               itemBuilder: (context, index){
                 final grupo = widget.grupos![index]; //Tenemos el grupo que se renderizará
                 final notasDeGrupo = notas?.where((nota) => nota.idGrupo.getIdGrupoNota() == grupo.idGrupo).toList();
+                cantNotas = notasDeGrupo!.length.toString();
               if (notasDeGrupo != null && notasDeGrupo.isNotEmpty) {
                 return Column(
                   children: <Widget>[
