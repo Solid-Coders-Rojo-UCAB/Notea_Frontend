@@ -21,6 +21,7 @@ class Papelera extends StatefulWidget {
 
 class _PapeleraState extends State<Papelera> {
   List<Nota>? notas = [];
+  String? cantidadNotas;
   final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
 
   @override
@@ -35,15 +36,26 @@ class _PapeleraState extends State<Papelera> {
   @override
   Widget build(BuildContext context) {
     return BlocBuilder<NotaBloc, NotaState>(builder: (context, state) {
-      if (state is NotasSuccessState) {
+      if (state is NotasCatchSuccessState) {
         notas = state.notas;
-       
+        int? suma = 0;
+
+        for (int i = 0; i < widget.grupos!.length; i++) {
+          final grupo = widget.grupos![i]; //Tenemos el grupo que se renderizará
+          final cant = notas
+              ?.where((nota) =>
+                  nota.idGrupo.getIdGrupoNota() == grupo.idGrupo &&
+                  (nota.getEstado() == "PAPELERA"))
+              .toList();
+          suma = (suma! + cant!.length);
+        }
+
+        cantidadNotas = suma.toString();
 
         return Scaffold(
             bottomNavigationBar: BottomBar(scaffoldKey: _scaffoldKey),
             body: Padding(
                 padding: const EdgeInsets.only(top: 60),
-                
                 child: Column(children: [
                   Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
@@ -56,7 +68,6 @@ class _PapeleraState extends State<Papelera> {
                           child: Column(
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
-                              
                               Text(
                                 'Papelera de Notas',
                                 style: TextStyle(
@@ -67,7 +78,7 @@ class _PapeleraState extends State<Papelera> {
                               ),
                               const SizedBox(height: 6),
                               Text(
-                                'Tienes un total de ${notas!.length} notas en la papelera',
+                                'Tienes un total de $cantidadNotas notas en la papelera',
                                 style: const TextStyle(
                                   color: Colors.black54,
                                   fontSize: 23,
