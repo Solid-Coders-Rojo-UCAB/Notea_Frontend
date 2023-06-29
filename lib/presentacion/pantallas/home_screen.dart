@@ -29,22 +29,22 @@ class _MessagesScreenState extends State<MessagesScreen> {
   List<Grupo>? grupos = [];
 
 
-  // @override
-  // void initState() {
-  //   super.initState();
+  @override
+  void initState() {
+    super.initState();
 
-  //   WidgetsBinding.instance.addPostFrameCallback((_) {
-  //     final grupoBloc = BlocProvider.of<GrupoBloc>(context);
-  //     grupoBloc.add(GrupoCatchEvent(idUsuarioDueno: widget.usuario.id));
-  //   });
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      final grupoBloc = BlocProvider.of<GrupoBloc>(context);
+      grupoBloc.add(GrupoCatchEvent(idUsuarioDueno: widget.usuario.id));
+    });
 
-  //   Future.delayed(const Duration(milliseconds: 2000), () {
-  //     setState(() {
-  //       alignment = Alignment.topRight;
-  //       stopScaleAnimtion = true;
-  //     });
-  //   });
-  // }
+    Future.delayed(const Duration(milliseconds: 2000), () {
+      setState(() {
+        alignment = Alignment.topRight;
+        stopScaleAnimtion = true;
+      });
+    });
+  }
 
   
 @override
@@ -55,14 +55,14 @@ Widget build(BuildContext context) {
         return const Center(child: Text('Error al cargar los grupos'));
       }
       if(state is GrupoInitialState) {
-        final grupoBloc = BlocProvider.of<GrupoBloc>(context);
-        grupoBloc.add(GrupoCatchEvent(idUsuarioDueno: widget.usuario.id));
-        Future.delayed(const Duration(milliseconds: 2000), () {
-          setState(() {
-            alignment = Alignment.topRight;
-            stopScaleAnimtion = true;
-          });
-        });
+        // final grupoBloc = BlocProvider.of<GrupoBloc>(context);
+        // grupoBloc.add(GrupoCatchEvent(idUsuarioDueno: widget.usuario.id));
+        // Future.delayed(const Duration(milliseconds: 2000), () {
+        //   setState(() {
+        //     alignment = Alignment.topRight;
+        //     stopScaleAnimtion = true;
+        //   });
+        // });
       }
       if (state is GruposSuccessState) {
         grupos = state.grupos;
@@ -170,7 +170,7 @@ Widget build(BuildContext context) {
         ),
         );
       }
-      return const CircularProgressIndicator();
+      return const Center(child: CircularProgressIndicator());
     },
   );
 }

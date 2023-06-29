@@ -11,6 +11,7 @@ import 'package:notea_frontend/infraestructura/bloc/nota/nota_bloc.dart';
 import 'package:notea_frontend/infraestructura/bloc/usuario/usuario_bloc.dart';
 import 'package:notea_frontend/presentacion/pantallas/Container_Editor_Nota.dart';
 import 'package:notea_frontend/presentacion/pantallas/home_screen.dart';
+import 'package:notea_frontend/presentacion/pantallas/lista_notas_screen.dart';
 import 'package:notea_frontend/presentacion/widgets/EtiquetaList.dart';
 import 'package:notea_frontend/presentacion/widgets/GrupoList.dart';
 import 'package:notea_frontend/presentacion/widgets/ImageBlock.dart';
@@ -145,6 +146,10 @@ class _AccionesConNotaState extends State<AccionesConNota> {
 // Evento de regresar
   void _regresar() {
     Navigator.pop(context);
+    Navigator.pushReplacement(
+      context,
+      MaterialPageRoute(builder: (context) =>  MessagesScreen(usuario: context.read<UsuarioBloc>().state.usuario!) ),
+    );
   }
   @override
   Widget build(BuildContext context) {
