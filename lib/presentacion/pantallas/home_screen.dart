@@ -46,7 +46,6 @@ class _MessagesScreenState extends State<MessagesScreen> {
     });
   }
 
-  
 @override
 Widget build(BuildContext context) {
   return BlocBuilder<GrupoBloc, GrupoState>(
