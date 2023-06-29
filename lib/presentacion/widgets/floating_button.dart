@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:notea_frontend/presentacion/pantallas/angel/Creacion_Edicion_Nota.dart';
+import 'package:notea_frontend/presentacion/pantallas/Creacion_Edicion_Nota.dart';
 
 
 class MyFloatingButton extends StatefulWidget {

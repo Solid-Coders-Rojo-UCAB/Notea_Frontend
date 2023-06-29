@@ -35,7 +35,7 @@ class _MyDropdownState extends State<MyDropdown> {
     
     return BlocBuilder<NotaBloc, NotaState>(
       builder: (context, state) {
-        if (state is NotasSuccessState) {
+        if (state is NotasCatchSuccessState) {
           notas = state.notas;
             return ListView.builder(
               itemCount: widget.grupos?.length,

@@ -1,7 +1,13 @@
+// ignore_for_file: must_be_immutable, library_private_types_in_public_api
+
 import 'package:flutter/material.dart';
 
 class TareaBlock extends StatefulWidget {
-  const TareaBlock({Key? key}) : super(key: key);
+
+  List<TextEditingController> controllers = []; // Controladores de texto
+  final TareaBlockController controller1 =TareaBlockController(); // Controladores de texto
+
+  TareaBlock({Key? key}) : super(key: key);
 
   @override
   _TareaBlockState createState() => _TareaBlockState();
@@ -9,12 +15,11 @@ class TareaBlock extends StatefulWidget {
 
 class _TareaBlockState extends State<TareaBlock> {
   List<Task> tasks = []; // Lista de tareas
-  List<TextEditingController> controllers = []; // Controladores de texto
 
   @override
   void dispose() {
     // Liberar los controladores de texto al salir del Widget
-    for (var controller in controllers) {
+    for (var controller in widget.controllers) {
       controller.dispose();
     }
     super.dispose();
@@ -46,7 +51,7 @@ class _TareaBlockState extends State<TareaBlock> {
             itemBuilder: (context, index) {
               final task = tasks[index];
               final controller = TextEditingController(text: task.description);
-              controllers.add(controller); // Agregar el controlador a la lista
+              widget.controllers.add(controller); // Agregar el controlador a la lista
 
               return Row(
                 children: [
@@ -86,8 +91,9 @@ class _TareaBlockState extends State<TareaBlock> {
                   IconButton(
                     onPressed: () {
                       setState(() {
+                        widget.controller1.eliminarTarea(tasks[index]);           //TArea agregada
                         tasks.removeAt(index);
-                        controllers.removeAt(index); // Eliminar el controlador correspondiente
+                        widget.controllers.removeAt(index); // Eliminar el controlador correspondiente
                       });
                     },
                     icon: const Icon(Icons.close),
@@ -122,7 +128,8 @@ class _TareaBlockState extends State<TareaBlock> {
                               completed: false,
                             );
                             tasks.add(newTask);
-                            controllers.add(TextEditingController(
+                            widget.controller1.agregarTarea(newTask);           //TArea agregada
+                            widget.controllers.add(TextEditingController(
                               text: newTask.description,
                             ));
                             Navigator.pop(context);
@@ -155,6 +162,18 @@ class Task {
 
   Task({
     required this.description,
-    this.completed = false,
+    required this.completed,
   });
+}
+
+
+class TareaBlockController {
+  List<Task> listaTareas = [];
+
+  void agregarTarea(Task tarea) {
+    listaTareas.add(tarea);
+  }
+  void eliminarTarea(Task tarea) {
+    listaTareas.remove(tarea);
+  }
 }
