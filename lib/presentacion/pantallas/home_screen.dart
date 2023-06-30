@@ -63,7 +63,7 @@ Widget build(BuildContext context) {
           onPressed: () {
           },
         ),
-        bottomNavigationBar: BottomBar(scaffoldKey: _scaffoldKey),
+        bottomNavigationBar: BottomBar(scaffoldKey: _scaffoldKey, usuario: widget.usuario),
         drawer: CustomDrawer(
           username: capitalizeFirstLetter(widget.usuario.getNombre()),
           email: widget.usuario.getEmail(),
@@ -153,7 +153,7 @@ Widget build(BuildContext context) {
             ),
             const SizedBox(height: 50),
             Expanded(
-              child: MyDropdown(grupos: grupos),
+              child: MyDropdown(grupos: grupos, usuario: widget.usuario),
             ),
           ],
         ),

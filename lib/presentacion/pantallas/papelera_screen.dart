@@ -8,11 +8,14 @@ import 'package:notea_frontend/infraestructura/bloc/nota/nota_bloc.dart';
 import 'package:notea_frontend/presentacion/widgets/BottomBar.dart';
 import 'package:notea_frontend/presentacion/widgets/card.dart';
 import 'package:notea_frontend/presentacion/widgets/desplegable.dart';
+import '../../dominio/agregados/usuario.dart';
 
 // ignore: must_be_immutable
 class Papelera extends StatefulWidget {
   List<Grupo>? grupos;
-  Papelera({super.key, required this.grupos});
+  final Usuario usuario;
+
+  Papelera({super.key, required this.grupos, required this.usuario});
 
   @override
   // ignore: library_private_types_in_public_api
@@ -53,7 +56,8 @@ class _PapeleraState extends State<Papelera> {
         cantidadNotas = suma.toString();
 
         return Scaffold(
-            bottomNavigationBar: BottomBar(scaffoldKey: _scaffoldKey),
+            bottomNavigationBar:
+                BottomBar(scaffoldKey: _scaffoldKey, usuario: widget.usuario),
             body: Padding(
                 padding: const EdgeInsets.only(top: 60),
                 child: Column(children: [
@@ -159,7 +163,19 @@ class _PapeleraState extends State<Papelera> {
                                                                     .idGrupo,
                                                                 estado:
                                                                     "GUARDADO"));
-                                                        Navigator.pop(context);
+
+                                                        Navigator.push(
+                                                            context,
+                                                            MaterialPageRoute(
+                                                                builder:
+                                                                    (context) =>
+                                                                        Papelera(
+                                                                          grupos:
+                                                                              widget.grupos,
+                                                                          usuario:
+                                                                              widget.usuario,
+                                                                        )));
+
                                                         // mover a la papelera
                                                       },
                                                     ),

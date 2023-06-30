@@ -6,13 +6,18 @@ import 'package:notea_frontend/dominio/agregados/VONota/EstadoEnum.dart';
 import 'package:notea_frontend/dominio/agregados/grupo.dart';
 import 'package:notea_frontend/dominio/agregados/nota.dart';
 import 'package:notea_frontend/infraestructura/bloc/nota/nota_bloc.dart';
+import 'package:notea_frontend/presentacion/pantallas/home_screen.dart';
 import 'package:notea_frontend/presentacion/widgets/card.dart';
 import 'package:notea_frontend/presentacion/widgets/desplegable.dart';
+
+import '../../dominio/agregados/usuario.dart';
 
 // ignore: must_be_immutable
 class MyDropdown extends StatefulWidget {
   List<Grupo>? grupos;
-  MyDropdown({super.key, required this.grupos});
+  final Usuario usuario;
+
+  MyDropdown({super.key, required this.grupos, required this.usuario});
 
   @override
   // ignore: library_private_types_in_public_api
@@ -85,7 +90,13 @@ class _MyDropdownState extends State<MyDropdown> {
                                                   idNota: nota.id,
                                                   grupo: grupo.idGrupo,
                                                   estado: "PAPELERA"));
-                                          Navigator.pop(context);
+                                          Navigator.push(
+                                              context,
+                                              MaterialPageRoute(
+                                                  builder: (context) =>
+                                                      MessagesScreen(
+                                                        usuario: widget.usuario,
+                                                      )));
                                           // mover a la papelera
                                         },
                                       ),
