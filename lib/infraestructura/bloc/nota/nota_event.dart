@@ -22,11 +22,10 @@ class CreateNotaEvent extends NotaEvent {
 
 class ModificarEstadoNotaEvent extends NotaEvent {
   final String idNota;
-  final String grupo;
   final String estado;
 
   ModificarEstadoNotaEvent(
-      {required this.idNota, required this.grupo, required this.estado});
+      {required this.idNota, required this.estado});
 }
 
 class DeleteNoteEvent extends NotaEvent {

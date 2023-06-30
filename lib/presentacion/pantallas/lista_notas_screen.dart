@@ -88,7 +88,6 @@ class _MyDropdownState extends State<MyDropdown> {
                                           BlocProvider.of<NotaBloc>(context)
                                               .add(ModificarEstadoNotaEvent(
                                                   idNota: nota.id,
-                                                  grupo: grupo.idGrupo,
                                                   estado: "PAPELERA"));
                                           Navigator.push(
                                               context,

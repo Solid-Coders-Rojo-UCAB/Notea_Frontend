@@ -207,8 +207,6 @@ class _PapeleraState extends State<Papelera> {
                                                                 context)
                                                             .add(ModificarEstadoNotaEvent(
                                                                 idNota: nota.id,
-                                                                grupo: grupo
-                                                                    .idGrupo,
                                                                 estado:
                                                                     "GUARDADO"));
 

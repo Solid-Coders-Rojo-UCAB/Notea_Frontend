@@ -30,7 +30,7 @@ class NotaBloc extends Bloc<NotaEvent, NotaState> {
       final repositorio = RepositorioNotaImpl(
           remoteDataSource: RemoteDataNotaImp(client: http.Client()));
       final notas = await repositorio.modificarEstadoNota(
-          event.idNota, event.grupo, event.estado);
+          event.idNota, event.estado);
       notas.isLeft()
           ? emit(NotaModifyStateSuccessSate(status: notas.isLeft()))
           : emit(const NotasFailureState());

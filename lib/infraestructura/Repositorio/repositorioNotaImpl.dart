@@ -32,10 +32,9 @@ class RepositorioNotaImpl implements INotaRepository {
 
   @override
   Future<Either<int, Exception>> modificarEstadoNota(
-      String id, String grupo, String estado) async {
+      String id, String estado) async {
     Map<String, dynamic> notaDTO = {
       "id": id,
-      "grupo": grupo,
       "estado": estado,
     };
     var result = await remoteDataSource.changeStateNotaApi(notaDTO);

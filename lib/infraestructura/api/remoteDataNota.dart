@@ -69,7 +69,7 @@ class RemoteDataNotaImp implements RemoteDataNota {
       Map<String, dynamic> jsonString) async {
     if (await const ConectivityCheck().checkConectivity()) {
       final response = await client.patch(
-        Uri.parse('http://localhost:3000/nota'),
+        Uri.parse('http://localhost:3000/nota/cambiarEstado'),
         body: jsonEncode(jsonString),
         headers: <String, String>{
           'Content-Type': 'application/json; charset=UTF-8',
