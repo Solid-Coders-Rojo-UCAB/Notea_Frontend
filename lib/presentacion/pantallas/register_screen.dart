@@ -1,4 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:notea_frontend/infraestructura/bloc/usuario/usuario_bloc.dart';
+import 'package:notea_frontend/presentacion/pantallas/home_screen.dart';
 import 'package:notea_frontend/presentacion/pantallas/login_screen.dart';
 import 'package:notea_frontend/presentacion/widgets/oldCode/email_field.dart';
 import 'package:notea_frontend/presentacion/widgets/oldCode/email_field2.dart';
@@ -18,8 +21,8 @@ class RegisterScreen extends StatefulWidget {
 
 class _RegisterScreenState extends State<RegisterScreen> {
   late TextEditingController emailController;
-  late TextEditingController emailController2;
-  late TextEditingController emailController3;
+  late TextEditingController firstNameController;
+  late TextEditingController lastNameController;
   late TextEditingController passwordController;
   late TextEditingController passwordController2;
   final double _elementsOpacity = 1;
@@ -29,8 +32,8 @@ class _RegisterScreenState extends State<RegisterScreen> {
   @override
   void initState() {
     emailController = TextEditingController();
-    emailController2 = TextEditingController();
-    emailController3 = TextEditingController();
+    firstNameController = TextEditingController();
+    lastNameController = TextEditingController();
     passwordController = TextEditingController();
     passwordController2 = TextEditingController();
     super.initState();
@@ -39,8 +42,8 @@ class _RegisterScreenState extends State<RegisterScreen> {
     @override
   void dispose() {
     emailController.dispose();
-    emailController2.dispose();
-    emailController3.dispose();
+    firstNameController.dispose();
+    lastNameController.dispose();
     passwordController.dispose();
     passwordController2.dispose();
     super.dispose();
@@ -48,15 +51,19 @@ class _RegisterScreenState extends State<RegisterScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
+    return BlocBuilder<UsuarioBloc, UsuarioState>(
+    builder: (context, state) {
+      if (state is UsuarioSuccessState) {
+        return MessagesScreen(usuario: state.usuario);
+      }
+      // if (state is UsuarioLoadingState) {
+      //   return const Center(child: CircularProgressIndicator());
+      // }
+      return Scaffold(
       resizeToAvoidBottomInset: true,
       body: SafeArea(
         bottom: false,
-        child: loadingBallAppear
-            ? const Padding(
-                padding: EdgeInsets.symmetric(vertical: 20, horizontal: 30.0),
-                child: LoginScreen())
-            : Padding(
+        child:  Padding(
                 padding: const EdgeInsets.symmetric(horizontal: 50.0),
                 child: SingleChildScrollView(
                   child: Column(
@@ -101,17 +108,17 @@ class _RegisterScreenState extends State<RegisterScreen> {
                         padding: const EdgeInsets.symmetric(horizontal: 8.0),
                         child: Column(
                           children: [
-                            EmailField( //username
+                            EmailField( //email
                                 fadeEmail: _elementsOpacity == 0,
                                 emailController: emailController),
                             const SizedBox(height: 24),
                             EmailField2( //firstName
                                 fadeEmail: _elementsOpacity == 0,
-                                emailController: emailController2),
+                                emailController: firstNameController),
                             const SizedBox(height: 24),
                             EmailField3( //lastName
                                 fadeEmail: _elementsOpacity == 0,
-                                emailController: emailController3),
+                                emailController: lastNameController),
                             const SizedBox(height: 24),
                             PasswordField( //password
                                 fadePassword: _elementsOpacity == 0,
@@ -142,12 +149,13 @@ class _RegisterScreenState extends State<RegisterScreen> {
               ),
       ),
     );
+  });
   }
 
   Future<void> verificacion() async { //verificacion de campos, contrasena y username
     int code = 0;
 
-    if (emailController.text.isEmpty || emailController2.text.isEmpty || emailController3.text.isEmpty
+    if (emailController.text.isEmpty || firstNameController.text.isEmpty || lastNameController.text.isEmpty
         || passwordController.text.isEmpty || passwordController2.text.isEmpty) {
         ScaffoldMessenger.of(context).showSnackBar(
           const SnackBar(
@@ -164,23 +172,35 @@ class _RegisterScreenState extends State<RegisterScreen> {
         );
         return;
       }
-      // code = await Api.verifyUserId('/users/validate/${emailController.text}');
-      if (code == 200) { //si el usuario ya existe
+      if (passwordController.text.length < 8) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(
+            content: Text("La contraseña debe tener al menos 8 caracteres"),
+          ),
+        );
+        return;
+      }
+
+      final grupoBloc = BlocProvider.of<UsuarioBloc>(context);
+      grupoBloc.add(RegisterEvent(
+        email: emailController.text,
+        password: passwordController.text,
+        nombre: firstNameController.text,
+        apellido: lastNameController.text,
+        suscripcion: false,
+      ));
+      await Future.delayed(const Duration(milliseconds: 500));
+      if (!grupoBloc.state.existeUsuario) { //si el usuario ya existe
         ScaffoldMessenger.of(context).showSnackBar(
           const SnackBar(content: Text("El usuario ya existe"),
           ),
         );
         return;
-      }
-      // await createUserDB(emailController.text, emailController2.text,
-      //   emailController3.text, passwordController.text);
-      // setState(() {
-      //   _elementsOpacity = 0;
-      // });
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text("Usuario creado exitosamente"),
-      ),
-    );
+      } else {
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(content: Text("Usuario creado exitosamente"),
+        ),
+        );}
     }
 
 }

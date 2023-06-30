@@ -23,7 +23,25 @@ class UsuarioBloc extends  Bloc<UsuarioEvent, UsuarioState> {
 
       usuario.isLeft() ?  emit(UsuarioSuccessState(usuario: usuario.left!))  //emitimos el estado de exito
         : emit(const UsuarioFailureState()); //emitimos el estado de error
-      }
+      },
+
     );
+
+    on<RegisterEvent>((event, emit) async {
+      emit(const UsuarioLoadingState());
+      await Future.delayed(const Duration(milliseconds: 300));
+      final repositorio = RepositorioUsuarioImpl(remoteDataSource: RemoteDataUsuarioImp(client: http.Client()));
+      final newUser = Usuario.crearUsuario(event.nombre, event.apellido, event.email, event.password, event.suscripcion, "0");
+      final response = await repositorio.crearUsuario(newUser);
+
+      if (response.isLeft()) {
+        newUser.setId(response.left!);
+        emit(UsuarioSuccessState(usuario: newUser));
+      } else {
+        emit(const UsuarioFailureState());
+        await Future.delayed(const Duration(milliseconds: 500));
+        emit(const UsuarioInitialState());
+      }
+    });
   }
 }

@@ -54,18 +54,18 @@ class _LoginScreenState extends State<LoginScreen> {
     return BlocBuilder<UsuarioBloc, UsuarioState>( //siempre va el Bloc y el State
       builder: (context, state) {
 
-        // #############################################
-        // #############################################
-        // COMENTAR ESTO SI QUIERES PASAR DE UNA AL GOME
-        final usuariofinal = Usuario.crearUsuario('Angel', 'Hernandez','angel@gmail.com', '1234', true, 'dcb52ea6-fd0c-4ce6-9873-ce487cb39787');
-        if(true){
-          return Scaffold(
-            resizeToAvoidBottomInset: true,
-            body: Center(child: MessagesScreen(usuario : usuariofinal)),
-          );
-        }
-        // #############################################
-        // #############################################
+        // // #############################################
+        // // #############################################
+        // // COMENTAR ESTO SI QUIERES PASAR DE UNA AL GOME
+        // final usuariofinal = Usuario.crearUsuario('Angel', 'Hernandez','angel@gmail.com', '1234', true, 'dcb52ea6-fd0c-4ce6-9873-ce487cb39787');
+        // if(true){
+        //   return Scaffold(
+        //     resizeToAvoidBottomInset: true,
+        //     body: Center(child: MessagesScreen(usuario : usuariofinal)),
+        //   );
+        // }
+        // // #############################################
+        // // #############################################
 
         //se muestra una pantalla diferente dependiendo del estado del bloc
         if (state is UsuarioLoadingState) {
