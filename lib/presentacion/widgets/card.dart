@@ -20,111 +20,113 @@ class CartaWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     String formattedDate = fecha.month < 9 ? '0${fecha.month} - ${fecha.day}' : '${fecha.month} - ${fecha.day}'; // Formateo de la fecha
-    return FractionallySizedBox(
-      widthFactor: 0.65, // Establece el ancho al 70% del tamaño disponible
-      child:GestureDetector(
+    return Center(
+      child: GestureDetector(
         onTap: () {
           print('SE ABRE LA PANTALLA PARA EDITAR LA NOTA');
         },
-        child: Card(
-          shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(10.0),
-          ),
-          child: Padding(
-            padding: const EdgeInsets.all(16.0),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.stretch,
-              children: [
-                Container(
-                  constraints: const BoxConstraints(
-                    maxWidth: 100, // Establece el ancho máximo para el contenedor
-                  ),
-                  child: Text(
-                    formattedDate,
-                    style: const TextStyle(
-                      color: Colors.black,
-                      fontWeight: FontWeight.bold,
-                      fontSize: 16.0,
+        child: FractionallySizedBox(
+          widthFactor: 0.95, // Establece
+          child: Card(
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(10.0),
+            ),
+            child: Padding(
+              padding: const EdgeInsets.all(16.0),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.stretch,
+                children: [
+                  Container(
+                    constraints: const BoxConstraints(
+                      maxWidth: 100, // Establece el ancho máximo para el contenedor
                     ),
-                    overflow: TextOverflow.ellipsis, // Muestra "..." si el texto es demasiado largo
-                  ),
-                ),
-                const SizedBox(height: 16.0),
-                Row(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Container(
-                      width: 24.0,
-                      height: 24.0,
-                      decoration: const BoxDecoration(
-                        shape: BoxShape.circle,
-                        color: Colors.blue, // Cambiar el color del círculo según tus necesidades
+                    child: Text(
+                      formattedDate,
+                      style: const TextStyle(
+                        color: Colors.black,
+                        fontWeight: FontWeight.bold,
+                        fontSize: 16.0,
                       ),
+                      overflow: TextOverflow.ellipsis, // Muestra "..." si el texto es demasiado largo
                     ),
-                    const SizedBox(width: 8.0),
-                    Expanded(
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-
-                          Container(
-                            constraints: const BoxConstraints(
-                              maxWidth: 250, // Establece el ancho máximo para el contenedor
-                            ),
-                            child: Text(
-                              titulo,
-                              style: const TextStyle(
-                                color: Colors.black,
-                                fontWeight: FontWeight.bold,
-                                fontSize: 16.0,
-                              ),
-                              overflow: TextOverflow.ellipsis, // Muestra "..." si el texto es demasiado largo
-                            ),
-                          ),
-                          const SizedBox(height: 8.0),
-                          Container(
-                            constraints: const BoxConstraints(
-                              maxWidth: 300, // Establece el ancho máximo para el contenedor
-                            ),
-                            child: Text(
-                              contenido,
-                              style: const TextStyle(
-                                fontWeight: FontWeight.bold,
-                                fontSize: 14.0,
-                              color: Color.fromARGB(125, 0, 0, 0),
-                              ),
-                              overflow: TextOverflow.ellipsis, // Muestra "..." si el texto es demasiado largo
-                            ),
-                          ),
-                        ],
-                      ),
-                    ),
-                  ],
-                ),
-                const SizedBox(height: 16.0),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    Row(
-                      children: tags.map((tag) => TagWidget(tag: tag)).toList(),
-                    ),
-                    IconButton(
-                      icon: const Tooltip(
-                        message: 'Eliminar',
-                        child: Icon(
-                          Icons.delete,
-                          color: Colors.red,
+                  ),
+                  const SizedBox(height: 16.0),
+                  Row(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Container(
+                        width: 24.0,
+                        height: 24.0,
+                        decoration: const BoxDecoration(
+                          shape: BoxShape.circle,
+                          color: Colors.blue, // Cambiar el color del círculo según tus necesidades
                         ),
                       ),
-                      onPressed: onDeletePressed,
-                    ),
-                  ],
-                ),
-              ],
+                      const SizedBox(width: 8.0),
+                      Expanded(
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+            
+                            Container(
+                              constraints: const BoxConstraints(
+                                maxWidth: 250, // Establece el ancho máximo para el contenedor
+                              ),
+                              child: Text(
+                                titulo,
+                                style: const TextStyle(
+                                  color: Colors.black,
+                                  fontWeight: FontWeight.bold,
+                                  fontSize: 16.0,
+                                ),
+                                overflow: TextOverflow.ellipsis, // Muestra "..." si el texto es demasiado largo
+                              ),
+                            ),
+                            const SizedBox(height: 8.0),
+                            Container(
+                              constraints: const BoxConstraints(
+                                maxWidth: 300, // Establece el ancho máximo para el contenedor
+                              ),
+                              child: Text(
+                                contenido,
+                                style: const TextStyle(
+                                  fontWeight: FontWeight.bold,
+                                  fontSize: 14.0,
+                                color: Color.fromARGB(125, 0, 0, 0),
+                                ),
+                                overflow: TextOverflow.ellipsis, // Muestra "..." si el texto es demasiado largo
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                    ],
+                  ),
+                  const SizedBox(height: 16.0),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Row(
+                        children: tags.map((tag) => TagWidget(tag: tag)).toList(),
+                      ),
+                      IconButton(
+                        icon: const Tooltip(
+                          message: 'Eliminar',
+                          child: Icon(
+                            Icons.delete,
+                            color: Colors.red,
+                          ),
+                        ),
+                        onPressed: onDeletePressed,
+                      ),
+                    ],
+                  ),
+                ],
+              ),
             ),
           ),
         ),
-      )
+      ),
     );
   }
 

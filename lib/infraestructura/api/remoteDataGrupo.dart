@@ -24,7 +24,9 @@ class RemoteDataGrupoImp implements RemoteDataGrupo {
 
   @override
   Future<Either<List<Grupo>, Exception>> buscarGruposApi(String idUsuarioDueno) async {
-    print('-entra en remoteDataGrupo');
+    print('------------------Base URL-----------------');
+    print('Base URL -> ${ApiConfig.apiBaseUrl}');
+    print('------------------Base URL-----------------');
     if (await const ConectivityCheck().checkConectivity()) {
       final response =
           await client.get(Uri.parse('${ApiConfig.apiBaseUrl}/grupo/usuario/$idUsuarioDueno'));
@@ -44,6 +46,9 @@ class RemoteDataGrupoImp implements RemoteDataGrupo {
   Future<Either<int, Exception>> crearGrupoApi(
       Map<String, dynamic> jsonString) async {
     if (await const ConectivityCheck().checkConectivity()) {
+      print('------------------Base URL-----------------');
+      print('Base URL -> ${ApiConfig.apiBaseUrl}');
+      print('------------------Base URL-----------------');
       final response = await client.post(
         Uri.parse('${ApiConfig.apiBaseUrl}/grupo'),
         body: jsonString,

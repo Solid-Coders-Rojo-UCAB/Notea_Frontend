@@ -29,7 +29,9 @@ class RemoteDataNotaImp implements RemoteDataNota {
 
   @override
   Future<Either<List<Nota>, Exception>> buscarNotasApi() async {
-    print('-entra en remoteDataNota');
+    print('------------------Base URL-----------------');
+    print('Base URL -> ${ApiConfig.apiBaseUrl}');
+    print('------------------Base URL-----------------');
     if (await const ConectivityCheck().checkConectivity()) {
       final response =
           await client.get(Uri.parse('${ApiConfig.apiBaseUrl}/nota/all'));          //Creo que esto no es lo mejor, porque treemos todas las notas
@@ -45,6 +47,9 @@ class RemoteDataNotaImp implements RemoteDataNota {
 
   Future<Either<int, Exception>> crearNotaApiTareas(Map<String, dynamic> jsonString) async {
     if (await const ConectivityCheck().checkConectivity()) {
+      print('------------------Base URL-----------------');
+      print('Base URL -> ${ApiConfig.apiBaseUrl}');
+      print('------------------Base URL-----------------');
       final response = await http.post(
         Uri.parse('${ApiConfig.apiBaseUrl}/nota'),
         body: json.encode(jsonString),

@@ -124,50 +124,49 @@ Widget build(BuildContext context) {
             },
           ),
           body:  Padding(
-          padding: const EdgeInsets.only(top: 60),
-          child: Column(
-            children: [
-              Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  TweenAnimationBuilder<double>(
-                    duration: const Duration(seconds: 1),
-                    tween: Tween(begin: 0, end: 1),
-                    builder: (_, value, __) => Opacity(
-                      opacity: value,
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Text(
-                            'Hola, ${widget.usuario.nombre.value}',
-                            style: TextStyle(
-                              color: Colors.black.withOpacity(0.85),
-                              fontSize: 30,
-                              fontWeight: FontWeight.w700,
+            padding: const EdgeInsets.only(top: 120.0),
+            child: Column(
+              children: [
+                Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    TweenAnimationBuilder<double>(
+                      duration: const Duration(seconds: 1),
+                      tween: Tween(begin: 0, end: 1),
+                      builder: (_, value, __) => Opacity(
+                        opacity: value,
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Text(
+                              'Hola, ${widget.usuario.nombre.value}',
+                              style: TextStyle(
+                                color: Colors.black.withOpacity(0.85),
+                                fontSize: 30,
+                                fontWeight: FontWeight.w700,
+                              ),
                             ),
-                          ),
-                          const SizedBox(height: 6),
-                          Text(
-                            'Tienes un total de ${grupos!.length} grupos',
-                            style: const TextStyle(
-                              color: Colors.black54,
-                              fontSize: 23,
-                              fontWeight: FontWeight.w500,
+                            const SizedBox(height: 6),
+                            Text(
+                              'Tienes un total de ${grupos!.length} grupos',
+                              style: const TextStyle(
+                                color: Colors.black54,
+                                fontSize: 23,
+                                fontWeight: FontWeight.w500,
+                              ),
                             ),
-                          ),
-                        ],
+                          ],
+                        ),
                       ),
                     ),
-                  ),
-                ],
-              ),
-              const SizedBox(height: 50),
-              Expanded(
-                child: MyDropdown(grupos: grupos),
-              ),
-            ],
+                  ],
+                ),
+                Expanded(
+                  child: MyDropdown(grupos: grupos),
+                ),
+              ],
+            ),
           ),
-        ),
         );
       }
       return const Center(child: CircularProgressIndicator());

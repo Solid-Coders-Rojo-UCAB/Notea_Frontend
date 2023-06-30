@@ -47,32 +47,33 @@ class _MyDropdownState extends State<MyDropdown> {
                 final notasDeGrupo = notas?.where((nota) => nota.idGrupo.getIdGrupoNota() == grupo.idGrupo).toList();
                 cantNotas = notasDeGrupo!.length.toString();
               if (notasDeGrupo != null && notasDeGrupo.isNotEmpty) {
-                return Column(
-                  children: <Widget>[
-                    Tooltip(
-                      message: grupo.idGrupo,
-                      child: Desplegable(
-                        titulo: grupo.nombre.nombre,
-                        contenido: Column(
-                          children: notasDeGrupo.map((nota) {
-                            return SizedBox(
-                              child: CartaWidget(
-                                  fecha: nota.getFechaCreacion(),
-                                  titulo: nota.titulo.tituloNota,
-                                  contenido: nota.contenido.contenidoNota,
-                                  tags: const ['Tag1', 'Tag2', 'Tag3sssssss'],
-                                  onDeletePressed: () {
-                                    // Lógica para eliminar la nota
-                                  },
-                                )
-                              );
-                            }
-                          ).toList()
+                return FractionallySizedBox(
+                  widthFactor: 0.9, // Establece
+                  child: Column(
+                    children: <Widget>[
+                      Tooltip(
+                        message: grupo.idGrupo,
+                        child: Desplegable(
+                          titulo: grupo.nombre.nombre,
+                          contenido: Column(
+                            children: notasDeGrupo.map((nota) {
+                              return CartaWidget(
+                                    fecha: nota.getFechaCreacion(),
+                                    titulo: nota.titulo.tituloNota,
+                                    contenido: nota.contenido.contenidoNota,
+                                    tags: const ['Tag1', 'Tag2', 'Tag3sssssss'],
+                                    onDeletePressed: () {
+                                      // Lógica para eliminar la nota
+                                    },
+                                  );
+                              }
+                            ).toList()
+                          ),
                         ),
                       ),
-                    ),
-                    const SizedBox(height: 8.0), // Separación entre los desplegables
-                  ],
+                      const SizedBox(height: 8.0), // Separación entre los desplegables
+                    ],
+                  ),
                 );
               }
               return null;

@@ -27,6 +27,9 @@ class RemoteDataUsuarioImp implements RemoteDataUsuario {
   Future<Either<List<Usuario>, Exception>> buscarUsuarioApi() async {
     //  deberia devolver un Either
     if (await const ConectivityCheck().checkConectivity()) {
+      print('------------------Base URL-----------------');
+      print('Base URL -> ${ApiConfig.apiBaseUrl}');
+      print('------------------Base URL-----------------');
       final response =
           await client.get(Uri.parse('${ApiConfig.apiBaseUrl}/usuario/all'));
       if (response.statusCode == 200) {
@@ -46,6 +49,9 @@ class RemoteDataUsuarioImp implements RemoteDataUsuario {
       Map<String, dynamic> jsonString) async {
     //deberia devolver un Either
     if (await const ConectivityCheck().checkConectivity()) {
+      print('------------------Base URL-----------------');
+      print('Base URL -> ${ApiConfig.apiBaseUrl}');
+      print('------------------Base URL-----------------');
       final response = await client.post(
         Uri.parse('${ApiConfig.apiBaseUrl}/usuario'),
         body: jsonString,

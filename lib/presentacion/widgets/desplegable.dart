@@ -10,8 +10,29 @@ class Desplegable extends StatefulWidget {
   _DesplegableState createState() => _DesplegableState();
 }
 
-class _DesplegableState extends State<Desplegable> {
+class _DesplegableState extends State<Desplegable> with SingleTickerProviderStateMixin {
+  late AnimationController _animationController;
+  late Animation<double> _animation;
   bool _mostrarContenido = false;
+
+  @override
+  void initState() {
+    super.initState();
+    _animationController = AnimationController(
+      vsync: this,
+      duration: const Duration(milliseconds: 300),
+    );
+    _animation = CurvedAnimation(
+      parent: _animationController,
+      curve: Curves.easeInOut,
+    );
+  }
+
+  @override
+  void dispose() {
+    _animationController.dispose();
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -22,10 +43,14 @@ class _DesplegableState extends State<Desplegable> {
           onTap: () {
             setState(() {
               _mostrarContenido = !_mostrarContenido;
+              if (_mostrarContenido) {
+                _animationController.forward();
+              } else {
+                _animationController.reverse();
+              }
             });
           },
           child: Container(
-            width: MediaQuery.of(context).size.width * 0.7,
             padding: const EdgeInsets.all(16.0),
             decoration: BoxDecoration(
               color: Colors.grey[200],
@@ -39,25 +64,35 @@ class _DesplegableState extends State<Desplegable> {
                     widget.titulo,
                     style: TextStyle(
                       color: Colors.black,
-                      fontSize: _mostrarContenido ? 16.0 : 18.0,
+                      fontSize: _mostrarContenido ? 19.0 : 18.0,
                       fontWeight: FontWeight.bold,
                     ),
                   ),
                 ),
-                Icon(
-                  _mostrarContenido ? Icons.expand_less : Icons.expand_more,
-                  size: 30.0,
+                RotationTransition(
+                  turns: _animation,
+                  child: const Icon(
+                    Icons.expand_less,
+                    size: 30.0,
+                  ),
                 ),
               ],
             ),
           ),
         ),
-        if (_mostrarContenido)
-          Padding(
-            padding: EdgeInsets.symmetric(horizontal: 16.0),
-            child: widget.contenido,
-          ),
-        SizedBox(height: 16.0), // Separación entre los desplegables
+        AnimatedBuilder(
+          animation: _animationController,
+          builder: (BuildContext context, Widget? child) {
+            return ClipRect(
+              child: Align(
+                alignment: Alignment.topCenter,
+                heightFactor: _animation.value,
+                child: widget.contenido,
+              ),
+            );
+          },
+        ),
+        const SizedBox(height: 16.0), // Separación entre los desplegables
       ],
     );
   }
