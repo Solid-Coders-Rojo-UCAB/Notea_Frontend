@@ -18,6 +18,7 @@ abstract class RemoteDataNota {
   Future<Either<int, Exception>> crearNotaApi(Map<String, dynamic> jsonString);
   Future<Either<int, Exception>> changeStateNotaApi(
       Map<String, dynamic> jsonString);
+  Future<Either<int, Exception>> borrarNotaApi(Map<String, dynamic> jsonString);
 }
 
 class RemoteDataNotaImp implements RemoteDataNota {
@@ -79,6 +80,29 @@ class RemoteDataNotaImp implements RemoteDataNota {
       } else {
         return Either.right(
             Exception("Error al modificar la nota en el servidor"));
+      }
+    } else {
+      return Either.right(Exception(
+          "No hay conexion a internet")); //guardado en la base de datos local
+    }
+  }
+
+  @override
+  Future<Either<int, Exception>> borrarNotaApi(
+      Map<String, dynamic> jsonString) async {
+    if (await const ConectivityCheck().checkConectivity()) {
+      final response = await client.delete(
+        Uri.parse('http://localhost:3000/nota'),
+        body: jsonEncode(jsonString),
+        headers: <String, String>{
+          'Content-Type': 'application/json; charset=UTF-8',
+        },
+      );
+      if (response.statusCode == 200) {
+        return Either.left(response.statusCode);
+      } else {
+        return Either.right(
+            Exception("Error al elminar la nota en el servidor"));
       }
     } else {
       return Either.right(Exception(

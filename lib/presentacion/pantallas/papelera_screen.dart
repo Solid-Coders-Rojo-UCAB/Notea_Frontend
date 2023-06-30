@@ -130,6 +130,54 @@ class _PapeleraState extends State<Papelera> {
                                             'Tag3sssssss'
                                           ],
                                           onDeletePressed: () {
+                                            showDialog(
+                                              context: context,
+                                              builder: (BuildContext context) {
+                                                return AlertDialog(
+                                                  title: const Text(
+                                                      'Confirmación'),
+                                                  content: const Text(
+                                                      '¿Estás seguro de que deseas eliminar la nota permanentemente?'),
+                                                  actions: [
+                                                    TextButton(
+                                                      child: const Text(
+                                                          'Cancelar'),
+                                                      onPressed: () {
+                                                        Navigator.pop(
+                                                            context); // Cerrar el cuadro de diálogo
+                                                      },
+                                                    ),
+                                                    TextButton(
+                                                      child:
+                                                          const Text('Aceptar'),
+                                                      onPressed: () {
+                                                        BlocProvider.of<
+                                                                    NotaBloc>(
+                                                                context)
+                                                            .add(
+                                                                DeleteNoteEvent(
+                                                          idNota: nota.id,
+                                                        ));
+
+                                                        Navigator.push(
+                                                            context,
+                                                            MaterialPageRoute(
+                                                                builder:
+                                                                    (context) =>
+                                                                        Papelera(
+                                                                          grupos:
+                                                                              widget.grupos,
+                                                                          usuario:
+                                                                              widget.usuario,
+                                                                        )));
+
+                                                        // mover a la papelera
+                                                      },
+                                                    ),
+                                                  ],
+                                                );
+                                              },
+                                            );
                                             // Lógica para eliminar la nota
                                           },
                                           onChangePressed: () {

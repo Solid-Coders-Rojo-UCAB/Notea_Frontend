@@ -28,3 +28,9 @@ class ModificarEstadoNotaEvent extends NotaEvent {
   ModificarEstadoNotaEvent(
       {required this.idNota, required this.grupo, required this.estado});
 }
+
+class DeleteNoteEvent extends NotaEvent {
+  final String idNota;
+
+  DeleteNoteEvent({required this.idNota});
+}

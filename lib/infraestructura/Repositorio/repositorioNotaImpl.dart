@@ -41,4 +41,13 @@ class RepositorioNotaImpl implements INotaRepository {
     var result = await remoteDataSource.changeStateNotaApi(notaDTO);
     return result;
   }
+
+  @override
+  Future<Either<int, Exception>> borrarNota(String id) async {
+    Map<String, dynamic> notaDTO = {
+      "id": id,
+    };
+    var result = await remoteDataSource.borrarNotaApi(notaDTO);
+    return result;
+  }
 }
