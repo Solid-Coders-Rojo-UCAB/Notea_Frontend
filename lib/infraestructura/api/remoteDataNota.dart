@@ -88,7 +88,7 @@ class RemoteDataNotaImp implements RemoteDataNota {
   }
 
   @override
-  Future<Either<int, Exception>> borrarNotaApi(
+  Future<Either<int, Exception>> borrarNotaApi(    //para eliminar nota de la papelera permanentemente
       Map<String, dynamic> jsonString) async {
     if (await const ConectivityCheck().checkConectivity()) {
       final response = await client.delete(
