@@ -4,6 +4,7 @@ import 'dart:convert';
 import 'package:http/http.dart' as http;
 import 'package:notea_frontend/dominio/agregados/nota.dart';
 
+import '../../api_config.dart';
 import '../../dominio/agregados/usuario.dart';
 import '../../utils/Either.dart';
 import '../conectivityChecker/checker.dart';
@@ -27,7 +28,7 @@ class RemoteDataUsuarioImp implements RemoteDataUsuario {
     //  deberia devolver un Either
     if (await const ConectivityCheck().checkConectivity()) {
       final response =
-          await client.get(Uri.parse('http://localhost:3000/usuario/all'));
+          await client.get(Uri.parse('${ApiConfig.apiBaseUrl}/usuario/all'));
       if (response.statusCode == 200) {
         final usuariofinal = parseUsuario(response.body);
         return Either.left(usuariofinal);
@@ -46,7 +47,7 @@ class RemoteDataUsuarioImp implements RemoteDataUsuario {
     //deberia devolver un Either
     if (await const ConectivityCheck().checkConectivity()) {
       final response = await client.post(
-        Uri.parse('http://localhost:3000/usuario'),
+        Uri.parse('${ApiConfig.apiBaseUrl}/usuario'),
         body: jsonString,
         headers: <String, String>{
           'Content-Type': 'application/json; charset=UTF-8',
@@ -68,7 +69,7 @@ class RemoteDataUsuarioImp implements RemoteDataUsuario {
       String email, String clave) async {
     if (await const ConectivityCheck().checkConectivity()) {
       final response = await client.post(
-        Uri.parse('http://localhost:3000/usuario/login'),
+        Uri.parse('${ApiConfig.apiBaseUrl}/usuario/login'),
         body: jsonEncode(<String, String>{
           'email': email,
           'clave': clave,

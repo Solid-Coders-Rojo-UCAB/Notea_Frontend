@@ -12,6 +12,7 @@ import 'package:notea_frontend/dominio/agregados/VONota/VOUbicacionNota.dart';
 import 'package:notea_frontend/dominio/agregados/VONota/VOidGrupo.dart';
 
 
+import '../../api_config.dart';
 import '../../dominio/agregados/VONota/EstadoEnum.dart';
 import '../../dominio/agregados/nota.dart';
 import '../../utils/Either.dart';
@@ -31,7 +32,7 @@ class RemoteDataNotaImp implements RemoteDataNota {
     print('-entra en remoteDataNota');
     if (await const ConectivityCheck().checkConectivity()) {
       final response =
-          await client.get(Uri.parse('http://localhost:3000/nota/all'));          //Creo que esto no es lo mejor, porque treemos todas las notas
+          await client.get(Uri.parse('${ApiConfig.apiBaseUrl}/nota/all'));          //Creo que esto no es lo mejor, porque treemos todas las notas
       if (response.statusCode == 200) {
         return Either.left(parseNota(response.body));
       } else {
@@ -45,7 +46,7 @@ class RemoteDataNotaImp implements RemoteDataNota {
   Future<Either<int, Exception>> crearNotaApiTareas(Map<String, dynamic> jsonString) async {
     if (await const ConectivityCheck().checkConectivity()) {
       final response = await http.post(
-        Uri.parse('http://localhost:3000/nota'),
+        Uri.parse('${ApiConfig.apiBaseUrl}/nota'),
         body: json.encode(jsonString),
         headers: {'Content-Type': 'application/json'},
       );
@@ -65,7 +66,7 @@ class RemoteDataNotaImp implements RemoteDataNota {
   @override
   Future<Either<int, Exception>> crearNotaApi(Map<String, dynamic> jsonString, List<File> listaImages) async {
     if (await const ConectivityCheck().checkConectivity()) {
-      final request = http.MultipartRequest('POST', Uri.parse('http://localhost:3000/nota'))
+      final request = http.MultipartRequest('POST', Uri.parse('${ApiConfig.apiBaseUrl}/nota'))
       ..fields['titulo'] = jsonString['titulo']
       ..fields['contenido'] = jsonString['contenido']
       ..fields['fechaCreacion'] = jsonString['fechaCreacion'].toString()

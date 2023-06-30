@@ -7,6 +7,7 @@ import 'package:notea_frontend/dominio/agregados/VOGrupo/nombreGrupo.dart';
 import 'package:notea_frontend/dominio/agregados/grupo.dart';
 
 
+import '../../api_config.dart';
 import '../../dominio/agregados/VONota/EstadoEnum.dart';
 import '../../dominio/agregados/nota.dart';
 import '../../utils/Either.dart';
@@ -26,7 +27,7 @@ class RemoteDataGrupoImp implements RemoteDataGrupo {
     print('-entra en remoteDataGrupo');
     if (await const ConectivityCheck().checkConectivity()) {
       final response =
-          await client.get(Uri.parse('http://localhost:3000/grupo/usuario/$idUsuarioDueno'));
+          await client.get(Uri.parse('${ApiConfig.apiBaseUrl}/grupo/usuario/$idUsuarioDueno'));
 
       if (response.statusCode == 200) {
         return Either.left(parseGrupo(response.body));
@@ -44,7 +45,7 @@ class RemoteDataGrupoImp implements RemoteDataGrupo {
       Map<String, dynamic> jsonString) async {
     if (await const ConectivityCheck().checkConectivity()) {
       final response = await client.post(
-        Uri.parse('http://localhost:3000/grupo'),
+        Uri.parse('${ApiConfig.apiBaseUrl}/grupo'),
         body: jsonString,
         headers: <String, String>{
           'Content-Type': 'application/json; charset=UTF-8',
