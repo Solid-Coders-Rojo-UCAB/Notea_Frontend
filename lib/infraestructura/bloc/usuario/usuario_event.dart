@@ -14,3 +14,13 @@ class LoginEvent extends UsuarioEvent {
 class LogoutEvent extends UsuarioEvent { 
   LogoutEvent();
 }
+
+class RegisterEvent extends UsuarioEvent { 
+  final String email; //parametros que recibe el evento
+  final String nombre;
+  final String apellido;
+  final String password;
+  final bool suscripcion;
+
+  RegisterEvent({required this.email, required this.password, required this.nombre, required this.apellido, required this.suscripcion});
+}

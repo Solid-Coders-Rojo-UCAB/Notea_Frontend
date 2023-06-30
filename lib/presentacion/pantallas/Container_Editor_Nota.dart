@@ -7,7 +7,10 @@ import 'package:notea_frontend/presentacion/widgets/TareaBlock.dart';
 import 'package:notea_frontend/presentacion/widgets/TextBlock.dart';
 
 class ContainerEditorNota extends StatefulWidget {
-  const ContainerEditorNota({super.key});
+
+  final Function(String, List<dynamic>) onDataReceived;
+
+  const ContainerEditorNota({super.key, required this.onDataReceived});
 
   @override
   _ContainerEditorNotaState createState() => _ContainerEditorNotaState();
@@ -16,6 +19,7 @@ class ContainerEditorNota extends StatefulWidget {
 class _ContainerEditorNotaState extends State<ContainerEditorNota> {
   final ScrollController _scrollController = ScrollController();
   final TextEditingController titleController = TextEditingController();
+
 
   final focusNode = FocusNode();
   final  List<dynamic> _children = [
@@ -84,6 +88,12 @@ class _ContainerEditorNotaState extends State<ContainerEditorNota> {
     }
   }
 
+
+  // Con esta función enviamos la data al padre
+  void sendDataToWrapperWidget() {
+    widget.onDataReceived('data', _children);
+  }
+
   Widget _textBuilder() {
     return SingleChildScrollView(
       controller: _scrollController,
@@ -125,10 +135,11 @@ class _ContainerEditorNotaState extends State<ContainerEditorNota> {
                     if (value == 'text_block') {
                       _children.add(TextBlock());
                     }else if (value == 'image_block') {
-                      _children.add(const ImageBlock());
+                      _children.add(ImageBlock());
                     }else if (value == 'tarea_block') {
-                      _children.add(const TareaBlock());
+                      _children.add(TareaBlock());
                     }
+                    sendDataToWrapperWidget();          //Esto es mejorable, hay que agregar al menos otros componente de la lista para que se guarde
                   });
                   // Scroll hacia el nuevo bloque agregado
                   WidgetsBinding.instance.addPostFrameCallback((_) {
@@ -147,14 +158,30 @@ class _ContainerEditorNotaState extends State<ContainerEditorNota> {
     );
   }
 
+  // @override
+  // Widget build(BuildContext context) {
+  //   return RawKeyboardListener(
+  //       focusNode: focusNode,
+  //       onKey: (RawKeyEvent key) => handleKey(key),
+  //       child: Scaffold(
+  //         body: _textBuilder(),
+  //       ));
+  // }
+
+
   @override
   Widget build(BuildContext context) {
     return RawKeyboardListener(
-        focusNode: focusNode,
-        onKey: (RawKeyEvent key) => handleKey(key),
-        child: Scaffold(
-          body: _textBuilder(),
-        ));
+      focusNode: focusNode,
+      onKey: (RawKeyEvent key) => handleKey(key),
+      child: Scaffold(
+        body: Builder(
+          builder: (context) {
+            return _textBuilder();
+          },
+        ),
+      ),
+    );
   }
 
 }

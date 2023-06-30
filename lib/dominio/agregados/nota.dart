@@ -1,6 +1,5 @@
 import 'package:notea_frontend/dominio/agregados/VONota/VOidGrupo.dart';
 
-import 'Entidades/EntidadTarea.dart';
 import 'VONota/EstadoEnum.dart';
 import 'VONota/VOContenidoNota.dart';
 import 'VONota/VOTituloNota.dart';

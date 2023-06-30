@@ -1,31 +1,39 @@
 // ignore_for_file: file_names, library_private_types_in_public_api
 
 import 'package:flutter/material.dart';
+import 'package:notea_frontend/dominio/agregados/grupo.dart';
 
-class Grupo {
+class Grupa {
   final int id;
   final String nombre;
   final int usuario;
 
-  Grupo({required this.id, required this.nombre, required this.usuario});
+  Grupa({required this.id, required this.nombre, required this.usuario});
 }
 
 class GrupoList extends StatefulWidget {
-  const GrupoList({Key? key}) : super(key: key);
+  final List<Grupo>? grupos;
+  final Function(Grupo) onDataReceived;
+  const GrupoList({Key? key, required this.onDataReceived, required this.grupos}) : super(key: key);
 
   @override
   _GrupoListState createState() => _GrupoListState();
 }
 
 class _GrupoListState extends State<GrupoList> {
-  List<Grupo> grupos = [      //LISTA DE GRUPOS QUE SE SUPONE SE RECIBIRAN POR PARAMETROS
-    Grupo(id: 1, nombre: 'Grupo 1', usuario: 1),
-    Grupo(id: 2, nombre: 'Grupo 2', usuario: 2),
-    Grupo(id: 3, nombre: 'Grupo 3', usuario: 1),
-    Grupo(id: 4, nombre: 'Grupo 4', usuario: 2),
+  List<Grupa> grupas = [      //LISTA DE GRUPOS QUE SE SUPONE SE RECIBIRAN POR PARAMETROS
+    Grupa(id: 1, nombre: 'Grupa 1', usuario: 1),
+    Grupa(id: 2, nombre: 'Grupa 2', usuario: 2),
+    Grupa(id: 3, nombre: 'Grupa 3', usuario: 1),
+    Grupa(id: 4, nombre: 'Grupa 4', usuario: 2),
   ];
 
   Grupo? selectedGrupo;
+
+
+  void sendDataToWrapperWidget() {
+    widget.onDataReceived(selectedGrupo!);
+  }
 
   void _openBottomSheet(BuildContext context) async {
     await showModalBottomSheet(
@@ -48,20 +56,21 @@ class _GrupoListState extends State<GrupoList> {
                   ),
                   const SizedBox(height: 16.0),
                   SizedBox(
-                    height: 200, 
+                    height: 200,
                     child: ListView.builder(
-                      itemCount: grupos.length,
+                      itemCount: widget.grupos?.length,
                       itemBuilder: (context, index) {
-                        final grupo = grupos[index];
+                        final grupo =  widget.grupos?[index];
                         return Card(
                           child: RadioListTile<Grupo>(
-                            title: Text(grupo.nombre),
+                            title: Text(grupo!.getNombre()),
                             value: grupo,
                             groupValue: selectedGrupo,
                             onChanged: (value) {
                               setState(() {
                                 selectedGrupo = value;
                               });
+                              sendDataToWrapperWidget();
                             },
                           ),
                         );
@@ -106,7 +115,7 @@ class _GrupoListState extends State<GrupoList> {
             child: const Text('Grupo'),
           ),
           const SizedBox(height: 16.0),
-          Text('Grupo seleccionado: ${selectedGrupo?.nombre ?? ''}'),
+          Text('Grupo seleccionado: ${selectedGrupo?.getNombre() ?? ''}'),
         ],
       ),
     );

@@ -75,6 +75,7 @@ class TextBlock extends StatefulWidget {
   TextBlock({Key? key}) : super(key: key);
 
   final TextEditingController controller = TextEditingController();
+  final TextBlockController controller1 = TextBlockController();
   final FocusNode focus = FocusNode();
   final FocusNode rawKeyboardFocus = FocusNode();
 
@@ -113,6 +114,7 @@ class _TextBlockState extends State<TextBlock> {
         });
       }
     });
+    widget.controller1.setTexBlock('',false, false, false, false);
   }
 
   @override
@@ -149,10 +151,8 @@ class _TextBlockState extends State<TextBlock> {
       if (key.data.keyLabel == 'Escape' ||
           key.logicalKey.keyLabel == 'Escape') {
         setState(() {
-          renderBlockChange =
-              !renderBlockChange; //Setea al valor contrario al que estaba
-          if (renderBlockChange) {
-            //Si es true, pone el fondo con negro
+          renderBlockChange = !renderBlockChange;                       //Setea al valor contrario al que estaba
+          if (renderBlockChange) {                                      //Si es true, pone el fondo con negro
             backgroundColor = Colors.black12;
             opacity = 1;
           } else {
@@ -166,7 +166,16 @@ class _TextBlockState extends State<TextBlock> {
     }
   }
 
-  TextStyle? activarEstilo(String estilo) {
+  TextStyle?  activarEstilo(String estilo) {    //Este if es mejorable, pero es por la pruba y rapidez
+    if(estilo == 'negrita'){
+      widget.controller1.setTexBlock(widget.controller.text,true, false, false, false);
+    }else if(estilo == 'cursiva'){
+      widget.controller1.setTexBlock(widget.controller.text,false, true, false, false);
+    }else if(estilo == 'tachado'){
+      widget.controller1.setTexBlock(widget.controller.text,false, false, true, false);
+    }else if(estilo == 'subrayado'){
+      widget.controller1.setTexBlock(widget.controller.text,false, false, false, true);
+    }
     final Map<String, TextStyle> estilos = {
       'negrita': negrita,
       'cursiva': cursiva,
@@ -443,17 +452,29 @@ class _TextBlockState extends State<TextBlock> {
   }
 }
 
-Future<String?> seleccionarImagen() async {
-  FilePickerResult? result = await FilePicker.platform.pickFiles(
-    type: FileType.image,
-    allowMultiple: false,
-  );
+class TextBlockController {
+    late String contenido;
+    late Estilos estilos ;
 
-  if (result != null) {
-    PlatformFile file = result.files.first;
-    String? imagePath = file.path;
-    return imagePath;
-  } else {
-    throw Exception('No se seleccionó ninguna imagen');
+  void setTexBlock(String contenido, bool negrita, bool cursiva, bool tachado, bool subrayado) {
+    contenido = contenido;
+    estilos = Estilos(negrita: negrita, cursiva: cursiva, tachado: tachado, subrayado: subrayado);
   }
+
+  String getContenido() {
+    return contenido;
+  }
+  String getEstilos() {
+    String est = 'Negrita -> ${estilos.negrita}, Cursiva -> ${estilos.cursiva}, Tachado -> ${estilos.tachado}, Subrayado -> ${estilos.subrayado}';
+    return est;
+  }
+}
+
+class Estilos {
+  late bool negrita;
+  late bool cursiva;
+  late bool tachado;
+  late bool subrayado;
+
+  Estilos({required this.negrita, required this.cursiva, required this.tachado, required this.subrayado});
 }

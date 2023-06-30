@@ -1,4 +1,4 @@
-// ignore_for_file: unrelated_type_equality_checks
+// ignore_for_file: unrelated_type_equality_checks, unnecessary_null_comparison
 
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -20,6 +20,7 @@ class MyDropdown extends StatefulWidget {
 
 class _MyDropdownState extends State<MyDropdown> {
   List<Nota>? notas = [];
+  String  cantNotas = '';
 
   @override
   void initState() {
@@ -32,43 +33,44 @@ class _MyDropdownState extends State<MyDropdown> {
 
   @override
   Widget build(BuildContext context) {
-    
     return BlocBuilder<NotaBloc, NotaState>(
       builder: (context, state) {
-        if (state is NotasSuccessState) {
+        if (state is NotasCatchSuccessState) {
           notas = state.notas;
             return ListView.builder(
               itemCount: widget.grupos?.length,
               itemBuilder: (context, index){
                 final grupo = widget.grupos![index]; //Tenemos el grupo que se renderizará
-                final notasDeGrupo = notas?.where((nota) => nota.idGrupo.getIdGrupoNota() == grupo.idGrupo
-                && !(nota.getEstado() == "PAPELERA")).toList();
+                final notasDeGrupo = notas?.where((nota) => nota.idGrupo.getIdGrupoNota() == grupo.idGrupo).toList();
+                cantNotas = notasDeGrupo!.length.toString();
               if (notasDeGrupo != null && notasDeGrupo.isNotEmpty) {
-                return Column(
-                  children: <Widget>[
-                    Tooltip(
-                      message: grupo.idGrupo,
-                      child: Desplegable(
-                        titulo: grupo.nombre.nombre,
-                        contenido: Column(
+                return FractionallySizedBox(
+                  widthFactor: 0.9, // Establece
+                  child: Column(
+                    children: <Widget>[
+                      Tooltip(
+                        message: grupo.idGrupo,
+                        child: Desplegable(
+                          titulo: grupo.nombre.nombre,
+                          contenido: Column(
                             children: notasDeGrupo.map((nota) {
-                          return SizedBox(
-                              child: CartaWidget(
-                            fecha: nota.getFechaCreacion(),
-                            titulo: nota.titulo.tituloNota,
-                            contenido: nota.contenido.contenidoNota,
-                            tags: const ['Tag1', 'Tag2', 'Tag3sssssss'],
-                            onDeletePressed: () {
-                              // Lógica para eliminar la nota
-                            },
-                          ));
-                        }).toList()),
+                              return CartaWidget(
+                                    fecha: nota.getFechaCreacion(),
+                                    titulo: nota.titulo.tituloNota,
+                                    contenido: nota.contenido.contenidoNota,
+                                    tags: const ['Tag1', 'Tag2', 'Tag3sssssss'],
+                                    onDeletePressed: () {
+                                      // Lógica para eliminar la nota
+                                    },
+                                  );
+                              }
+                            ).toList()
+                          ),
+                        ),
                       ),
-                    ),
-
-                    const SizedBox(
-                        height: 8.0), // Separación entre los desplegables
-                  ],
+                      const SizedBox(height: 8.0), // Separación entre los desplegables
+                    ],
+                  ),
                 );
               }
             });
