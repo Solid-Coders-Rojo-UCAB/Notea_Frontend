@@ -4,7 +4,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:notea_frontend/aplicacion/ImagenATexto.dart';
-import 'package:file_picker/file_picker.dart';
 
 const h1 = TextStyle(
   fontSize: 37,
