@@ -59,7 +59,7 @@ class _EmailFieldState extends State<EmailField>
                 child: TextFormField(
                   controller: emailController,
                   focusNode: node,
-                  decoration: const InputDecoration(hintText: "Usuario"),
+                  decoration: const InputDecoration(hintText: "Correo"),
                   keyboardType: TextInputType.emailAddress,
                   onChanged: (value) async {
                     if (value.isNotEmpty) {

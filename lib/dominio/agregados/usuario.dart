@@ -72,6 +72,10 @@ class Usuario {
   String getClave() {
     return clave.getValue();
   }
+
+  void setId(String id) {
+    this.id = id;
+  }
 }
 
 

@@ -1,4 +1,4 @@
-// ignore_for_file: unrelated_type_equality_checks
+// ignore_for_file: unrelated_type_equality_checks, unnecessary_null_comparison
 
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -26,6 +26,7 @@ class MyDropdown extends StatefulWidget {
 
 class _MyDropdownState extends State<MyDropdown> {
   List<Nota>? notas = [];
+  String  cantNotas = '';
 
   @override
   void initState() {
@@ -52,13 +53,15 @@ class _MyDropdownState extends State<MyDropdown> {
                       !(nota.getEstado() == "PAPELERA"))
                   .toList();
               if (notasDeGrupo != null && notasDeGrupo.isNotEmpty) {
-                return Column(
-                  children: <Widget>[
-                    Tooltip(
-                      message: grupo.idGrupo,
-                      child: Desplegable(
-                        titulo: grupo.nombre.nombre,
-                        contenido: Column(
+                return FractionallySizedBox(
+                  widthFactor: 0.9, // Establece
+                  child: Column(
+                    children: <Widget>[
+                      Tooltip(
+                        message: grupo.idGrupo,
+                        child: Desplegable(
+                          titulo: grupo.nombre.nombre,
+                          contenido: Column(
                             children: notasDeGrupo.map((nota) {
                           return SizedBox(
                               child: CartaWidget(
@@ -108,11 +111,9 @@ class _MyDropdownState extends State<MyDropdown> {
                           ));
                         }).toList()),
                       ),
-                    ),
-
-                    const SizedBox(
-                        height: 8.0), // Separación entre los desplegables
-                  ],
+                      const SizedBox(height: 8.0), // Separación entre los desplegables
+                    ],
+                  ),
                 );
               }
             });

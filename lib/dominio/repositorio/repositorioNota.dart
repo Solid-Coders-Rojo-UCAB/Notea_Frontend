@@ -1,9 +1,11 @@
+
+import 'package:notea_frontend/dominio/agregados/grupo.dart';
 import '../../utils/Either.dart';
 import '../agregados/nota.dart';
 
 abstract class INotaRepository {
   Future<Either<List<Nota>, Exception>> buscarNotas();
-  Future<Either<int, Exception>> crearNota(Nota nota);
+  Future<Either<int, Exception>?> crearNota(String titulo, List<dynamic> listInfoContenido, List<dynamic> etiquetas, Grupo grupo);
   Future<Either<int, Exception>> modificarEstadoNota(
       String id, String estado);
   Future<Either<int, Exception>> borrarNota(String id);

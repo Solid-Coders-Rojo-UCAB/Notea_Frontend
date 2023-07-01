@@ -3,7 +3,7 @@
 import '../../dominio/repositorio/repositorioUsuario.dart';
 import '../../utils/Either.dart';
 import '../api/remoteDataUsuario.dart';
-import '/dominio/agregados/usuario.dart';
+import '/dominio/agregados/usuario.dart';             //Esto es de dominio, se pude tener aca?
 
 class RepositorioUsuarioImpl implements IUsuarioRepository {
   final RemoteDataUsuarioImp remoteDataSource;
@@ -17,7 +17,7 @@ class RepositorioUsuarioImpl implements IUsuarioRepository {
   }
 
   @override
-  Future<Either<int, Exception>> crearUsuario(Usuario usuario) async {
+  Future<Either<String, Exception>> crearUsuario(Usuario usuario) async {
     //NECESITAMOS UN BODY
     Map<String, dynamic> usuarioDTO = {
       "nombre": usuario.getNombre(),
@@ -26,9 +26,12 @@ class RepositorioUsuarioImpl implements IUsuarioRepository {
       "clave": usuario.getClave(),
       "suscripcion": usuario.isSuscribed(),
     };
-    return await remoteDataSource.crearUsuarioApi(usuarioDTO);
-    //   jsonUsuarioToBd(result);
-    //   return Right(result);
+    
+    final respuesta = await remoteDataSource.crearUsuarioApi(usuarioDTO);
+    if (respuesta.isLeft()) {
+      return Either.left(respuesta.left!["id"]["id"]);
+    }
+    return Either.right(respuesta.right!);
   }
 
   @override
@@ -37,6 +40,7 @@ class RepositorioUsuarioImpl implements IUsuarioRepository {
     final result = await remoteDataSource.loginUsuarioApi(email, clave);
     return result;
   }
+
 
   // @override
   // Future<Either<int, Exception>> eliminarUsuario(int id) async {

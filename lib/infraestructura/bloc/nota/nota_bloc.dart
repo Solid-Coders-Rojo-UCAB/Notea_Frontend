@@ -1,3 +1,5 @@
+// ignore_for_file: unrelated_type_equality_checks
+
 import 'package:http/http.dart' as http;
 import 'package:flutter/material.dart';
 
@@ -49,14 +51,12 @@ class NotaBloc extends Bloc<NotaEvent, NotaState> {
 
     on<CreateNotaEvent>((event, emit) async {
       emit(const NotaInitialState());
-      // await Future.delayed(const Duration(seconds: 2));
 
-      final repositorio = RepositorioNotaImpl(
-          remoteDataSource: RemoteDataNotaImp(client: http.Client()));
-      // final notas = await repositorio.crearNota(event);
+      final repositorio = RepositorioNotaImpl(remoteDataSource: RemoteDataNotaImp(client: http.Client()));
+      final nota = await repositorio.crearNota(event.tituloNota, event.listInfo, event.etiquetas, event.grupo);
 
-      // usuario.isLeft() ?  emit(UsuarioSuccessState(usuario: usuario.left!))  //emitimos el estado de exito
-      //   : emit(const UsuarioFailureState()); //emitimos el estado de error
+      await Future.delayed(const Duration(milliseconds: 300));
+      nota!.isLeft() ?  emit(const NotasCreateSuccessState()): emit(const NotasFailureState());//emitimos el estado de error
     });
   }
 }

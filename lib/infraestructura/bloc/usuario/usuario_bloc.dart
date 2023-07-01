@@ -15,17 +15,33 @@ class UsuarioBloc extends  Bloc<UsuarioEvent, UsuarioState> {
 
    //generamos los comportamientos del bloc
     on<LoginEvent>((event, emit) async { //para que el bloc escuche el evento Login
-      
       emit(const UsuarioLoadingState()); //emitimos el estado de cargando
-      await Future.delayed(const Duration(seconds: 2));
-       
+      await Future.delayed(const Duration(milliseconds: 300));
        //realizamos la logica de negocio para el login
       final repositorio = RepositorioUsuarioImpl(remoteDataSource: RemoteDataUsuarioImp(client: http.Client()));
       final usuario = await repositorio.loginUsuario(event.email, event.password);
 
       usuario.isLeft() ?  emit(UsuarioSuccessState(usuario: usuario.left!))  //emitimos el estado de exito
         : emit(const UsuarioFailureState()); //emitimos el estado de error
-      }
+      },
+
     );
+
+    on<RegisterEvent>((event, emit) async {
+      emit(const UsuarioLoadingState());
+      await Future.delayed(const Duration(milliseconds: 300));
+      final repositorio = RepositorioUsuarioImpl(remoteDataSource: RemoteDataUsuarioImp(client: http.Client()));
+      final newUser = Usuario.crearUsuario(event.nombre, event.apellido, event.email, event.password, event.suscripcion, "0");
+      final response = await repositorio.crearUsuario(newUser);
+
+      if (response.isLeft()) {
+        newUser.setId(response.left!);
+        emit(UsuarioSuccessState(usuario: newUser));
+      } else {
+        emit(const UsuarioFailureState());
+        await Future.delayed(const Duration(milliseconds: 500));
+        emit(const UsuarioInitialState());
+      }
+    });
   }
 }

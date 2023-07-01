@@ -8,3 +8,7 @@ class GrupoCatchEvent extends GrupoEvent {
 
   GrupoCatchEvent({required this.idUsuarioDueno});
 }
+
+class GrupoReload extends GrupoEvent {
+  GrupoReload();
+}
