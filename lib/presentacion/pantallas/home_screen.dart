@@ -137,7 +137,7 @@ Widget build(BuildContext context) {
             },
           ),
           body:  Padding(
-            padding: const EdgeInsets.symmetric( horizontal: 20, vertical: 40),
+            padding: const EdgeInsets.only( top: 80),
             child: Column(
               children: [
                 Column(
