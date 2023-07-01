@@ -39,6 +39,10 @@ class _PapeleraState extends State<Papelera> {
   @override
   Widget build(BuildContext context) {
     return BlocBuilder<NotaBloc, NotaState>(builder: (context, state) {
+      if (state is NotasFailureState){
+        return const Center(child: Text('Error al cargar las notas'));
+      }
+
       if (state is NotasCatchSuccessState) {
         notas = state.notas;
         int? suma = 0;
