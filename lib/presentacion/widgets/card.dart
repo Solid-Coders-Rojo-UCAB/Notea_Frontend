@@ -113,10 +113,20 @@ class CartaWidget extends StatelessWidget {
                         message: 'Eliminar',
                         child: Icon(
                           Icons.delete,
-                          color: Colors.red,
+                          color: Color.fromARGB(255, 20, 18, 18),
                         ),
                       ),
                       onPressed: onDeletePressed,
+                    ),
+                    IconButton(
+                      icon: const Tooltip(
+                        message: 'Recuperar',
+                        child: Icon(
+                          Icons.autorenew,
+                          color: Color.fromARGB(255, 20, 18, 18),
+                        ),
+                      ),
+                      onPressed: onChangePressed,
                     ),
                   ],
                 ),
