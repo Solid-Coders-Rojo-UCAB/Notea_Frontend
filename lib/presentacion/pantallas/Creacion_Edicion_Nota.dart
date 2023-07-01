@@ -1,4 +1,4 @@
-// ignore_for_file: must_be_immutable, library_private_types_in_public_api, file_names, avoid_print
+// ignore_for_file: must_be_immutable, library_private_types_in_public_api, file_names, avoid_print, unnecessary_null_comparison, avoid_init_to_null
 
 import 'dart:convert';
 
@@ -8,12 +8,11 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 
 import 'package:flutter/material.dart';
 import 'package:notea_frontend/dominio/agregados/grupo.dart';
-import 'package:notea_frontend/infraestructura/bloc/Grupo/grupo_bloc.dart';
 import 'package:notea_frontend/infraestructura/bloc/nota/nota_bloc.dart';
 import 'package:notea_frontend/infraestructura/bloc/usuario/usuario_bloc.dart';
 import 'package:notea_frontend/presentacion/pantallas/Container_Editor_Nota.dart';
 import 'package:notea_frontend/presentacion/pantallas/home_screen.dart';
-import 'package:notea_frontend/presentacion/pantallas/lista_notas_screen.dart';
+import 'package:notea_frontend/presentacion/widgets/Boton_Gru_Eti.dart';
 import 'package:notea_frontend/presentacion/widgets/EtiquetaList.dart';
 import 'package:notea_frontend/presentacion/widgets/GrupoList.dart';
 import 'package:notea_frontend/presentacion/widgets/ImageBlock.dart';
@@ -37,9 +36,11 @@ class _AccionesConNotaState extends State<AccionesConNota> {
 
   late List<dynamic> recivedDataList = [];
   late List<dynamic> recivedDataEitquetas = [];
-  late Grupo receivedDataGrupo;
+  late Grupo? receivedDataGrupo = null;
 
-  bool cerrar = false;
+  bool hayGrupo = false;
+  bool hayEtiquetas = false;
+
 
   @override
   void initState() {
@@ -108,10 +109,24 @@ class _AccionesConNotaState extends State<AccionesConNota> {
       }
     }
   }
-  
   //Traemos de la lista de etiquetas, las etiquetas que seleccione el usuario
   void handleDataEtiquetas(List<dynamic> dataEiquetas) {
       recivedDataEitquetas = dataEiquetas;
+
+      print('--------Lista de etiquetas-------');
+      print(recivedDataEitquetas.length);
+      print('---------------------------------');
+
+    if(recivedDataEitquetas.isEmpty){
+      hayEtiquetas = false;
+    }else{
+      hayEtiquetas = true;
+    }
+
+    setState(() {
+      recivedDataEitquetas = recivedDataEitquetas;
+    });
+
   }
   void printEtiquetas() {
     for (var element in recivedDataEitquetas) {
@@ -126,15 +141,14 @@ class _AccionesConNotaState extends State<AccionesConNota> {
   //Traemos de la lista de grupos el grupo seleccionado
   void handleDataGrupo(Grupo dataGrupo) {
     receivedDataGrupo = dataGrupo;
+    print('--------Grupo-------');
+    print(receivedDataGrupo!.getNombre());
+    print('---------------------------------');
+    hayGrupo = true;
+    setState(() {
+      receivedDataGrupo = receivedDataGrupo;
+    });
   }
-  // void printGrupo() {
-  //   print('-----');
-  //   print(receivedDataGrupo.id);
-  //   print(receivedDataGrupo.nombre);
-  //   print(receivedDataGrupo.usuario);
-  //   print('-----');
-  // }
-
 
   Future<Uint8List?> downloadImage(String imageUrl) async {
     try {
@@ -150,7 +164,7 @@ class _AccionesConNotaState extends State<AccionesConNota> {
       return null;
     }
   }
-// Evento de regresar
+  // Evento de regresar
   void _regresar() {
     Navigator.pop(context);
     Navigator.pushReplacement(
@@ -214,7 +228,7 @@ class _AccionesConNotaState extends State<AccionesConNota> {
                     padding: const EdgeInsets.symmetric(horizontal: 16.0),
                     child: SizedBox(
                       width: MediaQuery.of(context).size.width * 0.9,
-                      height: 500,
+                      height: 350,
                       child: Container(
                         decoration: BoxDecoration(
                           border: Border.all(
@@ -229,37 +243,92 @@ class _AccionesConNotaState extends State<AccionesConNota> {
                       ),
                     ),
                   ),
-                  const SizedBox(height: 24.0),
+                  const SizedBox(height: 16.0),
                   Column(
                     children: [
-                      EtiquetaList(
-                        onDataReceived: handleDataEtiquetas,
+                      Text('Etiquetas seleccionadas: ${recivedDataEitquetas.length}'),
+                      const SizedBox(height: 8.0),
+                      Wrap(
+                        spacing: 8.0,
+                        runSpacing: 8.0,
+                        children: recivedDataEitquetas.map((tag) {
+                          return Container(
+                            padding: const EdgeInsets.symmetric(horizontal: 12.0, vertical: 4.0),
+                            decoration: BoxDecoration(
+                              color: tag.color,
+                              borderRadius: BorderRadius.circular(12.0),
+                            ),
+                            child: Text(
+                              tag.nombre,
+                              style: const TextStyle(
+                                color: Colors.white,
+                                fontSize: 12.0,
+                                fontWeight: FontWeight.bold,
+                              ),
+                            ),
+                          );
+                        }).toList(),
                       ),
-                      GrupoList(
-                        onDataReceived: handleDataGrupo,
-                        grupos: widget.grupos,
+                      const SizedBox(height: 16.0),
+                      Column(
+                        children: [
+                          const Text('Grupo seleccionado:'),
+                          hayGrupo ?
+                              Chip(
+                                avatar: CircleAvatar(
+                                  backgroundColor: Colors.grey.shade800,
+                                  child: Text(obtenerPrimerasDosLetrasMayusculas(receivedDataGrupo!.getNombre())),
+                                ),
+                                label: Text(receivedDataGrupo!.getNombre()),
+                              ) :
+                              const Text(''),
+                        ],
                       ),
                     ],
                   ),
-                  const SizedBox(height: 24.0),
-                  FloatingActionButton(
-                    onPressed: () {
-                      BlocProvider.of<NotaBloc>(context).add(
-                        CreateNotaEvent(
-                          tituloNota: _tituloController.text,
-                          listInfo: recivedDataList,
-                          grupo: receivedDataGrupo,
-                          etiquetas: recivedDataEitquetas
-                        )
-                      );
-                      _regresar();
-                    },
-                    backgroundColor: Colors.blue,
-                    child: const Icon(
-                      Icons.sd_storage_outlined,
-                      color: Colors.white,
-                    ),
+                  const SizedBox(height: 16.0),
+                  AnimatedButton(
+                    onDataReceivedGrupo: handleDataGrupo,
+                    onDataReceivedEtiqueta: handleDataEtiquetas,
+                    grupos: widget.grupos,
+                    puedeCrear: hayGrupo && hayEtiquetas ? true : false,
+                    etiquetas: recivedDataEitquetas,
+                    grupo: receivedDataGrupo,
+                    listInfo: recivedDataList,
+                    tituloNota:_tituloController.text,
                   ),
+
+                  if (hayEtiquetas && hayGrupo && recivedDataList.isNotEmpty && _tituloController.text.isNotEmpty)
+                    Container(
+                      margin: const EdgeInsets.only(right: 40, bottom: 50), // Margen de 16.0 en todos los lados
+                      child: Align(
+                        alignment: Alignment.bottomRight,
+                        child: FloatingActionButton(
+                          onPressed: () {
+                            print(_tituloController.text);
+                            print(recivedDataList.length);
+                            print(receivedDataGrupo!.getNombre());
+                            print(recivedDataEitquetas.length);
+                            BlocProvider.of<NotaBloc>(context).add(
+                              CreateNotaEvent(
+                                tituloNota: _tituloController.text,
+                                listInfo: recivedDataList,
+                                grupo: receivedDataGrupo,
+                                etiquetas: recivedDataEitquetas,
+                              ),
+                            );
+                            _regresar();
+                          },
+                          backgroundColor: Colors.blue,
+                          child: const Icon(
+                            Icons.sd_storage_outlined,
+                            color: Colors.white,
+                          ),
+                        ),
+                      ),
+                    ),
+
+
                 ],
               ),
             ),
@@ -272,3 +341,12 @@ class _AccionesConNotaState extends State<AccionesConNota> {
 }
 
 
+String obtenerPrimerasDosLetrasMayusculas(String texto) {
+  if (texto.length >= 2) {
+    final primerasDosLetras = texto.substring(0, 2);
+    final primerasDosLetrasMayusculas = primerasDosLetras.toUpperCase();
+    return primerasDosLetrasMayusculas;
+  } else {
+    return texto.toUpperCase();
+  }
+}

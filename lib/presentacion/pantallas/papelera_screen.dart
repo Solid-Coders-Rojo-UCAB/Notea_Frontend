@@ -35,10 +35,8 @@ class _PapeleraState extends State<Papelera> {
   @override
   Widget build(BuildContext context) {
     return BlocBuilder<NotaBloc, NotaState>(builder: (context, state) {
-      if (state is NotasSuccessState) {
+      if (state is NotasCatchSuccessState) {
         notas = state.notas;
-       
-
         return Scaffold(
             bottomNavigationBar: BottomBar(scaffoldKey: _scaffoldKey),
             body: Padding(

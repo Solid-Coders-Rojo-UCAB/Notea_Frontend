@@ -1,4 +1,5 @@
 import 'dart:io';
+import 'package:universal_io/io.dart';
 
 class ApiConfig {
   static final String apiBaseUrl = _getBaseUrl();
