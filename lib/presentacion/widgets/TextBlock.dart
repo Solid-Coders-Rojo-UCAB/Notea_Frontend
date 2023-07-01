@@ -196,6 +196,7 @@ class _TextBlockState extends State<TextBlock> {
           decoration: BoxDecoration(
               color: backgroundColor, borderRadius: BorderRadius.circular(20)),
           padding: const EdgeInsets.all(20),
+
           child: Column(
             children: [
               Row(
@@ -214,7 +215,8 @@ class _TextBlockState extends State<TextBlock> {
                             }),
                           ],
                         )
-                      )),
+                      )
+                    ),
                   Flexible(
                     child: TextField(
                       cursorColor: Colors.black12,
@@ -432,3 +434,6 @@ class Estilos {
 
   Estilos({required this.negrita, required this.cursiva, required this.tachado, required this.subrayado});
 }
+
+
+

@@ -57,13 +57,13 @@ class _LoginScreenState extends State<LoginScreen> {
         // #############################################
         // #############################################
         // COMENTAR ESTO SI QUIERES PASAR DE UNA AL GOME
-        final usuariofinal = Usuario.crearUsuario('Angel', 'Hernandez','angel@gmail.com', '1234', true, 'dcb52ea6-fd0c-4ce6-9873-ce487cb39787');
-        if(true){
-          return Scaffold(
-            resizeToAvoidBottomInset: true,
-            body: Center(child: MessagesScreen(usuario : usuariofinal)),
-          );
-        }
+        // final usuariofinal = Usuario.crearUsuario('Angel', 'Hernandez','angel@gmail.com', '1234', true, 'dcb52ea6-fd0c-4ce6-9873-ce487cb39787');
+        // if(true){
+        //   return Scaffold(
+        //     resizeToAvoidBottomInset: true,
+        //     body: Center(child: MessagesScreen(usuario : usuariofinal)),
+        //   );
+        // }
         // #############################################
         // #############################################
 

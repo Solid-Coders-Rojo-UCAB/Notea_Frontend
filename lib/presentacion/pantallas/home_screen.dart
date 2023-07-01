@@ -7,6 +7,7 @@ import 'package:notea_frontend/presentacion/pantallas/lista_notas_screen.dart';
 import 'package:notea_frontend/presentacion/widgets/BottomBar.dart';
 import 'package:notea_frontend/presentacion/widgets/MenuDesplegable.dart';
 import 'package:notea_frontend/presentacion/widgets/floating_button.dart';
+import 'package:notea_frontend/presentacion/pantallas/angel/pruebaNota.dart';
 
 
 class MessagesScreen extends StatefulWidget {
@@ -93,6 +94,18 @@ Widget build(BuildContext context) {
                 title: 'Configuración',
                 onPressed: () {
                   // Acción al presionar el botón de configuración
+                },
+              ),
+              MenuItem(
+                icon: Icons.settings,
+                title: 'Nota Editor',
+                onPressed: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => NotaEditor(), // Navega hacia la pantalla del NotaEditor
+                    ),
+                  );
                 },
               ),
               // Agregar más elementos de menú si es necesario
