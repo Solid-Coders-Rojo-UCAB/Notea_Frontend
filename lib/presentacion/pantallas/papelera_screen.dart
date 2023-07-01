@@ -40,6 +40,7 @@ class _PapeleraState extends State<Papelera> {
   Widget build(BuildContext context) {
     return BlocBuilder<NotaBloc, NotaState>(builder: (context, state) {
       if (state is NotasCatchSuccessState) {
+      if (state is NotasCatchSuccessState) {
         notas = state.notas;
         int? suma = 0;
 

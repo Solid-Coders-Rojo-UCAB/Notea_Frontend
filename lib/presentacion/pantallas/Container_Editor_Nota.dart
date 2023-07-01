@@ -5,6 +5,7 @@ import 'package:flutter/services.dart';
 import 'package:notea_frontend/presentacion/widgets/ImageBlock.dart';
 import 'package:notea_frontend/presentacion/widgets/TareaBlock.dart';
 import 'package:notea_frontend/presentacion/widgets/TextBlock.dart';
+import 'package:notea_frontend/presentacion/widgets/textF.dart';
 
 class ContainerEditorNota extends StatefulWidget {
 
@@ -23,7 +24,8 @@ class _ContainerEditorNotaState extends State<ContainerEditorNota> {
 
   final focusNode = FocusNode();
   final  List<dynamic> _children = [
-    TextBlock(),
+    TextBlockPrueba(),
+    // TextBlock(),
   ];
   var canDelete = false;
 
@@ -112,28 +114,28 @@ class _ContainerEditorNotaState extends State<ContainerEditorNota> {
                     value: 'text_block',
                     child: ListTile(
                       leading: Icon(Icons.text_fields),
-                      title: Text('Agregar TextBlock'),
+                      title: Text('Agregar Texto'),
                     ),
                   ),
                   const PopupMenuItem<String>(
                     value: 'image_block',
                     child: ListTile(
                       leading: Icon(Icons.image),
-                      title: Text('Agregar ImageBlock'),
+                      title: Text('Agregar Imagen'),
                     ),
                   ),
                   const PopupMenuItem<String>(
                     value: 'tarea_block',
                     child: ListTile(
                       leading: Icon(Icons.list),
-                      title: Text('Agregar TareaBlock'),
+                      title: Text('Agregar Tarea'),
                     ),
                   ),
                 ],
                 onSelected: (String value) {
                   setState(() {
                     if (value == 'text_block') {
-                      _children.add(TextBlock());
+                      _children.add(TextBlockPrueba());
                     }else if (value == 'image_block') {
                       _children.add(ImageBlock());
                     }else if (value == 'tarea_block') {
@@ -158,17 +160,6 @@ class _ContainerEditorNotaState extends State<ContainerEditorNota> {
     );
   }
 
-  // @override
-  // Widget build(BuildContext context) {
-  //   return RawKeyboardListener(
-  //       focusNode: focusNode,
-  //       onKey: (RawKeyEvent key) => handleKey(key),
-  //       child: Scaffold(
-  //         body: _textBuilder(),
-  //       ));
-  // }
-
-
   @override
   Widget build(BuildContext context) {
     return RawKeyboardListener(
@@ -183,5 +174,4 @@ class _ContainerEditorNotaState extends State<ContainerEditorNota> {
       ),
     );
   }
-
 }

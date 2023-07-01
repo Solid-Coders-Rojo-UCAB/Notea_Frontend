@@ -113,7 +113,7 @@ class _TextBlockState extends State<TextBlock> {
         });
       }
     });
-    widget.controller1.setTexBlock('',false, false, false, false);
+    widget.controller1.setTexBlock('', false, false, false, false);
   }
 
   @override
@@ -150,8 +150,10 @@ class _TextBlockState extends State<TextBlock> {
       if (key.data.keyLabel == 'Escape' ||
           key.logicalKey.keyLabel == 'Escape') {
         setState(() {
-          renderBlockChange = !renderBlockChange;                       //Setea al valor contrario al que estaba
-          if (renderBlockChange) {                                      //Si es true, pone el fondo con negro
+          renderBlockChange =
+              !renderBlockChange; //Setea al valor contrario al que estaba
+          if (renderBlockChange) {
+            //Si es true, pone el fondo con negro
             backgroundColor = Colors.black12;
             opacity = 1;
           } else {
@@ -165,15 +167,20 @@ class _TextBlockState extends State<TextBlock> {
     }
   }
 
-  TextStyle?  activarEstilo(String estilo) {    //Este if es mejorable, pero es por la pruba y rapidez
-    if(estilo == 'negrita'){
-      widget.controller1.setTexBlock(widget.controller.text,true, false, false, false);
-    }else if(estilo == 'cursiva'){
-      widget.controller1.setTexBlock(widget.controller.text,false, true, false, false);
-    }else if(estilo == 'tachado'){
-      widget.controller1.setTexBlock(widget.controller.text,false, false, true, false);
-    }else if(estilo == 'subrayado'){
-      widget.controller1.setTexBlock(widget.controller.text,false, false, false, true);
+  TextStyle? activarEstilo(String estilo) {
+    //Este if es mejorable, pero es por la pruba y rapidez
+    if (estilo == 'negrita') {
+      widget.controller1
+          .setTexBlock(widget.controller.text, true, false, false, false);
+    } else if (estilo == 'cursiva') {
+      widget.controller1
+          .setTexBlock(widget.controller.text, false, true, false, false);
+    } else if (estilo == 'tachado') {
+      widget.controller1
+          .setTexBlock(widget.controller.text, false, false, true, false);
+    } else if (estilo == 'subrayado') {
+      widget.controller1
+          .setTexBlock(widget.controller.text, false, false, false, true);
     }
     final Map<String, TextStyle> estilos = {
       'negrita': negrita,
@@ -202,6 +209,7 @@ class _TextBlockState extends State<TextBlock> {
           decoration: BoxDecoration(
               color: backgroundColor, borderRadius: BorderRadius.circular(20)),
           padding: const EdgeInsets.all(20),
+
           child: Column(
             children: [
               Row(
@@ -374,29 +382,13 @@ class _TextBlockState extends State<TextBlock> {
                                           Icons.image_search_rounded,
                                           color:
                                               Color.fromARGB(255, 206, 156, 5)),
-                                      onPressed: () async {
+                                      onPressed: () {
                                         //Aca el boton del menu desplegable
                                         print(
                                             'Aca se habre la funcionalidad de imagen a texto');
-                                        Future<String> future = imagenATexto()
-                                            .EscanearTexto(await ImagePicker()
-                                                .pickImage(
-                                                    source: ImageSource
-                                                        .gallery)); //Aqui se selecciona una imagen desde la galeria, y se envia a la funcion para ser escaneada
-
-                                        // Future<String> future = imagenATexto()
-                                        //    .EscanearTexto(
-                                        //         (await seleccionarImagen())
-                                        //             as XFile?);
-
-                                        //Se guarda el texto escaneado en esta variable y se setea.
-                                        print(future);
-                                        widget.controller.text = await future;
-
-                                        setState(() async {
-                                          renderBlockChange =
-                                              !renderBlockChange; //Esto cambia el valor true o false
-                                        });
+                                        // setState(() {
+                                        //   renderBlockChange = !renderBlockChange;   //Esto cambia el valor true o false
+                                        // });
                                       }),
                                   IconButton(
                                       icon: const Icon(Icons.mic,
@@ -452,19 +444,26 @@ class _TextBlockState extends State<TextBlock> {
 }
 
 class TextBlockController {
-    late String contenido;
-    late Estilos estilos ;
+  late String contenido;
+  late Estilos estilos;
 
-  void setTexBlock(String contenido, bool negrita, bool cursiva, bool tachado, bool subrayado) {
+  void setTexBlock(String contenido, bool negrita, bool cursiva, bool tachado,
+      bool subrayado) {
     contenido = contenido;
-    estilos = Estilos(negrita: negrita, cursiva: cursiva, tachado: tachado, subrayado: subrayado);
+    estilos = Estilos(
+        negrita: negrita,
+        cursiva: cursiva,
+        tachado: tachado,
+        subrayado: subrayado);
   }
 
   String getContenido() {
     return contenido;
   }
+
   String getEstilos() {
-    String est = 'Negrita -> ${estilos.negrita}, Cursiva -> ${estilos.cursiva}, Tachado -> ${estilos.tachado}, Subrayado -> ${estilos.subrayado}';
+    String est =
+        'Negrita -> ${estilos.negrita}, Cursiva -> ${estilos.cursiva}, Tachado -> ${estilos.tachado}, Subrayado -> ${estilos.subrayado}';
     return est;
   }
 }
@@ -475,5 +474,9 @@ class Estilos {
   late bool tachado;
   late bool subrayado;
 
-  Estilos({required this.negrita, required this.cursiva, required this.tachado, required this.subrayado});
+  Estilos(
+      {required this.negrita,
+      required this.cursiva,
+      required this.tachado,
+      required this.subrayado});
 }
