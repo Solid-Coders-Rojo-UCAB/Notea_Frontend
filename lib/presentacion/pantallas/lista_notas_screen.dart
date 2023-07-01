@@ -111,7 +111,9 @@ class _MyDropdownState extends State<MyDropdown> {
                           ));
                         }).toList()),
                       ),
-                      const SizedBox(height: 8.0), // Separación entre los desplegables
+                      ),
+                     const SizedBox(height: 8.0),
+                      // Separación entre los desplegables
                     ],
                   ),
                 );
