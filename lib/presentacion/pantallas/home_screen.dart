@@ -137,7 +137,7 @@ Widget build(BuildContext context) {
             },
           ),
           body:  Padding(
-            padding: const EdgeInsets.only(top: 120.0),
+            padding: const EdgeInsets.symmetric( horizontal: 20, vertical: 40),
             child: Column(
               children: [
                 Column(
@@ -168,6 +168,7 @@ Widget build(BuildContext context) {
                                 fontWeight: FontWeight.w500,
                               ),
                             ),
+                            const SizedBox(height: 20),
                           ],
                         ),
                       ),
