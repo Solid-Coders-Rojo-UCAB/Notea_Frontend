@@ -63,7 +63,8 @@ class _PapeleraState extends State<Papelera> {
             bottomNavigationBar:
                 BottomBar(scaffoldKey: _scaffoldKey, usuario: widget.usuario),
             body: Padding(
-                padding: const EdgeInsets.only(top: 60),
+                padding:
+                    const EdgeInsets.symmetric(horizontal: 20, vertical: 40),
                 child: Column(children: [
                   Column(
                     crossAxisAlignment: CrossAxisAlignment.start,

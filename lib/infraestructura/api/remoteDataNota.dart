@@ -152,6 +152,7 @@ class RemoteDataNotaImp implements RemoteDataNota {
   List<Nota> parseNota(String responseBody) {
     List<dynamic> decodedResponse = jsonDecode(responseBody);
     List<Nota> notas = [];
+    print(decodedResponse);
     for (var item in decodedResponse) {
       EstadoEnum estado = EstadoEnum.values.byName(item['estado']);
 
