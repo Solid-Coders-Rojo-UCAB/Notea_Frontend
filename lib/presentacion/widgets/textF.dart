@@ -5,10 +5,12 @@ import 'package:flutter/material.dart';
 class TextBlockPrueba extends StatefulWidget {
   @override
   _TextBlockPruebaState createState() => _TextBlockPruebaState();
+
+  final TextEditingController controller = TextEditingController();
+
 }
 
 class _TextBlockPruebaState extends State<TextBlockPrueba> {
-  TextEditingController textEditingController = TextEditingController();
 
   @override
   void initState() {
@@ -35,7 +37,7 @@ class _TextBlockPruebaState extends State<TextBlockPrueba> {
             children: [
               Expanded(
                 child: TextField(
-                  controller: textEditingController,
+                  controller: widget.controller,
                   decoration: const InputDecoration(
                     border: InputBorder.none,
                     contentPadding: EdgeInsets.all(16.0),
@@ -88,7 +90,7 @@ class _TextBlockPruebaState extends State<TextBlockPrueba> {
 
   @override
   void dispose() {
-    textEditingController.dispose();
+    widget.controller.dispose();
     super.dispose();
   }
 }

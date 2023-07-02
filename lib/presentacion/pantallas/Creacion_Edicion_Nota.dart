@@ -23,7 +23,14 @@ import 'package:notea_frontend/presentacion/widgets/TextBlock.dart';
 class AccionesConNota extends StatefulWidget {
   final String accion;
   final List<Grupo>? grupos;
-  const AccionesConNota({Key? key, required this.accion, required this.grupos}) : super(key: key);
+  final List<dynamic>? etiquetas;
+
+  final String? titulo;
+  final List<String>? contenidosTotal;
+
+
+
+  const AccionesConNota({Key? key, required this.accion, required this.grupos, this.titulo, this.contenidosTotal, this.etiquetas}) : super(key: key);
 
   @override
   _AccionesConNotaState createState() => _AccionesConNotaState();
@@ -35,7 +42,7 @@ class _AccionesConNotaState extends State<AccionesConNota> {
 
 
   late List<dynamic> recivedDataList = [];
-  late List<dynamic> recivedDataEitquetas = [];
+  late List<dynamic> recivedDataEitquetas = [];         //ACA HAY QUE SETEAR LAS ETIQUETAS QUE TIENE LA NOTA
   late Grupo? receivedDataGrupo = null;
 
   bool hayGrupo = false;
@@ -45,7 +52,7 @@ class _AccionesConNotaState extends State<AccionesConNota> {
   @override
   void initState() {
     super.initState();
-    _tituloController = TextEditingController();
+    _tituloController = TextEditingController(text: widget.titulo ?? '');
     print('---');
     print(widget.grupos);
     print('-----');
@@ -177,14 +184,14 @@ class _AccionesConNotaState extends State<AccionesConNota> {
     return  BlocBuilder<NotaBloc, NotaState>(
     builder: (context, state) {
       if (state is NotasFailureState){
-        return const Center(child: Text('Error al crear la nota'));
+        return widget.titulo!.isEmpty ? const Center(child: Text('Error al crear la nota')) : const Center(child: Text('Error al editar la nota'));
       }
       if(state is NotasCreateSuccessState){
 
       }
       return Scaffold(
         appBar: AppBar(
-          title: const Text('Añadir Nota'),
+          title: Text(widget.accion),
           backgroundColor: const Color(0xFF21579C),
         ),
         body: Padding(
@@ -239,6 +246,7 @@ class _AccionesConNotaState extends State<AccionesConNota> {
                         ),
                         child: ContainerEditorNota(
                           onDataReceived: handleDataReceived,
+                          contenidoTotal: widget.contenidosTotal,
                         ),                         //Aca esta todo lo que compone la nota
                       ),
                     ),

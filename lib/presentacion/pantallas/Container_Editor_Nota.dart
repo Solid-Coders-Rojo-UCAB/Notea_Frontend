@@ -8,10 +8,11 @@ import 'package:notea_frontend/presentacion/widgets/TextBlock.dart';
 import 'package:notea_frontend/presentacion/widgets/textF.dart';
 
 class ContainerEditorNota extends StatefulWidget {
+  final List<dynamic>? contenidoTotal;
 
   final Function(String, List<dynamic>) onDataReceived;
 
-  const ContainerEditorNota({super.key, required this.onDataReceived});
+  const ContainerEditorNota({super.key, required this.onDataReceived, this.contenidoTotal});
 
   @override
   _ContainerEditorNotaState createState() => _ContainerEditorNotaState();
@@ -24,7 +25,7 @@ class _ContainerEditorNotaState extends State<ContainerEditorNota> {
 
   final focusNode = FocusNode();
   final  List<dynamic> _children = [
-    TextBlockPrueba(),
+    // TextBlockPrueba(),
     // TextBlock(),
   ];
   var canDelete = false;
@@ -32,6 +33,8 @@ class _ContainerEditorNotaState extends State<ContainerEditorNota> {
   @override
   void initState() {
     super.initState();
+    _children.add( widget.contenidoTotal ?? TextBlockPrueba());
+
   }
 
   @override
@@ -175,3 +178,4 @@ class _ContainerEditorNotaState extends State<ContainerEditorNota> {
     );
   }
 }
+

@@ -60,8 +60,9 @@ class _MyDropdownState extends State<MyDropdown> {
                               return CartaWidget(
                                     fecha: nota.getFechaCreacion(),
                                     titulo: nota.titulo.tituloNota,
-                                    contenido: nota.contenido.contenidoNota,
+                                    contenidoTotal: [nota.contenido.contenidoNota,nota.contenido.contenidoNota,nota.contenido.contenidoNota],
                                     tags: const ['Tag1', 'Tag2', 'Tag3sssssss'],
+                                    grupos: widget.grupos,
                                     onDeletePressed: () {
                                       // Lógica para eliminar la nota
                                     },

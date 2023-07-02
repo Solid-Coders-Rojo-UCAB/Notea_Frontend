@@ -1,19 +1,26 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:notea_frontend/dominio/agregados/grupo.dart';
+
+import '../../infraestructura/bloc/Grupo/grupo_bloc.dart';
+import '../pantallas/Creacion_Edicion_Nota.dart';
 
 
 class CartaWidget extends StatelessWidget {
   final DateTime fecha;
   final String titulo;
-  final String contenido;
+  final List<String> contenidoTotal;    //TODO Hay que cambiar esto con lista de contenidos
   final List<String> tags;
   final VoidCallback? onDeletePressed;
+  final List<Grupo>? grupos;
 
 
-  CartaWidget({
+  const CartaWidget({super.key, 
     required this.fecha,
     required this.titulo,
-    required this.contenido,
+    required this.contenidoTotal,
     required this.tags,
+    this.grupos,
     this.onDeletePressed,
   });
 
@@ -23,7 +30,19 @@ class CartaWidget extends StatelessWidget {
     return Center(
       child: GestureDetector(
         onTap: () {
-          print('SE ABRE LA PANTALLA PARA EDITAR LA NOTA');
+          final grupoBloc = BlocProvider.of<GrupoBloc>(context);
+          grupoBloc.add(GrupoReload());
+          Navigator.push(
+            context,
+            MaterialPageRoute(
+              builder: (context) => AccionesConNota(
+                accion: 'Editar Nota',
+                grupos: grupos,
+                titulo: titulo,
+                contenidosTotal: contenidoTotal,
+                etiquetas: tags,
+              )),
+          );
         },
         child: FractionallySizedBox(
           widthFactor: 0.95, // Establece
@@ -88,7 +107,7 @@ class CartaWidget extends StatelessWidget {
                                 maxWidth: 300, // Establece el ancho máximo para el contenedor
                               ),
                               child: Text(
-                                contenido,
+                                contenidoTotal[0],
                                 style: const TextStyle(
                                   fontWeight: FontWeight.bold,
                                   fontSize: 14.0,
