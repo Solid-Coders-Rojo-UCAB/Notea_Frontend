@@ -1,19 +1,27 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:notea_frontend/dominio/agregados/grupo.dart';
+
+import '../../infraestructura/bloc/Grupo/grupo_bloc.dart';
+import '../pantallas/Creacion_Edicion_Nota.dart';
 
 class CartaWidget extends StatelessWidget {
   final DateTime fecha;
   final String titulo;
-  final String contenido;
+  final List<String> contenidoTotal;    //TODO Hay que cambiar esto con lista de contenidos
   final List<String> tags;
   final VoidCallback? onDeletePressed;
+  final List<Grupo>? grupos;
+
   final VoidCallback? onChangePressed;
   final bool habilitado;
 
-  CartaWidget({
+  const CartaWidget({super.key, 
     required this.fecha,
     required this.titulo,
-    required this.contenido,
+    required this.contenidoTotal,
     required this.tags,
+    this.grupos,
     this.onDeletePressed,
     this.onChangePressed,
     required this.habilitado,
@@ -21,15 +29,26 @@ class CartaWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    String formattedDate = fecha.month < 9
-        ? '0${fecha.month} - ${fecha.day}'
-        : '${fecha.month} - ${fecha.day}'; // Formateo de la fecha
-    return FractionallySizedBox(
-        widthFactor: 0.65, // Establece el ancho al 70% del tamaño disponible
-        child: GestureDetector(
-          onTap: () {
-            print('SE ABRE LA PANTALLA PARA EDITAR LA NOTA');
-          },
+    String formattedDate = fecha.month < 9 ? '0${fecha.month} - ${fecha.day}' : '${fecha.month} - ${fecha.day}'; // Formateo de la fecha
+    return Center(
+      child: GestureDetector(
+        onTap: () {
+          final grupoBloc = BlocProvider.of<GrupoBloc>(context);
+          grupoBloc.add(GrupoReload());
+          Navigator.push(
+            context,
+            MaterialPageRoute(
+              builder: (context) => AccionesConNota(
+                accion: 'Editar Nota',
+                grupos: grupos,
+                titulo: titulo,
+                contenidosTotal: contenidoTotal,
+                etiquetas: tags,
+              )),
+          );
+        },
+        child: FractionallySizedBox(
+          widthFactor: 0.95, // Establece
           child: Card(
             shape: RoundedRectangleBorder(
               borderRadius: BorderRadius.circular(10.0),
@@ -96,7 +115,7 @@ class CartaWidget extends StatelessWidget {
                                     300, // Establece el ancho máximo para el contenedor
                               ),
                               child: Text(
-                                contenido,
+                                contenidoTotal[0],
                                 style: const TextStyle(
                                   fontWeight: FontWeight.bold,
                                   fontSize: 14.0,
@@ -154,7 +173,9 @@ class CartaWidget extends StatelessWidget {
               ),
             ),
           ),
-        ));
+        )
+      )
+    );
   }
 
   toList() {}

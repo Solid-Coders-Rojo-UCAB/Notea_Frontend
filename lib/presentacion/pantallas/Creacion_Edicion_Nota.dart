@@ -13,17 +13,22 @@ import 'package:notea_frontend/infraestructura/bloc/usuario/usuario_bloc.dart';
 import 'package:notea_frontend/presentacion/pantallas/Container_Editor_Nota.dart';
 import 'package:notea_frontend/presentacion/pantallas/home_screen.dart';
 import 'package:notea_frontend/presentacion/widgets/Boton_Gru_Eti.dart';
-import 'package:notea_frontend/presentacion/widgets/EtiquetaList.dart';
-import 'package:notea_frontend/presentacion/widgets/GrupoList.dart';
 import 'package:notea_frontend/presentacion/widgets/ImageBlock.dart';
 import 'package:notea_frontend/presentacion/widgets/TareaBlock.dart';
-import 'package:notea_frontend/presentacion/widgets/TextBlock.dart';
+import 'package:notea_frontend/presentacion/widgets/textF.dart';
 
 
 class AccionesConNota extends StatefulWidget {
   final String accion;
   final List<Grupo>? grupos;
-  const AccionesConNota({Key? key, required this.accion, required this.grupos}) : super(key: key);
+  final List<dynamic>? etiquetas;
+
+  final String? titulo;
+  final List<String>? contenidosTotal;
+
+
+
+  const AccionesConNota({Key? key, required this.accion, required this.grupos, this.titulo, this.contenidosTotal, this.etiquetas}) : super(key: key);
 
   @override
   _AccionesConNotaState createState() => _AccionesConNotaState();
@@ -35,7 +40,7 @@ class _AccionesConNotaState extends State<AccionesConNota> {
 
 
   late List<dynamic> recivedDataList = [];
-  late List<dynamic> recivedDataEitquetas = [];
+  late List<dynamic> recivedDataEitquetas = [];         //ACA HAY QUE SETEAR LAS ETIQUETAS QUE TIENE LA NOTA
   late Grupo? receivedDataGrupo = null;
 
   bool hayGrupo = false;
@@ -45,7 +50,7 @@ class _AccionesConNotaState extends State<AccionesConNota> {
   @override
   void initState() {
     super.initState();
-    _tituloController = TextEditingController();
+    _tituloController = TextEditingController(text: widget.titulo ?? '');
     print('---');
     print(widget.grupos);
     print('-----');
@@ -68,14 +73,24 @@ class _AccionesConNotaState extends State<AccionesConNota> {
       recivedDataList = dataList;
   }
 
+  Future<String?> htmlPrint(TextBlockPrueba1 textBlock) async {
+    String? html = await textBlock.editorKey.currentState?.getHtml();
+    return html;
+  }
+
   Future<void> pintaLista() async {
+    print('-------ReciveddataList---------');
+    print(recivedDataList.length);
+    print('-------ReciveddataList---------');
     for (var element in recivedDataList) {
-      if(element is TextBlock){
-        final textBlock = element; // Crea una instancia del widget TextBlock
-        final texto = textBlock.controller.text; // Obtiene el texto del controlador
-        print(texto);
+      if(element is TextBlockPrueba1){
+        final textBlock = element;
         print('------------');
-        print(textBlock.controller1.getEstilos());
+
+
+        String? html = await textBlock.editorKey.currentState?.getHtml();         //Aca captamos el codigo de la lista
+        print(html);
+
         print('------------');
       }else if(element is ImageBlock) {
         print('-----');
@@ -177,14 +192,14 @@ class _AccionesConNotaState extends State<AccionesConNota> {
     return  BlocBuilder<NotaBloc, NotaState>(
     builder: (context, state) {
       if (state is NotasFailureState){
-        return const Center(child: Text('Error al crear la nota'));
+        return widget.titulo!.isEmpty ? const Center(child: Text('Error al crear la nota')) : const Center(child: Text('Error al editar la nota'));
       }
       if(state is NotasCreateSuccessState){
 
       }
       return Scaffold(
         appBar: AppBar(
-          title: const Text('Añadir Nota'),
+          title: Text(widget.accion),
           backgroundColor: const Color(0xFF21579C),
         ),
         body: Padding(
@@ -228,7 +243,7 @@ class _AccionesConNotaState extends State<AccionesConNota> {
                     padding: const EdgeInsets.symmetric(horizontal: 16.0),
                     child: SizedBox(
                       width: MediaQuery.of(context).size.width * 0.9,
-                      height: 350,
+                      height: 500,                                          //Se cambia de tamano al contenedor del contenido de las notas
                       child: Container(
                         decoration: BoxDecoration(
                           border: Border.all(
@@ -239,7 +254,8 @@ class _AccionesConNotaState extends State<AccionesConNota> {
                         ),
                         child: ContainerEditorNota(
                           onDataReceived: handleDataReceived,
-                        ),                         //Aca esta todo lo que compone la nota
+                          contenidoTotal: widget.contenidosTotal,
+                        ),
                       ),
                     ),
                   ),
@@ -305,19 +321,22 @@ class _AccionesConNotaState extends State<AccionesConNota> {
                         alignment: Alignment.bottomRight,
                         child: FloatingActionButton(
                           onPressed: () {
-                            print(_tituloController.text);
-                            print(recivedDataList.length);
-                            print(receivedDataGrupo!.getNombre());
-                            print(recivedDataEitquetas.length);
-                            BlocProvider.of<NotaBloc>(context).add(
-                              CreateNotaEvent(
-                                tituloNota: _tituloController.text,
-                                listInfo: recivedDataList,
-                                grupo: receivedDataGrupo,
-                                etiquetas: recivedDataEitquetas,
-                              ),
-                            );
-                            _regresar();
+                            pintaLista();
+
+
+                            // print(_tituloController.text);
+                            // print(recivedDataList.length);
+                            // print(receivedDataGrupo!.getNombre());
+                            // print(recivedDataEitquetas.length);
+                            // BlocProvider.of<NotaBloc>(context).add(
+                            //   CreateNotaEvent(
+                            //     tituloNota: _tituloController.text,
+                            //     listInfo: recivedDataList,
+                            //     grupo: receivedDataGrupo,
+                            //     etiquetas: recivedDataEitquetas,
+                            //   ),
+                            // );
+                            // _regresar();
                           },
                           backgroundColor: Colors.blue,
                           child: const Icon(

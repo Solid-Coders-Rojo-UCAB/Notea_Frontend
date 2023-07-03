@@ -81,27 +81,30 @@ class _PapeleraState extends State<Papelera> {
                         tween: Tween(begin: 0, end: 1),
                         builder: (_, value, __) => Opacity(
                           opacity: value,
-                          child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              Text(
-                                'Papelera de Notas',
-                                style: TextStyle(
-                                  color: Colors.black.withOpacity(0.85),
-                                  fontSize: 30,
-                                  fontWeight: FontWeight.w700,
+                          child: Padding(
+                            padding: const EdgeInsets.only(left: 40, right: 40),
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Text(
+                                  'Papelera de Notas',
+                                  style: TextStyle(
+                                    color: Colors.black.withOpacity(0.85),
+                                    fontSize: 30,
+                                    fontWeight: FontWeight.w700,
+                                  ),
                                 ),
-                              ),
-                              const SizedBox(height: 6),
-                              Text(
-                                'Tienes un total de $cantidadNotas notas en la papelera',
-                                style: const TextStyle(
-                                  color: Colors.black54,
-                                  fontSize: 23,
-                                  fontWeight: FontWeight.w500,
+                                const SizedBox(height: 6),
+                                Text(
+                                  'Tienes un total de $cantidadNotas notas en la papelera',
+                                  style: const TextStyle(
+                                    color: Colors.black54,
+                                    fontSize: 18,
+                                    fontWeight: FontWeight.w500,
+                                  ),
                                 ),
-                              ),
-                            ],
+                              ],
+                            ),
                           ),
                         ),
                       ),
@@ -122,136 +125,139 @@ class _PapeleraState extends State<Papelera> {
 
                             if (notasDeGrupo != null &&
                                 notasDeGrupo.isNotEmpty) {
-                              return Column(
-                                children: <Widget>[
-                                  Tooltip(
-                                    message: grupo.idGrupo,
-                                    child: Desplegable(
-                                      titulo: grupo.nombre.nombre,
-                                      contenido: Column(
-                                          children: notasDeGrupo.map((nota) {
-                                        return SizedBox(
-                                            child: CartaWidget(
-                                          habilitado: true,
-                                          fecha: nota.getFechaCreacion(),
-                                          titulo: nota.titulo.tituloNota,
-                                          contenido:
-                                              nota.contenido.contenidoNota,
-                                          tags: const [
-                                            'Tag1',
-                                            'Tag2',
-                                            'Tag3sssssss'
-                                          ],
-                                          onDeletePressed: () {
-                                            showDialog(
-                                              context: context,
-                                              builder: (BuildContext context) {
-                                                return AlertDialog(
-                                                  title: const Text(
-                                                      'Confirmación'),
-                                                  content: const Text(
-                                                      '¿Estás seguro de que deseas eliminar la nota permanentemente?'),
-                                                  actions: [
-                                                    TextButton(
-                                                      child: const Text(
-                                                          'Cancelar'),
-                                                      onPressed: () {
-                                                        Navigator.pop(
-                                                            context); // Cerrar el cuadro de diálogo
-                                                      },
-                                                    ),
-                                                    TextButton(
-                                                      child:
-                                                          const Text('Aceptar'),
-                                                      onPressed: () {
-                                                        BlocProvider.of<
-                                                                    NotaBloc>(
-                                                                context)
-                                                            .add(
-                                                                DeleteNoteEvent(
-                                                          idNota: nota.id,
-                                                        ));
-
-                                                        Navigator.push(
-                                                            context,
-                                                            MaterialPageRoute(
-                                                                builder:
-                                                                    (context) =>
-                                                                        Papelera(
-                                                                          grupos:
-                                                                              widget.grupos,
-                                                                          usuario:
-                                                                              widget.usuario,
-                                                                        )));
-
-                                                        // mover a la papelera
-                                                      },
-                                                    ),
-                                                  ],
-                                                );
-                                              },
-                                            );
-                                            // Lógica para eliminar la nota
-                                          },
-                                          onChangePressed: () {
-                                            showDialog(
-                                              context: context,
-                                              builder: (BuildContext context) {
-                                                return AlertDialog(
-                                                  title: const Text(
-                                                      'Confirmación'),
-                                                  content: const Text(
-                                                      '¿Estás seguro de que deseas regresar la nota a la lista de notas?'),
-                                                  actions: [
-                                                    TextButton(
-                                                      child: const Text(
-                                                          'Cancelar'),
-                                                      onPressed: () {
-                                                        Navigator.pop(
-                                                            context); // Cerrar el cuadro de diálogo
-                                                      },
-                                                    ),
-                                                    TextButton(
-                                                      child:
-                                                          const Text('Aceptar'),
-                                                      onPressed: () {
-                                                        BlocProvider.of<
-                                                                    NotaBloc>(
-                                                                context)
-                                                            .add(ModificarEstadoNotaEvent(
+                              return FractionallySizedBox(
+                                widthFactor: 0.9,
+                                child: Column(
+                                  children: <Widget>[
+                                    Tooltip(
+                                      message: grupo.idGrupo,
+                                      child: Desplegable(
+                                        titulo: grupo.nombre.nombre,
+                                        contenido: Column(
+                                            children: notasDeGrupo.map((nota) {
+                                          return SizedBox(
+                                              child: CartaWidget(
+                                                habilitado: true,
+                                                fecha: nota.getFechaCreacion(),
+                                                titulo: nota.titulo.tituloNota,
+                                                contenidoTotal: [nota.contenido.contenidoNota,],
+                                                tags: const [
+                                                  'Tag1',
+                                                  'Tag2',
+                                                  'Tag3sssssss'
+                                                ],
+                                                onDeletePressed: () {
+                                                  showDialog(
+                                                    context: context,
+                                                    builder: (BuildContext context) {
+                                                      return AlertDialog(
+                                                        title: const Text(
+                                                            'Confirmación'),
+                                                        content: const Text(
+                                                            '¿Estás seguro de que deseas eliminar la nota permanentemente?'),
+                                                        actions: [
+                                                          TextButton(
+                                                            child: const Text(
+                                                                'Cancelar'),
+                                                            onPressed: () {
+                                                              Navigator.pop(
+                                                                  context); // Cerrar el cuadro de diálogo
+                                                            },
+                                                          ),
+                                                          TextButton(
+                                                            child:
+                                                                const Text('Aceptar'),
+                                                            onPressed: () {
+                                                              BlocProvider.of<
+                                                                          NotaBloc>(
+                                                                      context)
+                                                                  .add(
+                                                                      DeleteNoteEvent(
                                                                 idNota: nota.id,
-                                                                estado:
-                                                                    "GUARDADO"));
-
-                                                        Navigator.push(
-                                                            context,
-                                                            MaterialPageRoute(
-                                                                builder:
-                                                                    (context) =>
-                                                                        Papelera(
-                                                                          grupos:
-                                                                              widget.grupos,
-                                                                          usuario:
-                                                                              widget.usuario,
-                                                                        )));
-
-                                                        // mover a la papelera
-                                                      },
-                                                    ),
-                                                  ],
-                                                );
-                                              },
-                                            );
-                                          },
-                                        ));
-                                      }).toList()),
+                                                              ));
+                              
+                                                              Navigator.push(
+                                                                  context,
+                                                                  MaterialPageRoute(
+                                                                      builder:
+                                                                          (context) =>
+                                                                              Papelera(
+                                                                                grupos:
+                                                                                    widget.grupos,
+                                                                                usuario:
+                                                                                    widget.usuario,
+                                                                              )));
+                              
+                                                              // mover a la papelera
+                                                            },
+                                                          ),
+                                                        ],
+                                                      );
+                                                    },
+                                                  );
+                                                  // Lógica para eliminar la nota
+                                                },
+                                                onChangePressed: () {
+                                                  showDialog(
+                                                    context: context,
+                                                    builder: (BuildContext context) {
+                                                      return AlertDialog(
+                                                        title: const Text(
+                                                            'Confirmación'),
+                                                        content: const Text(
+                                                            '¿Estás seguro de que deseas regresar la nota a la lista de notas?'),
+                                                        actions: [
+                                                          TextButton(
+                                                            child: const Text(
+                                                                'Cancelar'),
+                                                            onPressed: () {
+                                                              Navigator.pop(
+                                                                  context); // Cerrar el cuadro de diálogo
+                                                            },
+                                                          ),
+                                                          TextButton(
+                                                            child:
+                                                                const Text('Aceptar'),
+                                                            onPressed: () {
+                                                              BlocProvider.of<
+                                                                          NotaBloc>(
+                                                                      context)
+                                                                  .add(ModificarEstadoNotaEvent(
+                                                                      idNota: nota.id,
+                                                                      estado:
+                                                                          "GUARDADO"));
+                              
+                                                              Navigator.push(
+                                                                  context,
+                                                                  MaterialPageRoute(
+                                                                      builder:
+                                                                          (context) =>
+                                                                              Papelera(
+                                                                                grupos:
+                                                                                    widget.grupos,
+                                                                                usuario:
+                                                                                    widget.usuario,
+                                                                              )));
+                              
+                                                              // mover a la papelera
+                                                            },
+                                                          ),
+                                                        ],
+                                                      );
+                                                    },
+                                                  );
+                                                },
+                                              )
+                                          );
+                                        }).toList()),
+                                      ),
                                     ),
-                                  ),
-
-                                  const SizedBox(
-                                      height:
-                                          8.0), // Separación entre los desplegables
-                                ],
+                              
+                                    const SizedBox(
+                                        height:
+                                            8.0), // Separación entre los desplegables
+                                  ],
+                                ),
                               );
                             }
                           }))

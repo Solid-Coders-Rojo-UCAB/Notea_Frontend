@@ -8,7 +8,7 @@ import 'VONota/VOUbicacionNota.dart';
 class Nota {
   String id;
   late VOTituloNota titulo;
-  late VOContenidoNota contenido;
+  late VOContenidoNota contenido;     //Se supone que esto es una lista de cosas(CONTENIDOS, IMAGENES, TAREAS)
   late DateTime fechaCreacion;
   late VOUbicacionNota ubicacion;
   late EstadoEnum estado;

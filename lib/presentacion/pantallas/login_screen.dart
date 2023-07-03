@@ -33,8 +33,8 @@ class _LoginScreenState extends State<LoginScreen> {
   void initState() {
     emailController = TextEditingController();
     passwordController = TextEditingController();
-    emailController.text = 'andres@gmail.com';
-    passwordController.text = 'andres01';
+    emailController.text = 'angel@gmail.com';
+    passwordController.text = '1234';
     super.initState();
   }
 

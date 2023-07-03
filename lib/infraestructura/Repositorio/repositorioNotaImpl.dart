@@ -5,9 +5,6 @@ import 'package:flutter/widgets.dart';
 import 'package:http/http.dart' as http;
 import 'package:intl/intl.dart';
 import 'package:notea_frontend/dominio/agregados/grupo.dart';
-import 'package:path_provider/path_provider.dart';
-import 'dart:io' as io;
-import 'dart:ui' as ui;
 import 'dart:typed_data';
 
 import 'package:notea_frontend/presentacion/widgets/ImageBlock.dart';
@@ -43,7 +40,7 @@ class RepositorioNotaImpl implements INotaRepository {
 
     Map<String, dynamic> notaDTO = {
       "titulo": titulo,
-      "contenido": obtenerContenidoTextBlocks(listInfoContenido),
+      "contenido": obtenerContenidoDelContenidoBlock(listInfoContenido),
       "fechaCreacion": datetimeString.toString(),
       "latitud": '40.0238823', //Colocar aca lo de la ubicacion
       "longitud": '20.0238823',
@@ -86,7 +83,7 @@ class RepositorioNotaImpl implements INotaRepository {
   }
 }
 
-String obtenerContenidoTextBlocks(List<dynamic> lista) {
+String obtenerContenidoDelContenidoBlock(List<dynamic> lista) {
   String contenido = '';
 
   for (dynamic elemento in lista) {
