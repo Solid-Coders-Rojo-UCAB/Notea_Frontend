@@ -5,7 +5,8 @@ import 'package:flutter/services.dart';
 import 'package:notea_frontend/presentacion/widgets/ImageBlock.dart';
 import 'package:notea_frontend/presentacion/widgets/TareaBlock.dart';
 import 'package:notea_frontend/presentacion/widgets/TextBlock.dart';
-import 'package:notea_frontend/presentacion/widgets/textF.dart';
+import 'package:notea_frontend/presentacion/widgets/textOptions.dart';
+
 
 class ContainerEditorNota extends StatefulWidget {
 

@@ -1,8 +1,13 @@
 // ignore_for_file: use_key_in_widget_constructors, library_private_types_in_public_api, file_names
+import 'dart:ui';
 
 import 'package:flutter/material.dart';
+import 'package:notea_frontend/presentacion/pantallas/Speech_to_Text_Screen.dart';
 
 class TextBlockPrueba extends StatefulWidget {
+
+  //hay que pasarle el texto de la nota
+
   @override
   _TextBlockPruebaState createState() => _TextBlockPruebaState();
 }
@@ -67,7 +72,12 @@ class _TextBlockPruebaState extends State<TextBlockPrueba> {
                         // Acción para la cámara a texto
                         break;
                       case 'audioToText':
-                        // Acción para el audio a texto
+                        // Navigator.push(context, 
+                        // MaterialPageRoute(builder: (context) => 
+                        //   SpeechToTextScreen(textoNota: )))
+                        //   .then((value) => setState(() { 
+                        //     //nos devuelve el texto de la nota
+                        //    }));
                         break;
                       case 'changeStyle':
                         // Acción para cambiar el estilo
