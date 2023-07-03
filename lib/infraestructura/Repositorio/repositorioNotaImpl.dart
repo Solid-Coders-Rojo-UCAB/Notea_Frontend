@@ -55,12 +55,12 @@ String obtenerContenidoDelContenidoBlock(List<dynamic> lista) {
   String contenido = '';
 
   for (dynamic elemento in lista) {
-    if (elemento is TextBlockPrueba) {
-    // if (elemento is TextBlock) {
-      final textBlock = elemento; // Crea una instancia del widget TextBlock
-      final texto = textBlock.controller.text; // Obtiene el texto del controlador
-      contenido += '$texto\n';
-    }
+    // if (elemento is TextBlockPrueba) {
+    // // if (elemento is TextBlock) {
+    //   final textBlock = elemento; // Crea una instancia del widget TextBlock
+    //   final texto = textBlock.controller.text; // Obtiene el texto del controlador
+    //   contenido += '$texto\n';
+    // }
     //Aca se llena la lista de con los tipos de datos ordenados
     // if (elemento is ImageBlock) {
     //   final textBlock = elemento; // Crea una instancia del widget TextBlock

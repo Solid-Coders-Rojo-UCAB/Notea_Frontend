@@ -1,96 +1,61 @@
-// ignore_for_file: use_key_in_widget_constructors, library_private_types_in_public_api, file_names
+// ignore_for_file: use_key_in_widget_constructors, library_private_types_in_public_api
 
 import 'package:flutter/material.dart';
+import 'package:rich_editor/rich_editor.dart';
 
 class TextBlockPrueba extends StatefulWidget {
+  TextBlockPrueba({Key? key});
+
+  final GlobalKey<RichEditorState> _editorKey = GlobalKey<RichEditorState>();
+
   @override
   _TextBlockPruebaState createState() => _TextBlockPruebaState();
-
-  final TextEditingController controller = TextEditingController();
-
 }
 
 class _TextBlockPruebaState extends State<TextBlockPrueba> {
 
   @override
-  void initState() {
-    super.initState();
+  void dispose() {
+    super.dispose();
   }
 
-  
+Future<String?>? getEditorValue()async{
+  if (widget._editorKey.currentState != null) {
+
+    String? html = await widget._editorKey.currentState?.getHtml();
+
+    return html;
+
+  }
+  return null;
+}
 
   @override
   Widget build(BuildContext context) {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.stretch,
-      children: [
-        Container(
-          decoration: BoxDecoration(
-            borderRadius: BorderRadius.circular(8.0),
-            border: Border.all(
-              color: Colors.grey,
-              width: 1.0,
-            ),
-          ),
-          child: Row(
-            crossAxisAlignment: CrossAxisAlignment.center,
-            children: [
-              Expanded(
-                child: TextField(
-                  controller: widget.controller,
-                  decoration: const InputDecoration(
-                    border: InputBorder.none,
-                    contentPadding: EdgeInsets.all(16.0),
-                  ),
-                  maxLines: null, // Permite que el TextField crezca verticalmente
-                ),
-              ),
-              Align(
-                alignment: Alignment.center,
-                child: PopupMenuButton<String>(
-                  itemBuilder: (context) => [
-                    const PopupMenuItem<String>(
-                      value: 'cameraToText',
-                      child: Text('Cámara a Texto'),
-                    ),
-                    const PopupMenuItem<String>(
-                      value: 'audioToText',
-                      child: Text('Audio a Texto'),
-                    ),
-                    const PopupMenuItem<String>(
-                      value: 'changeStyle',
-                      child: Text('Cambiar Estilo'),
-                    ),
-                  ],
-                  onSelected: (value) {
-                    // Aquí puedes manejar las distintas funcionalidades según lo seleccionado en el menú
-                    switch (value) {
-                      case 'cameraToText':
-                        // Acción para la cámara a texto
-                        break;
-                      case 'audioToText':
-                        // Acción para el audio a texto
-                        break;
-                      case 'changeStyle':
-                        // Acción para cambiar el estilo
-                        break;
-                    }
-                  },
-                ),
-              ),
-            ],
-          ),
+    return Container(
+      padding: const EdgeInsets.all(20),
+      margin: const EdgeInsets.only(bottom: 20),
+      decoration: BoxDecoration(
+        borderRadius: BorderRadius.circular(8.0),
+        border: Border.all(
+          color: Colors.grey,
+          width: 1.0,
         ),
-        const SizedBox(
-          height: 20,
-        ),
-      ],
+      ),
+      child:
+            RichEditor(
+              key: widget._editorKey,
+              //Aca agregamos lo que nos trae el contenido de la nota
+              value: '''
+                
+              ''',
+              editorOptions: RichEditorOptions(
+                placeholder: 'Start typing',
+                padding: const EdgeInsets.symmetric(horizontal: 20.0),
+                baseFontFamily: 'sans-serif',
+                barPosition: BarPosition.BOTTOM,
+              ),
+            )
     );
-  }
-
-  @override
-  void dispose() {
-    widget.controller.dispose();
-    super.dispose();
   }
 }

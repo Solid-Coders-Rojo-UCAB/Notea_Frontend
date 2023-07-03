@@ -25,7 +25,12 @@ class _ContainerEditorNotaState extends State<ContainerEditorNota> {
 
   final focusNode = FocusNode();
   final  List<dynamic> _children = [
-    // TextBlockPrueba(),
+
+    Expanded(
+      child: TextBlockPrueba(),
+    ),
+
+
     // TextBlock(),
   ];
   var canDelete = false;
@@ -33,7 +38,6 @@ class _ContainerEditorNotaState extends State<ContainerEditorNota> {
   @override
   void initState() {
     super.initState();
-    _children.add( widget.contenidoTotal ?? TextBlockPrueba());
 
   }
 
@@ -99,65 +103,78 @@ class _ContainerEditorNotaState extends State<ContainerEditorNota> {
     widget.onDataReceived('data', _children);
   }
 
+
+
+
   Widget _textBuilder() {
     return SingleChildScrollView(
       controller: _scrollController,
-      child: Padding(
-        padding: const EdgeInsets.all(16.0),
-        child: Column(
-          children: [
-            ..._children,
-            IconButton(
-              onPressed: () {},
-              icon: PopupMenuButton<String>(
-                icon: const Icon(Icons.add),
-                offset: const Offset(-120, 10),
-                itemBuilder: (BuildContext context) => <PopupMenuEntry<String>>[
-                  const PopupMenuItem<String>(
-                    value: 'text_block',
-                    child: ListTile(
-                      leading: Icon(Icons.text_fields),
-                      title: Text('Agregar Texto'),
-                    ),
+      child: SizedBox(
+        height: _children.length == 1 ? 500 : 480 * _children.length.toDouble(), // Establecer una altura explícita
+        child: Align(
+          alignment: Alignment.topCenter,
+          child: Padding(
+            padding: const EdgeInsets.all(16.0), //16
+            child: Column(
+              children: [
+                ..._children,
+                IconButton(
+                  onPressed: () {},
+                  icon: PopupMenuButton<String>(
+                    icon: const Icon(Icons.add),
+                    offset: const Offset(-120, 10),
+                    itemBuilder: (BuildContext context) => <PopupMenuEntry<String>>[
+                      const PopupMenuItem<String>(
+                        value: 'text_block',
+                        child: ListTile(
+                          leading: Icon(Icons.text_fields),
+                          title: Text('Agregar Texto'),
+                        ),
+                      ),
+                      const PopupMenuItem<String>(
+                        value: 'image_block',
+                        child: ListTile(
+                          leading: Icon(Icons.image),
+                          title: Text('Agregar Imagen'),
+                        ),
+                      ),
+                      const PopupMenuItem<String>(
+                        value: 'tarea_block',
+                        child: ListTile(
+                          leading: Icon(Icons.list),
+                          title: Text('Agregar Tarea'),
+                        ),
+                      ),
+                    ],
+                    onSelected: (String value) {
+                      setState(() {
+                        if (value == 'text_block') {
+                          _children.add(
+                            Expanded(
+                              child: TextBlockPrueba(),           //Ahora esto maneja lo de los estilos mis oabna 
+                            ),
+                          );
+                        }else if (value == 'image_block') {
+                          _children.add(ImageBlock());
+                        }else if (value == 'tarea_block') {
+                          _children.add(TareaBlock());
+                        }
+                        sendDataToWrapperWidget();          //Esto es mejorable, hay que agregar al menos otros componente de la lista para que se guarde
+                      });
+                      // Scroll hacia el nuevo bloque agregado
+                      WidgetsBinding.instance.addPostFrameCallback((_) {
+                        _scrollController.animateTo(
+                          _scrollController.position.maxScrollExtent + 120, // Con esto se maneja cuanto scrool se recorre
+                          duration: const Duration(milliseconds: 300),
+                          curve: Curves.easeInOut,
+                        );
+                      });
+                    },
                   ),
-                  const PopupMenuItem<String>(
-                    value: 'image_block',
-                    child: ListTile(
-                      leading: Icon(Icons.image),
-                      title: Text('Agregar Imagen'),
-                    ),
-                  ),
-                  const PopupMenuItem<String>(
-                    value: 'tarea_block',
-                    child: ListTile(
-                      leading: Icon(Icons.list),
-                      title: Text('Agregar Tarea'),
-                    ),
-                  ),
-                ],
-                onSelected: (String value) {
-                  setState(() {
-                    if (value == 'text_block') {
-                      _children.add(TextBlockPrueba());
-                    }else if (value == 'image_block') {
-                      _children.add(ImageBlock());
-                    }else if (value == 'tarea_block') {
-                      _children.add(TareaBlock());
-                    }
-                    sendDataToWrapperWidget();          //Esto es mejorable, hay que agregar al menos otros componente de la lista para que se guarde
-                  });
-                  // Scroll hacia el nuevo bloque agregado
-                  WidgetsBinding.instance.addPostFrameCallback((_) {
-                    _scrollController.animateTo(
-                      _scrollController.position.maxScrollExtent + 120, // Con esto se maneja cuanto scrool se recorre
-                      duration: const Duration(milliseconds: 300),
-                      curve: Curves.easeInOut,
-                    );
-                  });
-                },
-              ),
+                ),
+              ],
             ),
-          ],
+          ),
         ),
       ),
     );

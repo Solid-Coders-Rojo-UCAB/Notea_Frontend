@@ -18,6 +18,7 @@ import 'package:notea_frontend/presentacion/widgets/GrupoList.dart';
 import 'package:notea_frontend/presentacion/widgets/ImageBlock.dart';
 import 'package:notea_frontend/presentacion/widgets/TareaBlock.dart';
 import 'package:notea_frontend/presentacion/widgets/TextBlock.dart';
+import 'package:notea_frontend/presentacion/widgets/textF.dart';
 
 
 class AccionesConNota extends StatefulWidget {
@@ -77,12 +78,21 @@ class _AccionesConNotaState extends State<AccionesConNota> {
 
   Future<void> pintaLista() async {
     for (var element in recivedDataList) {
-      if(element is TextBlock){
+      if(element is Expanded){
         final textBlock = element; // Crea una instancia del widget TextBlock
-        final texto = textBlock.controller.text; // Obtiene el texto del controlador
-        print(texto);
         print('------------');
-        print(textBlock.controller1.getEstilos());
+
+
+
+
+          Widget expandedChildren = element.child ;
+          print(expandedChildren.key);                        //Verificar como traerme el texto del richtext
+
+
+    
+
+
+
         print('------------');
       }else if(element is ImageBlock) {
         print('-----');
@@ -235,7 +245,7 @@ class _AccionesConNotaState extends State<AccionesConNota> {
                     padding: const EdgeInsets.symmetric(horizontal: 16.0),
                     child: SizedBox(
                       width: MediaQuery.of(context).size.width * 0.9,
-                      height: 350,
+                      height: 500,                                          //Se cambia de tamano al contenedor del contenido de las notas
                       child: Container(
                         decoration: BoxDecoration(
                           border: Border.all(
@@ -247,7 +257,7 @@ class _AccionesConNotaState extends State<AccionesConNota> {
                         child: ContainerEditorNota(
                           onDataReceived: handleDataReceived,
                           contenidoTotal: widget.contenidosTotal,
-                        ),                         //Aca esta todo lo que compone la nota
+                        ),
                       ),
                     ),
                   ),
@@ -313,19 +323,22 @@ class _AccionesConNotaState extends State<AccionesConNota> {
                         alignment: Alignment.bottomRight,
                         child: FloatingActionButton(
                           onPressed: () {
-                            print(_tituloController.text);
-                            print(recivedDataList.length);
-                            print(receivedDataGrupo!.getNombre());
-                            print(recivedDataEitquetas.length);
-                            BlocProvider.of<NotaBloc>(context).add(
-                              CreateNotaEvent(
-                                tituloNota: _tituloController.text,
-                                listInfo: recivedDataList,
-                                grupo: receivedDataGrupo,
-                                etiquetas: recivedDataEitquetas,
-                              ),
-                            );
-                            _regresar();
+                            pintaLista();
+
+
+                            // print(_tituloController.text);
+                            // print(recivedDataList.length);
+                            // print(receivedDataGrupo!.getNombre());
+                            // print(recivedDataEitquetas.length);
+                            // BlocProvider.of<NotaBloc>(context).add(
+                            //   CreateNotaEvent(
+                            //     tituloNota: _tituloController.text,
+                            //     listInfo: recivedDataList,
+                            //     grupo: receivedDataGrupo,
+                            //     etiquetas: recivedDataEitquetas,
+                            //   ),
+                            // );
+                            // _regresar();
                           },
                           backgroundColor: Colors.blue,
                           child: const Icon(
