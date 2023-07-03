@@ -52,13 +52,13 @@ class _MyDropdownState extends State<MyDropdown> {
                   nota.idGrupo.getIdGrupoNota() == grupo.idGrupo &&
                   !(nota.getEstado() == "PAPELERA"))
               .toList();
-          if (cant!.length > 0) {
+          if (cant!.isNotEmpty) {
             gruposPapelera.add(widget.grupos![i]);
           }
         }
 
         return ListView.builder(
-            itemCount: widget.grupos?.length,
+            itemCount: gruposPapelera.length,
             itemBuilder: (context, index) {
               final grupo =
                   gruposPapelera[index]; //Tenemos el grupo que se renderizará
