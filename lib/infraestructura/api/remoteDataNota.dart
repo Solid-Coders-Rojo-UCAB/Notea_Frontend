@@ -9,6 +9,7 @@ import 'package:notea_frontend/dominio/agregados/VONota/VOContenidoNota.dart';
 import 'package:notea_frontend/dominio/agregados/VONota/VOTituloNota.dart';
 import 'package:notea_frontend/dominio/agregados/VONota/VOUbicacionNota.dart';
 import 'package:notea_frontend/dominio/agregados/VONota/VOidGrupo.dart';
+import 'package:notea_frontend/dominio/agregados/grupo.dart';
 
 import '../../api_config.dart';
 import '../../dominio/agregados/VONota/EstadoEnum.dart';
@@ -30,9 +31,6 @@ class RemoteDataNotaImp implements RemoteDataNota {
 
   @override
   Future<Either<List<Nota>, Exception>> buscarNotasApi() async {
-    print('------------------Base URL-----------------');
-    print('Base URL -> ${ApiConfig.apiBaseUrl}');
-    print('------------------Base URL-----------------');
     if (await const ConectivityCheck().checkConectivity()) {
       final response = await client.get(Uri.parse(
           '${ApiConfig.apiBaseUrl}/nota/all')); //Creo que esto no es lo mejor, porque treemos todas las notas
@@ -47,12 +45,30 @@ class RemoteDataNotaImp implements RemoteDataNota {
     }
   }
 
+  Future<Either<List<Nota>, Exception>> buscarNotasByUserApi(
+      List<String> grupos) async {
+    if (await const ConectivityCheck().checkConectivity()) {
+      final response = await http.patch(
+        Uri.parse('${ApiConfig.apiBaseUrl}/nota/grupos'),
+        body: jsonEncode(grupos),
+        headers: <String, String>{
+          'Content-Type': 'application/json; charset=UTF-8',
+        },
+      ); //Creo que esto no es lo mejor, porque treemos todas las notas
+      if (response.statusCode == 200) {
+        return Either.left(parseNota(response.body));
+      } else {
+        return Either.right(Exception("Error al buscar las notas"));
+      }
+    } else {
+      return Either.right(Exception(
+          "No hay conexion a internet")); //guardado en la base de datos local
+    }
+  }
+
   Future<Either<int, Exception>> crearNotaApiTareas(
       Map<String, dynamic> jsonString) async {
     if (await const ConectivityCheck().checkConectivity()) {
-      print('------------------Base URL-----------------');
-      print('Base URL -> ${ApiConfig.apiBaseUrl}');
-      print('------------------Base URL-----------------');
       final response = await http.post(
         Uri.parse('${ApiConfig.apiBaseUrl}/nota'),
         body: json.encode(jsonString),
@@ -152,7 +168,6 @@ class RemoteDataNotaImp implements RemoteDataNota {
   List<Nota> parseNota(String responseBody) {
     List<dynamic> decodedResponse = jsonDecode(responseBody);
     List<Nota> notas = [];
-    print(decodedResponse);
     for (var item in decodedResponse) {
       EstadoEnum estado = EstadoEnum.values.byName(item['estado']);
 

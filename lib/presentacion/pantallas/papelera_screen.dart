@@ -32,14 +32,14 @@ class _PapeleraState extends State<Papelera> {
     super.initState();
     WidgetsBinding.instance.addPostFrameCallback((_) {
       final notaBloc = BlocProvider.of<NotaBloc>(context);
-      notaBloc.add(NotaCatchEvent());
+      notaBloc.add(NotaCatchEvent(grupos: widget.grupos!));
     });
   }
 
   @override
   Widget build(BuildContext context) {
     return BlocBuilder<NotaBloc, NotaState>(builder: (context, state) {
-      if (state is NotasFailureState){
+      if (state is NotasFailureState) {
         return const Center(child: Text('Error al cargar las notas'));
       }
 
@@ -63,8 +63,7 @@ class _PapeleraState extends State<Papelera> {
             bottomNavigationBar:
                 BottomBar(scaffoldKey: _scaffoldKey, usuario: widget.usuario),
             body: Padding(
-                padding:
-                    const EdgeInsets.only(top: 80),
+                padding: const EdgeInsets.only(top: 80),
                 child: Column(children: [
                   Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
@@ -109,10 +108,9 @@ class _PapeleraState extends State<Papelera> {
                                 index]; //Tenemos el grupo que se renderizará
                             final notasDeGrupo = notas
                                 ?.where((nota) =>
-                                    nota.idGrupo.getIdGrupoNota() ==
-                                        grupo.idGrupo &&
-                                    (nota.getEstado() == "PAPELERA"))
+                                  nota.getEstado() == "PAPELERA")
                                 .toList();
+
                             if (notasDeGrupo != null &&
                                 notasDeGrupo.isNotEmpty) {
                               return Column(
