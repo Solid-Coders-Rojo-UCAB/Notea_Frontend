@@ -65,6 +65,7 @@ class _MyDropdownState extends State<MyDropdown> {
                               children: notasDeGrupo.map((nota) {
                             return SizedBox(
                                 child: CartaWidget(
+                              habilitado: false,
                               fecha: nota.getFechaCreacion(),
                               titulo: nota.titulo.tituloNota,
                               contenido: nota.contenido.contenidoNota,
@@ -109,6 +110,7 @@ class _MyDropdownState extends State<MyDropdown> {
                                 );
                                 // Lógica para eliminar la nota
                               },
+                              onChangePressed: null,
                             ));
                           }).toList()),
                         ),

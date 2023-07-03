@@ -120,7 +120,7 @@ class _PapeleraState extends State<Papelera> {
                                     nota.getEstado() == "PAPELERA")
                                 .toList();
 
-                              if (notasDeGrupo != null &&
+                            if (notasDeGrupo != null &&
                                 notasDeGrupo.isNotEmpty) {
                               return Column(
                                 children: <Widget>[
@@ -132,6 +132,7 @@ class _PapeleraState extends State<Papelera> {
                                           children: notasDeGrupo.map((nota) {
                                         return SizedBox(
                                             child: CartaWidget(
+                                          habilitado: true,
                                           fecha: nota.getFechaCreacion(),
                                           titulo: nota.titulo.tituloNota,
                                           contenido:
