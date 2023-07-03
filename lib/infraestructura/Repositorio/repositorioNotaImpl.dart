@@ -7,11 +7,9 @@ import 'package:intl/intl.dart';
 import 'package:notea_frontend/dominio/agregados/grupo.dart';
 import 'dart:typed_data';
 
-
 import 'package:notea_frontend/presentacion/widgets/ImageBlock.dart';
 import 'package:notea_frontend/presentacion/widgets/TareaBlock.dart';
 import 'package:notea_frontend/presentacion/widgets/TextBlock.dart';
-import 'package:notea_frontend/presentacion/widgets/textF.dart';       //Este es el nuevo textBLOCK
 
 import '../../dominio/agregados/nota.dart';
 import '../../dominio/repositorio/repositorioNota.dart';
@@ -30,23 +28,57 @@ class RepositorioNotaImpl implements INotaRepository {
   }
 
   @override
-  Future<Either<int, Exception>?> crearNota(String titulo, List<dynamic> listInfoContenido, List<dynamic> etiquetas, Grupo grupo) async {
+  Future<Either<int, Exception>?> crearNota(
+      String titulo,
+      List<dynamic> listInfoContenido,
+      List<dynamic> etiquetas,
+      Grupo grupo) async {
     final now = DateTime.now();
-    var datetimeString = DateFormat('yyyy-MM-ddTHH:mm:ssZ').format(now);// Formato de fecha 'dd/MM/yyyy'
+    var datetimeString = DateFormat('yyyy-MM-ddTHH:mm:ssZ')
+        .format(now); // Formato de fecha 'dd/MM/yyyy'
     // List<File>? listaImagen= await imageToFile(listInfoContenido);
 
     Map<String, dynamic> notaDTO = {
       "titulo": titulo,
       "contenido": obtenerContenidoDelContenidoBlock(listInfoContenido),
       "fechaCreacion": datetimeString.toString(),
-      "latitud": '40.0238823',        //Colocar aca lo de la ubicacion
+      "latitud": '40.0238823', //Colocar aca lo de la ubicacion
       "longitud": '20.0238823',
       "grupo": grupo.idGrupo,
       "tareas": crearEstructuraTareasJson(listInfoContenido),
     };
-    print(notaDTO);
+   
     var result = await remoteDataSource.crearNotaApiTareas(notaDTO);
     // var result = await remoteDataSource.crearNotaApi(notaDTO, listaImagen);
+    return result;
+  }
+
+  @override
+  Future<Either<List<Nota>, Exception>> buscarNotasGrupos(
+      List<Grupo> grupos) async {
+    
+    List<String> idsGrupos = grupos.map((grupo) => grupo.idGrupo).toList();
+    final result = await remoteDataSource.buscarNotasByUserApi(idsGrupos);
+    return result;
+  }
+
+  @override
+  Future<Either<int, Exception>> modificarEstadoNota(
+      String id, String estado) async {
+    Map<String, dynamic> notaDTO = {
+      "id": id,
+      "estado": estado,
+    };
+    var result = await remoteDataSource.changeStateNotaApi(notaDTO);
+    return result;
+  }
+
+  @override
+  Future<Either<int, Exception>> borrarNota(String id) async {
+    Map<String, dynamic> notaDTO = {
+      "id": id,
+    };
+    var result = await remoteDataSource.borrarNotaApi(notaDTO);
     return result;
   }
 }
@@ -55,29 +87,18 @@ String obtenerContenidoDelContenidoBlock(List<dynamic> lista) {
   String contenido = '';
 
   for (dynamic elemento in lista) {
-    // if (elemento is TextBlockPrueba) {
-    // // if (elemento is TextBlock) {
-    //   final textBlock = elemento; // Crea una instancia del widget TextBlock
-    //   final texto = textBlock.controller.text; // Obtiene el texto del controlador
-    //   contenido += '$texto\n';
-    // }
-    //Aca se llena la lista de con los tipos de datos ordenados
-    // if (elemento is ImageBlock) {
-    //   final textBlock = elemento; // Crea una instancia del widget TextBlock
-    //   final texto = textBlock.controller.text; // Obtiene el texto del controlador
-    //   contenido += '$texto\n';
-    // }
-    // if (elemento is TareaBlock) {
-    //   final textBlock = elemento; // Crea una instancia del widget TextBlock
-    //   final texto = textBlock.controller.text; // Obtiene el texto del controlador
-    //   contenido += '$texto\n';
-    // }
+    if (elemento is TextBlock) {
+      final textBlock = elemento; // Crea una instancia del widget TextBlock
+      final texto =
+          textBlock.controller.text; // Obtiene el texto del controlador
+      contenido += '$texto\n';
+    }
   }
   return contenido;
 }
 
-
-List<Map<String, dynamic>> crearEstructuraTareasJson(List<dynamic> listInfoContenido) {
+List<Map<String, dynamic>> crearEstructuraTareasJson(
+    List<dynamic> listInfoContenido) {
   List<Map<String, dynamic>> tareas = [];
 
   for (dynamic elemento in listInfoContenido) {
@@ -96,11 +117,13 @@ List<Map<String, dynamic>> crearEstructuraTareasJson(List<dynamic> listInfoConte
   return tareas;
 }
 
-Future<List<Map<String, dynamic>>?> crearEstructuraImagenesJson(List<dynamic> listInfoContenido) async {
+Future<List<Map<String, dynamic>>?> crearEstructuraImagenesJson(
+    List<dynamic> listInfoContenido) async {
   List<Map<String, dynamic>> imagenes = [];
   for (dynamic elemento in listInfoContenido) {
     if (elemento is ImageBlock) {
-      NetworkImage networkImage = elemento.controller.getSelectedImage()!.image as NetworkImage;
+      NetworkImage networkImage =
+          elemento.controller.getSelectedImage()!.image as NetworkImage;
       String imageUrl = networkImage.url;
       Uint8List? imageBuffer = await downloadImage(imageUrl);
       if (imageBuffer != null) {
@@ -119,26 +142,25 @@ Future<List<Map<String, dynamic>>?> crearEstructuraImagenesJson(List<dynamic> li
   return null;
 }
 
-
-  Future<Uint8List?> downloadImage(String imageUrl) async {
-    try {
-      final response = await http.get(Uri.parse(imageUrl));
-      if (response.statusCode == 200) {
-        return response.bodyBytes;
-      } else {
-        return null;
-      }
-    } catch (e) {
+Future<Uint8List?> downloadImage(String imageUrl) async {
+  try {
+    final response = await http.get(Uri.parse(imageUrl));
+    if (response.statusCode == 200) {
+      return response.bodyBytes;
+    } else {
       return null;
     }
+  } catch (e) {
+    return null;
   }
-
+}
 
 Future<List<File>> imageToFile(List<dynamic> listInfoContenido) async {
   List<File> imagenesFile = [];
   for (dynamic elemento in listInfoContenido) {
     if (elemento is ImageBlock) {
-      NetworkImage networkImage = elemento.controller.getSelectedImage()!.image as NetworkImage;
+      NetworkImage networkImage =
+          elemento.controller.getSelectedImage()!.image as NetworkImage;
       String imageUrl = networkImage.url;
       Uint8List? imageBuffer = await downloadImage(imageUrl);
 

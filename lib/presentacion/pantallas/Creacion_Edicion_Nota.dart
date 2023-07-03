@@ -13,11 +13,8 @@ import 'package:notea_frontend/infraestructura/bloc/usuario/usuario_bloc.dart';
 import 'package:notea_frontend/presentacion/pantallas/Container_Editor_Nota.dart';
 import 'package:notea_frontend/presentacion/pantallas/home_screen.dart';
 import 'package:notea_frontend/presentacion/widgets/Boton_Gru_Eti.dart';
-import 'package:notea_frontend/presentacion/widgets/EtiquetaList.dart';
-import 'package:notea_frontend/presentacion/widgets/GrupoList.dart';
 import 'package:notea_frontend/presentacion/widgets/ImageBlock.dart';
 import 'package:notea_frontend/presentacion/widgets/TareaBlock.dart';
-import 'package:notea_frontend/presentacion/widgets/TextBlock.dart';
 import 'package:notea_frontend/presentacion/widgets/textF.dart';
 
 
@@ -76,7 +73,7 @@ class _AccionesConNotaState extends State<AccionesConNota> {
       recivedDataList = dataList;
   }
 
-  Future<String?> htmlPrint(TextBlockPrueba textBlock) async {
+  Future<String?> htmlPrint(TextBlockPrueba1 textBlock) async {
     String? html = await textBlock.editorKey.currentState?.getHtml();
     return html;
   }
@@ -86,7 +83,7 @@ class _AccionesConNotaState extends State<AccionesConNota> {
     print(recivedDataList.length);
     print('-------ReciveddataList---------');
     for (var element in recivedDataList) {
-      if(element is TextBlockPrueba){
+      if(element is TextBlockPrueba1){
         final textBlock = element;
         print('------------');
 

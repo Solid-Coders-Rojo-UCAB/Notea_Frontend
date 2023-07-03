@@ -6,6 +6,8 @@ import 'package:notea_frontend/presentacion/widgets/ImageBlock.dart';
 import 'package:notea_frontend/presentacion/widgets/TareaBlock.dart';
 import 'package:notea_frontend/presentacion/widgets/TextBlock.dart';
 import 'package:notea_frontend/presentacion/widgets/textF.dart';
+import 'package:notea_frontend/presentacion/widgets/textOptions.dart';
+
 
 class ContainerEditorNota extends StatefulWidget {
   final List<dynamic>? contenidoTotal;
@@ -26,7 +28,7 @@ class _ContainerEditorNotaState extends State<ContainerEditorNota> {
   final focusNode = FocusNode();
   final  List<dynamic> _children = [
 
-    TextBlockPrueba(),
+    TextBlockPrueba1(),
 
 
     // TextBlock(),
@@ -148,7 +150,7 @@ class _ContainerEditorNotaState extends State<ContainerEditorNota> {
                       setState(() {
                         if (value == 'text_block') {
                           _children.add(
-                            TextBlockPrueba(),           //Ahora esto maneja lo de los estilos mis oabna 
+                            TextBlockPrueba1(),           //Ahora esto maneja lo de los estilos mis oabna 
                           );
                         }else if (value == 'image_block') {
                           _children.add(ImageBlock());

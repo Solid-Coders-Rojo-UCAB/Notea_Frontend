@@ -74,7 +74,7 @@ Widget build(BuildContext context) {
             },
             grupos: grupos,
           ),
-          bottomNavigationBar: BottomBar(scaffoldKey: _scaffoldKey),
+          bottomNavigationBar: BottomBar(scaffoldKey: _scaffoldKey, usuario: widget.usuario),
           drawer: CustomDrawer(
             username: capitalizeFirstLetter(widget.usuario.getNombre()),
             email: widget.usuario.getEmail(),
@@ -137,7 +137,7 @@ Widget build(BuildContext context) {
             },
           ),
           body:  Padding(
-            padding: const EdgeInsets.only(top: 120.0),
+            padding: const EdgeInsets.only( top: 80),
             child: Column(
               children: [
                 Column(
@@ -168,6 +168,7 @@ Widget build(BuildContext context) {
                                 fontWeight: FontWeight.w500,
                               ),
                             ),
+                            const SizedBox(height: 20),
                           ],
                         ),
                       ),
@@ -175,7 +176,7 @@ Widget build(BuildContext context) {
                   ],
                 ),
                 Expanded(
-                  child: MyDropdown(grupos: grupos),
+                  child: MyDropdown(grupos: grupos, usuario: widget.usuario),
                 ),
               ],
             ),

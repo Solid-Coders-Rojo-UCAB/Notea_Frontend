@@ -3,18 +3,18 @@
 import 'package:flutter/material.dart';
 import 'package:rich_editor/rich_editor.dart';
 
-class TextBlockPrueba extends StatefulWidget {
-  TextBlockPrueba({Key? key});
+class TextBlockPrueba1 extends StatefulWidget {
+  TextBlockPrueba1({Key? key});
 
   final GlobalKey<RichEditorState> _editorKey = GlobalKey<RichEditorState>();
 
   GlobalKey<RichEditorState> get editorKey => _editorKey;
 
   @override
-  _TextBlockPruebaState createState() => _TextBlockPruebaState();
+  _TextBlockPrueba1State createState() => _TextBlockPrueba1State();
 }
 
-class _TextBlockPruebaState extends State<TextBlockPrueba> {
+class _TextBlockPrueba1State extends State<TextBlockPrueba1> {
 
   @override
   void dispose() {

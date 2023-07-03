@@ -11,7 +11,7 @@ import '../conectivityChecker/checker.dart';
 
 abstract class RemoteDataUsuario {
   Future<Either<List<Usuario>, Exception>> buscarUsuarioApi();
-  Future<Either<int, Exception>> crearUsuarioApi(
+  Future<Either<Map<String, dynamic>, Exception>> crearUsuarioApi(
       Map<String, dynamic> jsonString);
   Future<Either<Usuario, Exception>> loginUsuarioApi(
       String email, String password);
@@ -45,7 +45,7 @@ class RemoteDataUsuarioImp implements RemoteDataUsuario {
   }
 
   @override
-  Future<Either<int, Exception>> crearUsuarioApi(
+  Future<Either<Map<String, dynamic>, Exception>> crearUsuarioApi(
       Map<String, dynamic> jsonString) async {
     //deberia devolver un Either
     if (await const ConectivityCheck().checkConectivity()) {
@@ -54,13 +54,13 @@ class RemoteDataUsuarioImp implements RemoteDataUsuario {
       print('------------------Base URL-----------------');
       final response = await client.post(
         Uri.parse('${ApiConfig.apiBaseUrl}/usuario'),
-        body: jsonString,
+        body: jsonEncode(jsonString),
         headers: <String, String>{
           'Content-Type': 'application/json; charset=UTF-8',
         },
       );
       if (response.statusCode == 200) {
-        return Either.left(response.statusCode);
+        return Either.left(jsonDecode(response.body));
       } else {
         return Either.right(Exception("Error al crear el usuario en el servidor"));
       }

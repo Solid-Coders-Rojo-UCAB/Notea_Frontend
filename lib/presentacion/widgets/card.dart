@@ -5,7 +5,6 @@ import 'package:notea_frontend/dominio/agregados/grupo.dart';
 import '../../infraestructura/bloc/Grupo/grupo_bloc.dart';
 import '../pantallas/Creacion_Edicion_Nota.dart';
 
-
 class CartaWidget extends StatelessWidget {
   final DateTime fecha;
   final String titulo;
@@ -14,6 +13,8 @@ class CartaWidget extends StatelessWidget {
   final VoidCallback? onDeletePressed;
   final List<Grupo>? grupos;
 
+  final VoidCallback? onChangePressed;
+  final bool habilitado;
 
   const CartaWidget({super.key, 
     required this.fecha,
@@ -22,6 +23,8 @@ class CartaWidget extends StatelessWidget {
     required this.tags,
     this.grupos,
     this.onDeletePressed,
+    this.onChangePressed,
+    required this.habilitado,
   });
 
   @override
@@ -57,7 +60,8 @@ class CartaWidget extends StatelessWidget {
                 children: [
                   Container(
                     constraints: const BoxConstraints(
-                      maxWidth: 100, // Establece el ancho máximo para el contenedor
+                      maxWidth:
+                          100, // Establece el ancho máximo para el contenedor
                     ),
                     child: Text(
                       formattedDate,
@@ -66,7 +70,8 @@ class CartaWidget extends StatelessWidget {
                         fontWeight: FontWeight.bold,
                         fontSize: 16.0,
                       ),
-                      overflow: TextOverflow.ellipsis, // Muestra "..." si el texto es demasiado largo
+                      overflow: TextOverflow
+                          .ellipsis, // Muestra "..." si el texto es demasiado largo
                     ),
                   ),
                   const SizedBox(height: 16.0),
@@ -78,7 +83,8 @@ class CartaWidget extends StatelessWidget {
                         height: 24.0,
                         decoration: const BoxDecoration(
                           shape: BoxShape.circle,
-                          color: Colors.blue, // Cambiar el color del círculo según tus necesidades
+                          color: Colors
+                              .blue, // Cambiar el color del círculo según tus necesidades
                         ),
                       ),
                       const SizedBox(width: 8.0),
@@ -86,10 +92,10 @@ class CartaWidget extends StatelessWidget {
                         child: Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
-            
                             Container(
                               constraints: const BoxConstraints(
-                                maxWidth: 250, // Establece el ancho máximo para el contenedor
+                                maxWidth:
+                                    250, // Establece el ancho máximo para el contenedor
                               ),
                               child: Text(
                                 titulo,
@@ -98,22 +104,25 @@ class CartaWidget extends StatelessWidget {
                                   fontWeight: FontWeight.bold,
                                   fontSize: 16.0,
                                 ),
-                                overflow: TextOverflow.ellipsis, // Muestra "..." si el texto es demasiado largo
+                                overflow: TextOverflow
+                                    .ellipsis, // Muestra "..." si el texto es demasiado largo
                               ),
                             ),
                             const SizedBox(height: 8.0),
                             Container(
                               constraints: const BoxConstraints(
-                                maxWidth: 300, // Establece el ancho máximo para el contenedor
+                                maxWidth:
+                                    300, // Establece el ancho máximo para el contenedor
                               ),
                               child: Text(
                                 contenidoTotal[0],
                                 style: const TextStyle(
                                   fontWeight: FontWeight.bold,
                                   fontSize: 14.0,
-                                color: Color.fromARGB(125, 0, 0, 0),
+                                  color: Color.fromARGB(125, 0, 0, 0),
                                 ),
-                                overflow: TextOverflow.ellipsis, // Muestra "..." si el texto es demasiado largo
+                                overflow: TextOverflow
+                                    .ellipsis, // Muestra "..." si el texto es demasiado largo
                               ),
                             ),
                           ],
@@ -123,20 +132,40 @@ class CartaWidget extends StatelessWidget {
                   ),
                   const SizedBox(height: 16.0),
                   Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    mainAxisAlignment: MainAxisAlignment.end,
                     children: [
                       Row(
-                        children: tags.map((tag) => TagWidget(tag: tag)).toList(),
+                        children:
+                            tags.map((tag) => TagWidget(tag: tag)).toList(),
                       ),
-                      IconButton(
-                        icon: const Tooltip(
-                          message: 'Eliminar',
-                          child: Icon(
-                            Icons.delete,
-                            color: Colors.red,
-                          ),
-                        ),
-                        onPressed: onDeletePressed,
+                      Expanded(
+                        child: Row(
+                            mainAxisAlignment: MainAxisAlignment.end,
+                            children: [
+                              IconButton(
+                                icon: const Tooltip(
+                                  message: 'Eliminar',
+                                  child: Icon(
+                                    Icons.delete,
+                                    color: Color.fromARGB(255, 20, 18, 18),
+                                  ),
+                                ),
+                                onPressed: onDeletePressed,
+                              ),
+                              Visibility(
+                                visible: habilitado,
+                                child: IconButton(
+                                  icon: const Tooltip(
+                                    message: 'Recuperar',
+                                    child: Icon(
+                                      Icons.autorenew,
+                                      color: Color.fromARGB(255, 20, 18, 18),
+                                    ),
+                                  ),
+                                  onPressed: onChangePressed,
+                                ),
+                              ),
+                            ]),
                       ),
                     ],
                   ),
@@ -144,8 +173,8 @@ class CartaWidget extends StatelessWidget {
               ),
             ),
           ),
-        ),
-      ),
+        )
+      )
     );
   }
 
@@ -172,13 +201,9 @@ class TagWidget extends StatelessWidget {
       child: Text(
         tag,
         style: const TextStyle(
-          fontSize: 12.0,
-          fontWeight: FontWeight.w300,
-          color: Colors.white
-        ),
+            fontSize: 12.0, fontWeight: FontWeight.w300, color: Colors.white),
         overflow: TextOverflow.ellipsis,
       ),
     );
   }
 }
-

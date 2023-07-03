@@ -2,6 +2,8 @@
 
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:image_picker/image_picker.dart';
+import 'package:notea_frontend/aplicacion/ImagenATexto.dart';
 
 const h1 = TextStyle(
   fontSize: 37,
@@ -84,7 +86,8 @@ class _TextBlockState extends State<TextBlock> {
   String dropdownValue = 'One';
   Color backgroundColor = Colors.transparent;
   double opacity = 0;
-  bool renderBlockChange = false;                     //Esta es la variable que se encarga de mostrar o no el  menu desplegable de NEGRITAS, IMAGENES
+  bool renderBlockChange =
+      false; //Esta es la variable que se encarga de mostrar o no el  menu desplegable de NEGRITAS, IMAGENES
   TextStyle activeStyle = text;
 
   List<FocusNode> styleNodes = [
@@ -98,11 +101,11 @@ class _TextBlockState extends State<TextBlock> {
   void initState() {
     super.initState();
     widget.focus.addListener(() {
-      if (!widget.focus.hasFocus
-          && !styleNodes[0].hasFocus
-          && !styleNodes[1].hasFocus
-          && !styleNodes[2].hasFocus
-          && !styleNodes[3].hasFocus) {
+      if (!widget.focus.hasFocus &&
+          !styleNodes[0].hasFocus &&
+          !styleNodes[1].hasFocus &&
+          !styleNodes[2].hasFocus &&
+          !styleNodes[3].hasFocus) {
         setState(() {
           renderBlockChange = false;
           backgroundColor = Colors.transparent;
@@ -110,7 +113,7 @@ class _TextBlockState extends State<TextBlock> {
         });
       }
     });
-    widget.controller1.setTexBlock('',false, false, false, false);
+    widget.controller1.setTexBlock('', false, false, false, false);
   }
 
   @override
@@ -126,7 +129,8 @@ class _TextBlockState extends State<TextBlock> {
 
   _onEnter(e) {
     setState(() {
-      backgroundColor = Colors.black12;       //Cuando se le pasa el mouse por encima cambia de color (es un HOVER de csss)
+      backgroundColor = Colors
+          .black12; //Cuando se le pasa el mouse por encima cambia de color (es un HOVER de csss)
       opacity = 1;
     });
   }
@@ -134,7 +138,8 @@ class _TextBlockState extends State<TextBlock> {
   _onExit(e) {
     setState(() {
       if (!renderBlockChange) {
-        backgroundColor = Colors.transparent; //Cuando se le pasa el mouse por encima cambia de color (es un HOVER de csss)
+        backgroundColor = Colors
+            .transparent; //Cuando se le pasa el mouse por encima cambia de color (es un HOVER de csss)
         opacity = 0;
       }
     });
@@ -142,15 +147,18 @@ class _TextBlockState extends State<TextBlock> {
 
   handleKey(key) {
     if (key.runtimeType == RawKeyDownEvent) {
-      if (key.data.keyLabel == 'Escape' || key.logicalKey.keyLabel == 'Escape') {
+      if (key.data.keyLabel == 'Escape' ||
+          key.logicalKey.keyLabel == 'Escape') {
         setState(() {
-          renderBlockChange = !renderBlockChange;                       //Setea al valor contrario al que estaba
-          if (renderBlockChange) {                                      //Si es true, pone el fondo con negro
+          renderBlockChange =
+              !renderBlockChange; //Setea al valor contrario al que estaba
+          if (renderBlockChange) {
+            //Si es true, pone el fondo con negro
             backgroundColor = Colors.black12;
             opacity = 1;
-          }
-          else {
-            backgroundColor = Colors.transparent;                     //Si es false, pone el fondo trasnparente
+          } else {
+            backgroundColor =
+                Colors.transparent; //Si es false, pone el fondo trasnparente
             opacity = 0;
             widget.focus.requestFocus();
           }
@@ -159,15 +167,20 @@ class _TextBlockState extends State<TextBlock> {
     }
   }
 
-  TextStyle?  activarEstilo(String estilo) {    //Este if es mejorable, pero es por la pruba y rapidez
-    if(estilo == 'negrita'){
-      widget.controller1.setTexBlock(widget.controller.text,true, false, false, false);
-    }else if(estilo == 'cursiva'){
-      widget.controller1.setTexBlock(widget.controller.text,false, true, false, false);
-    }else if(estilo == 'tachado'){
-      widget.controller1.setTexBlock(widget.controller.text,false, false, true, false);
-    }else if(estilo == 'subrayado'){
-      widget.controller1.setTexBlock(widget.controller.text,false, false, false, true);
+  TextStyle? activarEstilo(String estilo) {
+    //Este if es mejorable, pero es por la pruba y rapidez
+    if (estilo == 'negrita') {
+      widget.controller1
+          .setTexBlock(widget.controller.text, true, false, false, false);
+    } else if (estilo == 'cursiva') {
+      widget.controller1
+          .setTexBlock(widget.controller.text, false, true, false, false);
+    } else if (estilo == 'tachado') {
+      widget.controller1
+          .setTexBlock(widget.controller.text, false, false, true, false);
+    } else if (estilo == 'subrayado') {
+      widget.controller1
+          .setTexBlock(widget.controller.text, false, false, false, true);
     }
     final Map<String, TextStyle> estilos = {
       'negrita': negrita,
@@ -185,8 +198,8 @@ class _TextBlockState extends State<TextBlock> {
       focusNode: widget.rawKeyboardFocus,
       onKey: (RawKeyEvent key) => handleKey(key),
       child: MouseRegion(
-        onEnter: (e) => _onEnter(e),        //HOVER
-        onExit: (e) => _onExit(e),          //HOVER
+        onEnter: (e) => _onEnter(e), //HOVER
+        onExit: (e) => _onExit(e), //HOVER
         child: AnimatedContainer(
           margin: const EdgeInsets.only(bottom: 20),
           height: renderBlockChange ? 180 : 105,
@@ -205,18 +218,21 @@ class _TextBlockState extends State<TextBlock> {
                       opacity: opacity,
                       duration: const Duration(milliseconds: 200),
                       child: Container(
-                        margin: const EdgeInsets.only(right: 20),
-                        child: Column(
-                          children: [
-                            IconButton(icon: const Icon(Icons.menu, color: Colors.black38), onPressed: () {    //Aca el boton del menu desplegable
-                              setState(() {
-                                renderBlockChange = !renderBlockChange;   //Esto cambia el valor true o false
-                              });
-                            }),
-                          ],
-                        )
-                      )
-                    ),
+                          margin: const EdgeInsets.only(right: 20),
+                          child: Column(
+                            children: [
+                              IconButton(
+                                  icon: const Icon(Icons.menu,
+                                      color: Colors.black38),
+                                  onPressed: () {
+                                    //Aca el boton del menu desplegable
+                                    setState(() {
+                                      renderBlockChange =
+                                          !renderBlockChange; //Esto cambia el valor true o false
+                                    });
+                                  }),
+                            ],
+                          ))),
                   Flexible(
                     child: TextField(
                       cursorColor: Colors.black12,
@@ -247,14 +263,14 @@ class _TextBlockState extends State<TextBlock> {
                 child: AnimatedContainer(
                   margin: const EdgeInsets.only(top: 12, left: 60),
                   duration: const Duration(milliseconds: 200),
-                  height: renderBlockChange ?  70 : 0,
+                  height: renderBlockChange ? 70 : 0,
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.start,
                     crossAxisAlignment: CrossAxisAlignment.end,
                     children: [
                       //Fila con los primeros botones
                       Expanded(
-                        child:Row(
+                        child: Row(
                           children: [
                             Expanded(
                               child: ListView(
@@ -305,7 +321,7 @@ class _TextBlockState extends State<TextBlock> {
                       ),
                       //Fila con los segundos botones
                       Expanded(
-                        child:Row(
+                        child: Row(
                           children: [
                             Expanded(
                               child: ListView(
@@ -340,7 +356,8 @@ class _TextBlockState extends State<TextBlock> {
                                     ),
                                     onPressed: () {
                                       setState(() {
-                                        activeStyle = activarEstilo('subrayado')!;
+                                        activeStyle =
+                                            activarEstilo('subrayado')!;
                                         renderBlockChange = true;
                                         opacity = 0;
                                         backgroundColor = Colors.transparent;
@@ -355,23 +372,36 @@ class _TextBlockState extends State<TextBlock> {
                         ),
                       ),
                       Expanded(
-                        child:Row(
+                        child: Row(
                           children: [
                             Expanded(
                               child: ListView(
                                 children: [
-                                 IconButton(icon: const Icon(Icons.image_search_rounded, color: Color.fromARGB(255, 206, 156, 5)), onPressed: () {    //Aca el boton del menu desplegable
-                                    print('Aca se habre la funcionalidad de imagen a texto');
-                                    // setState(() {
-                                    //   renderBlockChange = !renderBlockChange;   //Esto cambia el valor true o false
-                                    // });
-                                  }),
-                                  IconButton(icon: const Icon(Icons.mic, color: Color.fromARGB(255, 206, 156, 5)), onPressed: () {    //Aca el boton del menu desplegable
-                                    print('Aca se habre la funcionalidad de audio a texto');
-                                    // setState(() {
-                                    //   renderBlockChange = !renderBlockChange;   //Esto cambia el valor true o false
-                                    // });
-                                  }),
+                                  IconButton(
+                                      icon: const Icon(
+                                          Icons.image_search_rounded,
+                                          color:
+                                              Color.fromARGB(255, 206, 156, 5)),
+                                      onPressed: () {
+                                        //Aca el boton del menu desplegable
+                                        print(
+                                            'Aca se habre la funcionalidad de imagen a texto');
+                                        // setState(() {
+                                        //   renderBlockChange = !renderBlockChange;   //Esto cambia el valor true o false
+                                        // });
+                                      }),
+                                  IconButton(
+                                      icon: const Icon(Icons.mic,
+                                          color:
+                                              Color.fromARGB(255, 206, 156, 5)),
+                                      onPressed: () {
+                                        //Aca el boton del menu desplegable
+                                        print(
+                                            'Aca se habre la funcionalidad de audio a texto');
+                                        // setState(() {
+                                        //   renderBlockChange = !renderBlockChange;   //Esto cambia el valor true o false
+                                        // });
+                                      }),
                                 ],
                               ),
                             ),
@@ -380,16 +410,21 @@ class _TextBlockState extends State<TextBlock> {
                       ),
                       //Fila con el ultimo boton para salir del menu
                       Expanded(
-                        child:Row(
+                        child: Row(
                           children: [
                             Expanded(
                               child: ListView(
                                 children: [
-                                  IconButton(icon: const Icon(Icons.close, color: Colors.red), onPressed: () {    //Aca el boton del menu desplegable
-                                    setState(() {
-                                      renderBlockChange = !renderBlockChange;   //Esto cambia el valor true o false
-                                    });
-                                  }),
+                                  IconButton(
+                                      icon: const Icon(Icons.close,
+                                          color: Colors.red),
+                                      onPressed: () {
+                                        //Aca el boton del menu desplegable
+                                        setState(() {
+                                          renderBlockChange =
+                                              !renderBlockChange; //Esto cambia el valor true o false
+                                        });
+                                      }),
                                 ],
                               ),
                             ),
@@ -409,19 +444,26 @@ class _TextBlockState extends State<TextBlock> {
 }
 
 class TextBlockController {
-    late String contenido;
-    late Estilos estilos ;
+  late String contenido;
+  late Estilos estilos;
 
-  void setTexBlock(String contenido, bool negrita, bool cursiva, bool tachado, bool subrayado) {
+  void setTexBlock(String contenido, bool negrita, bool cursiva, bool tachado,
+      bool subrayado) {
     contenido = contenido;
-    estilos = Estilos(negrita: negrita, cursiva: cursiva, tachado: tachado, subrayado: subrayado);
+    estilos = Estilos(
+        negrita: negrita,
+        cursiva: cursiva,
+        tachado: tachado,
+        subrayado: subrayado);
   }
 
   String getContenido() {
     return contenido;
   }
+
   String getEstilos() {
-    String est = 'Negrita -> ${estilos.negrita}, Cursiva -> ${estilos.cursiva}, Tachado -> ${estilos.tachado}, Subrayado -> ${estilos.subrayado}';
+    String est =
+        'Negrita -> ${estilos.negrita}, Cursiva -> ${estilos.cursiva}, Tachado -> ${estilos.tachado}, Subrayado -> ${estilos.subrayado}';
     return est;
   }
 }
@@ -432,8 +474,9 @@ class Estilos {
   late bool tachado;
   late bool subrayado;
 
-  Estilos({required this.negrita, required this.cursiva, required this.tachado, required this.subrayado});
+  Estilos(
+      {required this.negrita,
+      required this.cursiva,
+      required this.tachado,
+      required this.subrayado});
 }
-
-
-
