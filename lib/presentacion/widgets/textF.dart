@@ -1,8 +1,10 @@
 // ignore_for_file: use_key_in_widget_constructors, library_private_types_in_public_api, file_names
 
 import 'package:flutter/material.dart';
+import 'package:notea_frontend/aplicacion/ImagenATexto.dart';
 import 'package:notea_frontend/presentacion/pantallas/Speech_to_Text_Screen.dart';
 import 'package:rich_editor/rich_editor.dart';
+import 'package:image_picker/image_picker.dart';
 import 'package:html/parser.dart' as htmlParser;
 
 class TextBlockPrueba1 extends StatefulWidget {
@@ -22,7 +24,6 @@ class _TextBlockPrueba1State extends State<TextBlockPrueba1> {
     super.dispose();
   }
 
-
   Future<String?>? getEditorValue() async {
     if (widget._editorKey.currentState != null) {
       String? html = await widget._editorKey.currentState?.getHtml();
@@ -30,7 +31,8 @@ class _TextBlockPrueba1State extends State<TextBlockPrueba1> {
     }
     return null;
   }
-      String hola = 'holaasa';
+
+  String hola = 'holaasa';
 
   void customAction(String action) {
     if (action == 'action1') {
@@ -39,20 +41,26 @@ class _TextBlockPrueba1State extends State<TextBlockPrueba1> {
         Navigator.push(
           context,
           MaterialPageRoute(
-            builder: (context) => SpeechToTextScreen(textoNota: text ),
+            builder: (context) => SpeechToTextScreen(textoNota: text),
           ),
         ).then((value) {
           if (value != null) {
             setState(() {
               // Lógica para actualizar el estado con el valor devuelto de SpeechToTextScreen
-                widget._editorKey.currentState!.setHtml(value);                                           //nO SE POR QUE NO FUNCIONA
+              widget._editorKey.currentState!
+                  .setHtml(value); //nO SE POR QUE NO FUNCIONA
             });
           }
         });
       });
     } else if (action == 'action2') {
       print('Accion 2');
-      // Acción 2
+      setState(() async {
+        Future<String> future = imagenATexto().EscanearTexto(
+            await ImagePicker().pickImage(source: ImageSource.gallery));
+        String textoEscaneado = await future;
+        widget._editorKey.currentState!.setHtml(textoEscaneado);
+      });
     }
   }
 
@@ -79,7 +87,7 @@ class _TextBlockPrueba1State extends State<TextBlockPrueba1> {
             Expanded(
               child: RichEditor(
                 key: widget._editorKey,
-                value:  hola,
+                value: hola,
                 editorOptions: RichEditorOptions(
                   placeholder: 'Start typing',
                   padding: const EdgeInsets.symmetric(horizontal: 20.0),
