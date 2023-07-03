@@ -42,11 +42,26 @@ class _MyDropdownState extends State<MyDropdown> {
     return BlocBuilder<NotaBloc, NotaState>(builder: (context, state) {
       if (state is NotasCatchSuccessState) {
         notas = state.notas;
+
+        List<Grupo> gruposPapelera = [];
+
+        for (int i = 0; i < widget.grupos!.length; i++) {
+          final grupo = widget.grupos![i]; //Tenemos el grupo que se renderizará
+          final cant = notas
+              ?.where((nota) =>
+                  nota.idGrupo.getIdGrupoNota() == grupo.idGrupo &&
+                  !(nota.getEstado() == "PAPELERA"))
+              .toList();
+          if (cant!.isNotEmpty) {
+            gruposPapelera.add(widget.grupos![i]);
+          }
+        }
+
         return ListView.builder(
-            itemCount: widget.grupos?.length,
+            itemCount: gruposPapelera.length,
             itemBuilder: (context, index) {
               final grupo =
-                  widget.grupos![index]; //Tenemos el grupo que se renderizará
+                  gruposPapelera[index]; //Tenemos el grupo que se renderizará
               final notasDeGrupo = notas
                   ?.where((nota) =>
                       nota.getIdGrupoNota() == grupo.idGrupo &&
