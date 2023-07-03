@@ -76,22 +76,23 @@ class _AccionesConNotaState extends State<AccionesConNota> {
       recivedDataList = dataList;
   }
 
+  Future<String?> htmlPrint(TextBlockPrueba textBlock) async {
+    String? html = await textBlock.editorKey.currentState?.getHtml();
+    return html;
+  }
+
   Future<void> pintaLista() async {
+    print('-------ReciveddataList---------');
+    print(recivedDataList.length);
+    print('-------ReciveddataList---------');
     for (var element in recivedDataList) {
-      if(element is Expanded){
-        final textBlock = element; // Crea una instancia del widget TextBlock
+      if(element is TextBlockPrueba){
+        final textBlock = element;
         print('------------');
 
 
-
-
-          Widget expandedChildren = element.child ;
-          print(expandedChildren.key);                        //Verificar como traerme el texto del richtext
-
-
-    
-
-
+        String? html = await textBlock.editorKey.currentState?.getHtml();         //Aca captamos el codigo de la lista
+        print(html);
 
         print('------------');
       }else if(element is ImageBlock) {

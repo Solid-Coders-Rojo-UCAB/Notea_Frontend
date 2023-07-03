@@ -26,9 +26,7 @@ class _ContainerEditorNotaState extends State<ContainerEditorNota> {
   final focusNode = FocusNode();
   final  List<dynamic> _children = [
 
-    Expanded(
-      child: TextBlockPrueba(),
-    ),
+    TextBlockPrueba(),
 
 
     // TextBlock(),
@@ -150,9 +148,7 @@ class _ContainerEditorNotaState extends State<ContainerEditorNota> {
                       setState(() {
                         if (value == 'text_block') {
                           _children.add(
-                            Expanded(
-                              child: TextBlockPrueba(),           //Ahora esto maneja lo de los estilos mis oabna 
-                            ),
+                            TextBlockPrueba(),           //Ahora esto maneja lo de los estilos mis oabna 
                           );
                         }else if (value == 'image_block') {
                           _children.add(ImageBlock());
