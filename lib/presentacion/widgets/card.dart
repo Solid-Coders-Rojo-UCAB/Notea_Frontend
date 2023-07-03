@@ -103,31 +103,39 @@ class CartaWidget extends StatelessWidget {
                 ),
                 const SizedBox(height: 16.0),
                 Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  mainAxisAlignment: MainAxisAlignment.end,
                   children: [
                     Row(
+                      
                       children: tags.map((tag) => TagWidget(tag: tag)).toList(),
                     ),
-                    IconButton(
-                      icon: const Tooltip(
-                        message: 'Eliminar',
-                        child: Icon(
-                          Icons.delete,
-                          color: Color.fromARGB(255, 20, 18, 18),
-                        ),
-                      ),
-                      onPressed: onDeletePressed,
-                    ),
-                    IconButton(
-                      icon: const Tooltip(
-                        message: 'Recuperar',
-                        child: Icon(
-                          Icons.autorenew,
-                          color: Color.fromARGB(255, 20, 18, 18),
-                        ),
-                      ),
-                      onPressed: onChangePressed,
-                    ),
+                    Expanded(
+                      
+                     child: Row(
+                      mainAxisAlignment: MainAxisAlignment.end,
+                      children: [
+                            IconButton(
+                              icon: const Tooltip(
+                                message: 'Eliminar',
+                                child: Icon(
+                                  Icons.delete,
+                                  color: Color.fromARGB(255, 20, 18, 18),
+                                ),
+                              ),
+                              onPressed: onDeletePressed,
+                            ),
+                            IconButton(
+                              icon: const Tooltip(
+                                message: 'Recuperar',
+                                child: Icon(
+                                  Icons.autorenew,
+                                  color: Color.fromARGB(255, 20, 18, 18),
+                                ),
+                              ),
+                              onPressed: onChangePressed,
+                            ),
+                  ]),
+                   ),
                   ],
                 ),
               ],

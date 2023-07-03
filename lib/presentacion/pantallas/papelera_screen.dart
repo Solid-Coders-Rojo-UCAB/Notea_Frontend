@@ -25,6 +25,7 @@ class Papelera extends StatefulWidget {
 class _PapeleraState extends State<Papelera> {
   List<Nota>? notas = [];
   String? cantidadNotas;
+  String? cantidadGrupos;
   final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
 
   @override
@@ -46,6 +47,8 @@ class _PapeleraState extends State<Papelera> {
       if (state is NotasCatchSuccessState) {
         notas = state.notas;
         int? suma = 0;
+        int? sumaGrupos = 0;
+        List<Grupo> gruposPapelera = [];
 
         for (int i = 0; i < widget.grupos!.length; i++) {
           final grupo = widget.grupos![i]; //Tenemos el grupo que se renderizará
@@ -54,9 +57,14 @@ class _PapeleraState extends State<Papelera> {
                   nota.idGrupo.getIdGrupoNota() == grupo.idGrupo &&
                   (nota.getEstado() == "PAPELERA"))
               .toList();
+          if (cant!.length > 0) {
+            sumaGrupos = (sumaGrupos! + 1);
+            gruposPapelera.add(widget.grupos![i]);
+          }
           suma = (suma! + cant!.length);
         }
 
+        cantidadGrupos = sumaGrupos.toString();
         cantidadNotas = suma.toString();
 
         return Scaffold(
@@ -102,17 +110,17 @@ class _PapeleraState extends State<Papelera> {
                   const SizedBox(height: 50),
                   Expanded(
                       child: ListView.builder(
-                          itemCount: widget.grupos?.length,
+                          itemCount: gruposPapelera.length,
                           itemBuilder: (context, index) {
-                            final grupo = widget.grupos![
+                            final grupo = gruposPapelera[
                                 index]; //Tenemos el grupo que se renderizará
                             final notasDeGrupo = notas
                                 ?.where((nota) =>
-                                  nota.getIdGrupoNota() == grupo.idGrupo &&
-                                  nota.getEstado() == "PAPELERA")
+                                    nota.getIdGrupoNota() == grupo.idGrupo &&
+                                    nota.getEstado() == "PAPELERA")
                                 .toList();
 
-                            if (notasDeGrupo != null &&
+                              if (notasDeGrupo != null &&
                                 notasDeGrupo.isNotEmpty) {
                               return Column(
                                 children: <Widget>[
