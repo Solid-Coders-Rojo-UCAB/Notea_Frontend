@@ -108,6 +108,7 @@ class _PapeleraState extends State<Papelera> {
                                 index]; //Tenemos el grupo que se renderizará
                             final notasDeGrupo = notas
                                 ?.where((nota) =>
+                                  nota.getIdGrupoNota() == grupo.idGrupo &&
                                   nota.getEstado() == "PAPELERA")
                                 .toList();
 

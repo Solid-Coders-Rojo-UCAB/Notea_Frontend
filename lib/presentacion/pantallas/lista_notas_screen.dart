@@ -49,6 +49,7 @@ class _MyDropdownState extends State<MyDropdown> {
                   widget.grupos![index]; //Tenemos el grupo que se renderizará
               final notasDeGrupo = notas
                   ?.where((nota) =>
+                      nota.getIdGrupoNota() == grupo.idGrupo &&
                       !(nota.getEstado() == "PAPELERA"))
                   .toList();
               if (notasDeGrupo != null && notasDeGrupo.isNotEmpty) {
