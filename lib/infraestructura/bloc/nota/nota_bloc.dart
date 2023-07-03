@@ -44,7 +44,7 @@ class NotaBloc extends Bloc<NotaEvent, NotaState> {
             remoteDataSource: RemoteDataNotaImp(client: http.Client()));
         final eliminado = await repositorio.borrarNota(event.idNota);
 
-        await Future.delayed(Duration(seconds: 0.9.toInt()));
+        await Future.delayed(const Duration(seconds: 1));
 
         eliminado.isLeft()
             ? emit(NotaDeleteSuccessState(status: eliminado.isLeft()))
