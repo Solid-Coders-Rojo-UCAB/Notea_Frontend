@@ -3,6 +3,7 @@
 import 'package:flutter/material.dart';
 import 'package:notea_frontend/presentacion/pantallas/Speech_to_Text_Screen.dart';
 import 'package:rich_editor/rich_editor.dart';
+import 'package:html/parser.dart' as htmlParser;
 
 class TextBlockPrueba1 extends StatefulWidget {
   TextBlockPrueba1({Key? key});
@@ -16,11 +17,11 @@ class TextBlockPrueba1 extends StatefulWidget {
 }
 
 class _TextBlockPrueba1State extends State<TextBlockPrueba1> {
-
   @override
   void dispose() {
     super.dispose();
   }
+
 
   Future<String?>? getEditorValue() async {
     if (widget._editorKey.currentState != null) {
@@ -29,21 +30,35 @@ class _TextBlockPrueba1State extends State<TextBlockPrueba1> {
     }
     return null;
   }
+      String hola = 'holaasa';
 
   void customAction(String action) {
-    // Lógica para las acciones personalizadas
     if (action == 'action1') {
-      Navigator.push(context, 
-        MaterialPageRoute(builder: (context) => 
-          const SpeechToTextScreen(textoNota: '')))
-          .then((value) => setState(() {
-            //nos devuelve el texto de la nota
-            }));
-      // Acción 1
+      getEditorValue()!.then((textoNota) {
+        String text = htmlParser.parse(textoNota).documentElement!.text;
+        Navigator.push(
+          context,
+          MaterialPageRoute(
+            builder: (context) => SpeechToTextScreen(textoNota: text ),
+          ),
+        ).then((value) {
+          if (value != null) {
+            setState(() {
+              // Lógica para actualizar el estado con el valor devuelto de SpeechToTextScreen
+                widget._editorKey.currentState!.setHtml(value);                                           //nO SE POR QUE NO FUNCIONA
+            });
+          }
+        });
+      });
     } else if (action == 'action2') {
       print('Accion 2');
       // Acción 2
     }
+  }
+
+  @override
+  void initState() {
+    super.initState();
   }
 
   @override
@@ -64,7 +79,7 @@ class _TextBlockPrueba1State extends State<TextBlockPrueba1> {
             Expanded(
               child: RichEditor(
                 key: widget._editorKey,
-                value: '',
+                value:  hola,
                 editorOptions: RichEditorOptions(
                   placeholder: 'Start typing',
                   padding: const EdgeInsets.symmetric(horizontal: 20.0),
