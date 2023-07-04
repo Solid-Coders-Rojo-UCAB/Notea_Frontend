@@ -51,9 +51,6 @@ class _AccionesConNotaState extends State<AccionesConNota> {
   void initState() {
     super.initState();
     _tituloController = TextEditingController(text: widget.titulo ?? '');
-    print('----------------------------------------------------contenido Total Creacion');
-    print(widget.contenidoTotal1);
-    print('----------------------------------------------------contenido Total Creacion');
   }
 
   @override
