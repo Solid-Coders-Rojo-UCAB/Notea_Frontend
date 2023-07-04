@@ -10,11 +10,13 @@ import 'package:notea_frontend/presentacion/widgets/textOptions.dart';
 
 
 class ContainerEditorNota extends StatefulWidget {
-  final List<dynamic>? contenidoTotal;
+  // final List<dynamic>? contenidoTotal;
+
+  final  Map<String, dynamic>? contenidoTotal1;
 
   final Function(String, List<dynamic>) onDataReceived;
 
-  const ContainerEditorNota({super.key, required this.onDataReceived, this.contenidoTotal});
+  const ContainerEditorNota({super.key, required this.onDataReceived, this.contenidoTotal1});
 
   @override
   _ContainerEditorNotaState createState() => _ContainerEditorNotaState();
@@ -28,8 +30,6 @@ class _ContainerEditorNotaState extends State<ContainerEditorNota> {
   final focusNode = FocusNode();
   final  List<dynamic> _children = [
 
-    TextBlockPrueba1(),
-
 
     // TextBlock(),
   ];
@@ -39,6 +39,30 @@ class _ContainerEditorNotaState extends State<ContainerEditorNota> {
   void initState() {
     super.initState();
 
+    if (widget.contenidoTotal1 != null) {
+      List<dynamic> contenidoList = widget.contenidoTotal1!['contenido'];
+      for (var item in contenidoList) {
+        if (item.containsKey('texto')) {
+          var cuerpo = item['texto']['cuerpo'];
+          _children.add(
+            TextBlockPrueba1(cuerpo: cuerpo),           //Aca se agrega el texblock que indica el contenido
+          );
+        } else if (item.containsKey('imagen')) {
+          var imagen = item['imagen'];
+          // Realizar acción para imagen
+          print('Imagen: $imagen');
+        } else if (item.containsKey('tarea')) {
+          var tareas = item['tarea'];
+          // Realizar acción para tarea
+          print(tareas);
+          _children.add(TareaBlock(tareas: tareas));      //Aca se agrega la tarea que indica el contenido
+        }
+      }
+    }else {
+      _children.add(
+        TextBlockPrueba1(),           //Ahora esto maneja lo de los estilos mis oabna 
+      );
+    }
   }
 
   @override
@@ -110,7 +134,7 @@ class _ContainerEditorNotaState extends State<ContainerEditorNota> {
     return SingleChildScrollView(
       controller: _scrollController,
       child: SizedBox(
-        height: _children.length == 1 ? 500 : 480 * _children.length.toDouble(), // Establecer una altura explícita
+        height: _children.length == 1 ? 500 : 350 * _children.length.toDouble(), // Establecer una altura explícita
         child: Align(
           alignment: Alignment.topCenter,
           child: Padding(

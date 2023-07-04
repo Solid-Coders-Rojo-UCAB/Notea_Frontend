@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:notea_frontend/dominio/agregados/grupo.dart';
+import 'package:html/parser.dart';
 
 import '../../infraestructura/bloc/Grupo/grupo_bloc.dart';
 import '../pantallas/Creacion_Edicion_Nota.dart';
@@ -8,18 +9,22 @@ import '../pantallas/Creacion_Edicion_Nota.dart';
 class CartaWidget extends StatelessWidget {
   final DateTime fecha;
   final String titulo;
-  final List<String> contenidoTotal;    //TODO Hay que cambiar esto con lista de contenidos
   final List<String> tags;
   final VoidCallback? onDeletePressed;
   final List<Grupo>? grupos;
 
+  final  Map<String, dynamic> contenidoTotal1;
+  final String? idNota;
+
   final VoidCallback? onChangePressed;
   final bool habilitado;
 
-  const CartaWidget({super.key, 
+  const CartaWidget({
+    super.key,
+    this.idNota,
     required this.fecha,
     required this.titulo,
-    required this.contenidoTotal,
+    required this.contenidoTotal1,
     required this.tags,
     this.grupos,
     this.onDeletePressed,
@@ -39,10 +44,11 @@ class CartaWidget extends StatelessWidget {
             context,
             MaterialPageRoute(
               builder: (context) => AccionesConNota(
+                idNota: idNota,
                 accion: 'Editar Nota',
                 grupos: grupos,
                 titulo: titulo,
-                contenidosTotal: contenidoTotal,
+                contenidoTotal1: contenidoTotal1,
                 etiquetas: tags,
               )),
           );
@@ -115,7 +121,7 @@ class CartaWidget extends StatelessWidget {
                                     300, // Establece el ancho máximo para el contenedor
                               ),
                               child: Text(
-                                contenidoTotal[0],
+                                convertHtmlToText(contenidoTotal1['contenido'][0]['texto']['cuerpo'].toString()),           //Cambiar por el primer contenido por lo mneos
                                 style: const TextStyle(
                                   fontWeight: FontWeight.bold,
                                   fontSize: 14.0,
@@ -183,7 +189,6 @@ class CartaWidget extends StatelessWidget {
 
 class TagWidget extends StatelessWidget {
   final String tag;
-
   TagWidget({required this.tag});
 
   @override
@@ -206,4 +211,10 @@ class TagWidget extends StatelessWidget {
       ),
     );
   }
+}
+
+String convertHtmlToText(String htmlString) {
+  final document = parse(htmlString);
+  final plainText = parse(document.body!.text).documentElement!.text;
+  return plainText.trim().replaceAll(RegExp(r'\s+'), ' ');
 }

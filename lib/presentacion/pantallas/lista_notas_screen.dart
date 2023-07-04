@@ -1,5 +1,7 @@
 // ignore_for_file: unrelated_type_equality_checks, unnecessary_null_comparison
 
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:notea_frontend/dominio/agregados/VONota/EstadoEnum.dart';
@@ -27,6 +29,11 @@ class MyDropdown extends StatefulWidget {
 class _MyDropdownState extends State<MyDropdown> {
   List<Nota>? notas = [];
   String cantNotas = '';
+
+  Map<String, dynamic> convertStringToMap(String jsonString) {
+    return jsonDecode(jsonString);
+  }
+
 
   @override
   void initState() {
@@ -80,10 +87,12 @@ class _MyDropdownState extends State<MyDropdown> {
                               children: notasDeGrupo.map((nota) {
                             return SizedBox(
                                 child: CartaWidget(
+                                  idNota: nota.id,
                                   habilitado: false,
                                   fecha: nota.getFechaCreacion(),
                                   titulo: nota.titulo.tituloNota,
-                                  contenidoTotal: [nota.contenido.contenidoNota,nota.contenido.contenidoNota,nota.contenido.contenidoNota],
+                                  // contenidoTotal1: cont,
+                                  contenidoTotal1: convertStringToMap(nota.getContenido().toString()),
                                   tags: const ['Tag1', 'Tag2', 'Tag3sssssss'],
                                   onDeletePressed: () {
                                     showDialog(
@@ -171,3 +180,5 @@ class _MyDropdownState extends State<MyDropdown> {
                   //   print('ID: ${nota.id}');
                   //   print('---------------------');
                   // });
+
+

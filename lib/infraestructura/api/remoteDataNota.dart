@@ -69,6 +69,8 @@ class RemoteDataNotaImp implements RemoteDataNota {
   Future<Either<int, Exception>> crearNotaApiTareas(
       Map<String, dynamic> jsonString) async {
     if (await const ConectivityCheck().checkConectivity()) {
+
+      print('entes del response-0000000000000000000000000000000-----------------------');
       final response = await http.post(
         Uri.parse('${ApiConfig.apiBaseUrl}/nota'),
         body: json.encode(jsonString),
@@ -183,5 +185,27 @@ class RemoteDataNotaImp implements RemoteDataNota {
       notas.add(nota);
     }
     return notas;
+  }
+
+  Future<Either<int, Exception>> editarNotaApi(Map<String, dynamic> jsonString) async {
+
+    String idNota = jsonString['idNota'];
+    if (await const ConectivityCheck().checkConectivity()) {
+      final request = http.MultipartRequest(
+          'PATCH', Uri.parse('${ApiConfig.apiBaseUrl}/nota/$idNota'))
+        ..fields['titulo'] = jsonString['titulo']
+        ..fields['contenido'] = jsonString['contenido'];
+
+      final response = await request.send();
+
+      if (response.statusCode == 200) {
+        return Either.left(response.statusCode);
+      } else {
+        return Either.right(Exception("Error al crear la nota en el servidor"));
+      }
+    } else {
+      return Either.right(Exception(
+          "No hay conexion a internet")); //guardado en la base de datos local
+    }
   }
 }

@@ -30,9 +30,11 @@ class RepositorioNotaImpl implements INotaRepository {
   @override
   Future<Either<int, Exception>?> crearNota(
       String titulo,
-      List<dynamic> listInfoContenido,
+      Map<String, dynamic> listInfoContenido,
       List<dynamic> etiquetas,
       Grupo grupo) async {
+      print('Entro en el repositorio de la notaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa');
+
     final now = DateTime.now();
     var datetimeString = DateFormat('yyyy-MM-ddTHH:mm:ssZ')
         .format(now); // Formato de fecha 'dd/MM/yyyy'
@@ -40,13 +42,13 @@ class RepositorioNotaImpl implements INotaRepository {
 
     Map<String, dynamic> notaDTO = {
       "titulo": titulo,
-      "contenido": obtenerContenidoDelContenidoBlock(listInfoContenido),
+      "contenido": listInfoContenido,
       "fechaCreacion": datetimeString.toString(),
       "latitud": '40.0238823', //Colocar aca lo de la ubicacion
       "longitud": '20.0238823',
       "grupo": grupo.idGrupo,
-      "tareas": crearEstructuraTareasJson(listInfoContenido),
     };
+
    
     var result = await remoteDataSource.crearNotaApiTareas(notaDTO);
     // var result = await remoteDataSource.crearNotaApi(notaDTO, listaImagen);
@@ -81,6 +83,25 @@ class RepositorioNotaImpl implements INotaRepository {
     var result = await remoteDataSource.borrarNotaApi(notaDTO);
     return result;
   }
+
+  Future<Either<int, Exception>?> editarNota(
+      String? idNota,
+      String titulo,
+      List<dynamic> listInfoContenido,
+      List<dynamic> etiquetas,
+      Grupo grupo) async {
+
+    Map<String, dynamic> notaDTO = {
+      "idNota": idNota,
+      "titulo": titulo,
+      "contenido": obtenerContenidoDelContenidoBlock(listInfoContenido),
+      "grupo": grupo.idGrupo,
+      "tareas": crearEstructuraTareasJson(listInfoContenido),
+    };
+    var result = await remoteDataSource.editarNotaApi(notaDTO);
+    return result;
+  }
+
 }
 
 String obtenerContenidoDelContenidoBlock(List<dynamic> lista) {
@@ -97,8 +118,7 @@ String obtenerContenidoDelContenidoBlock(List<dynamic> lista) {
   return contenido;
 }
 
-List<Map<String, dynamic>> crearEstructuraTareasJson(
-    List<dynamic> listInfoContenido) {
+List<Map<String, dynamic>> crearEstructuraTareasJson(List<dynamic> listInfoContenido) {
   List<Map<String, dynamic>> tareas = [];
 
   for (dynamic elemento in listInfoContenido) {
@@ -113,7 +133,6 @@ List<Map<String, dynamic>> crearEstructuraTareasJson(
       }
     }
   }
-
   return tareas;
 }
 
@@ -171,5 +190,7 @@ Future<List<File>> imageToFile(List<dynamic> listInfoContenido) async {
       imagenesFile.add(file);
     }
   }
+
   return imagenesFile;
 }
+

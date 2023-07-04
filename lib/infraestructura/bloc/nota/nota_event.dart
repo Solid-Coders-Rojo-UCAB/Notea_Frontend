@@ -15,11 +15,12 @@ class CreateNotaEvent extends NotaEvent {
   final List<dynamic> listInfo;
   final dynamic grupo;
   final List<dynamic> etiquetas;
-  CreateNotaEvent(
-      {required this.tituloNota,
-      required this.listInfo,
-      required this.grupo,
-      required this.etiquetas});
+  CreateNotaEvent({
+    required this.tituloNota,
+    required this.listInfo,
+    required this.grupo,
+    required this.etiquetas
+  });
 }
 
 class ModificarEstadoNotaEvent extends NotaEvent {
@@ -33,4 +34,19 @@ class DeleteNoteEvent extends NotaEvent {
   final String idNota;
 
   DeleteNoteEvent({required this.idNota});
+}
+
+class EditarNotaEvent extends NotaEvent {
+  final String? idNota;
+  final String tituloNota;
+  final List<dynamic> listInfo;
+  final dynamic grupo;
+  final List<dynamic> etiquetas;
+  EditarNotaEvent({
+    required this.idNota,
+    required this.tituloNota,
+    required this.listInfo,
+    required this.grupo,
+    required this.etiquetas
+  });
 }

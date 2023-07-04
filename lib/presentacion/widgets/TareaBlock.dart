@@ -4,10 +4,12 @@ import 'package:flutter/material.dart';
 
 class TareaBlock extends StatefulWidget {
 
+  final Map<String, dynamic>? tareas;
+
   List<TextEditingController> controllers = []; // Controladores de texto
   final TareaBlockController controller1 =TareaBlockController(); // Controladores de texto
 
-  TareaBlock({Key? key}) : super(key: key);
+  TareaBlock({Key? key, this.tareas}) : super(key: key);
 
   @override
   _TareaBlockState createState() => _TareaBlockState();
@@ -23,6 +25,15 @@ class _TareaBlockState extends State<TareaBlock> {
       controller.dispose();
     }
     super.dispose();
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    if (widget.tareas != null) {
+      List<dynamic> valueList = widget.tareas!['value'];
+      tasks = valueList.map((taskJson) => parseTask(taskJson)).toList();
+    }
   }
 
   @override
@@ -176,4 +187,11 @@ class TareaBlockController {
   void eliminarTarea(Task tarea) {
     listaTareas.remove(tarea);
   }
+}
+
+Task parseTask(Map<String, dynamic> json) {
+  return Task(
+    description: json['titulo'],
+    completed: json['check'],
+  );
 }
