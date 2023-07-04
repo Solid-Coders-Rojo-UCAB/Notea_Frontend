@@ -24,11 +24,11 @@ class AccionesConNota extends StatefulWidget {
   final List<dynamic>? etiquetas;
 
   final String? titulo;
-  final List<String>? contenidosTotal;
+  final String? idNota;
+  // final List<String>? contenidosTotal;
+  final  Map<String, dynamic>? contenidoTotal1;
 
-
-
-  const AccionesConNota({Key? key, required this.accion, required this.grupos, this.titulo, this.contenidosTotal, this.etiquetas}) : super(key: key);
+  const AccionesConNota({Key? key, required this.accion, required this.grupos,this.idNota, this.titulo, this.contenidoTotal1, this.etiquetas}) : super(key: key);
 
   @override
   _AccionesConNotaState createState() => _AccionesConNotaState();
@@ -51,9 +51,6 @@ class _AccionesConNotaState extends State<AccionesConNota> {
   void initState() {
     super.initState();
     _tituloController = TextEditingController(text: widget.titulo ?? '');
-    print('---');
-    print(widget.grupos);
-    print('-----');
   }
 
   @override
@@ -73,86 +70,20 @@ class _AccionesConNotaState extends State<AccionesConNota> {
       recivedDataList = dataList;
   }
 
-  Future<String?> htmlPrint(TextBlockPrueba1 textBlock) async {
-    String? html = await textBlock.editorKey.currentState?.getHtml();
-    return html;
-  }
-
-  Future<void> pintaLista() async {
-    print('-------ReciveddataList---------');
-    print(recivedDataList.length);
-    print('-------ReciveddataList---------');
-    for (var element in recivedDataList) {
-      if(element is TextBlockPrueba1){
-        final textBlock = element;
-        print('------------');
-
-
-        String? html = await textBlock.editorKey.currentState?.getHtml();         //Aca captamos el codigo de la lista
-        print(html);
-
-        print('------------');
-      }else if(element is ImageBlock) {
-        print('-----');
-        print('Esto es una IMAGEN');
-        print(element.controller.getSelectedImage());//Esto me devuelve el objeto imagen
-        NetworkImage networkImage = element.controller.getSelectedImage()!.image as NetworkImage;   //NetworkImage acepta la ruta de la imagen
-        String imageUrl = networkImage.url;   //Obtenemos el url de la imagen
-        Uint8List? imageBuffer = await downloadImage(imageUrl);     //Se convierte la imagen a buffer
-        if (imageBuffer != null) {
-          String base64Image = base64Encode(imageBuffer);
-          // Aquí tienes la imagen codificada en base64
-          print('Imagen codificada en base64: $base64Image');     //Esto es lo que se guarda en la base de datos //https://codebeautify.org/base64-to-image-converter
-          print('Se guardo el buffer');
-        } else {
-          // Ocurrió un error al descargar la imagen
-          print('Erro mi pana');
-        }
-        print(element.controller.getImageName());
-        print('-----');
-      }else if(element is TareaBlock){
-        print('-----');
-        print('Esto es una TAREA');
-        final tareaBlock = element; // Crea una instancia del widget TextBlock
-        print(tareaBlock.controller1.listaTareas);
-        for (var element in tareaBlock.controller1.listaTareas) {
-          print('--------');
-          print(element.description);
-          print(element.completed);
-          print('--------');
-        }
-      }
-    }
-  }
-  //Traemos de la lista de etiquetas, las etiquetas que seleccione el usuario
+//Traemos de la lista de etiquetas, las etiquetas que seleccione el usuario
   void handleDataEtiquetas(List<dynamic> dataEiquetas) {
       recivedDataEitquetas = dataEiquetas;
-
-      print('--------Lista de etiquetas-------');
-      print(recivedDataEitquetas.length);
-      print('---------------------------------');
-
     if(recivedDataEitquetas.isEmpty){
       hayEtiquetas = false;
     }else{
       hayEtiquetas = true;
     }
-
     setState(() {
       recivedDataEitquetas = recivedDataEitquetas;
     });
 
   }
-  void printEtiquetas() {
-    for (var element in recivedDataEitquetas) {
-      print('-----');
-      print(element.id);
-      print(element.nombre);
-      print(element.idUsuario);
-      print(element.color);
-      print('-----');
-    }
-  }
+ 
   //Traemos de la lista de grupos el grupo seleccionado
   void handleDataGrupo(Grupo dataGrupo) {
     receivedDataGrupo = dataGrupo;
@@ -254,7 +185,7 @@ class _AccionesConNotaState extends State<AccionesConNota> {
                         ),
                         child: ContainerEditorNota(
                           onDataReceived: handleDataReceived,
-                          contenidoTotal: widget.contenidosTotal,
+                          contenidoTotal1: widget.contenidoTotal1,
                         ),
                       ),
                     ),
@@ -321,22 +252,38 @@ class _AccionesConNotaState extends State<AccionesConNota> {
                         alignment: Alignment.bottomRight,
                         child: FloatingActionButton(
                           onPressed: () {
-                            pintaLista();
-
-
+                            // pintaLista();
                             // print(_tituloController.text);
                             // print(recivedDataList.length);
                             // print(receivedDataGrupo!.getNombre());
                             // print(recivedDataEitquetas.length);
-                            // BlocProvider.of<NotaBloc>(context).add(
-                            //   CreateNotaEvent(
-                            //     tituloNota: _tituloController.text,
-                            //     listInfo: recivedDataList,
-                            //     grupo: receivedDataGrupo,
-                            //     etiquetas: recivedDataEitquetas,
-                            //   ),
-                            // );
-                            // _regresar();
+
+                            if (widget.accion == 'Creando Nota') {
+                              BlocProvider.of<NotaBloc>(context).add(
+                                CreateNotaEvent(
+                                  tituloNota: _tituloController.text,
+                                  listInfo: recivedDataList,
+                                  grupo: receivedDataGrupo,
+                                  etiquetas: recivedDataEitquetas,
+                                ),
+                              );
+                            }else {
+                              BlocProvider.of<NotaBloc>(context).add(
+                                EditarNotaEvent(
+                                  idNota: widget.idNota,
+                                  tituloNota: _tituloController.text,
+                                  listInfo: recivedDataList,
+                                  grupo: receivedDataGrupo,
+                                  etiquetas: recivedDataEitquetas,
+                                ),
+                              );
+                            }
+
+                            hol11(recivedDataList);
+
+
+
+                            _regresar();
                           },
                           backgroundColor: Colors.blue,
                           child: const Icon(
@@ -368,4 +315,42 @@ String obtenerPrimerasDosLetrasMayusculas(String texto) {
   } else {
     return texto.toUpperCase();
   }
+}
+
+
+void hol11(List<dynamic> listInfo) async {
+  List<Map<String, dynamic>> contenidoList = [];
+
+  for (var element in listInfo) {
+    if (element is TextBlockPrueba1) {
+      final textBlock = element;
+      String? html = await textBlock.editorKey.currentState?.getHtml();
+
+      if (html != null) {
+        contenidoList.add({
+          'texto': {'cuerpo': html},
+        });
+      }
+    } else if (element is TareaBlock) {
+      final tareaBlock = element;
+      List<Task> tasks = tareaBlock.controller1.listaTareas;
+
+      List<Map<String, dynamic>> tareaValue = [];
+      for (var task in tasks) {
+        tareaValue.add({
+          'titulo': task.description,
+          'check': task.completed,
+        });
+      }
+      contenidoList.add({
+        'tarea': {
+          'value': tareaValue,
+        },
+      });
+    }
+  }
+
+  Map<String, dynamic> contenido = {'contenido': contenidoList};
+
+  print(contenido);
 }

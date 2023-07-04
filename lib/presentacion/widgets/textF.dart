@@ -8,7 +8,9 @@ import 'package:image_picker/image_picker.dart';
 import 'package:html/parser.dart' as htmlParser;
 
 class TextBlockPrueba1 extends StatefulWidget {
-  TextBlockPrueba1({Key? key});
+
+  String? cuerpo;
+  TextBlockPrueba1({Key? key, this.cuerpo});
 
   final GlobalKey<RichEditorState> _editorKey = GlobalKey<RichEditorState>();
 
@@ -31,8 +33,6 @@ class _TextBlockPrueba1State extends State<TextBlockPrueba1> {
     }
     return null;
   }
-
-  String hola = 'holaasa';
 
   void customAction(String action) {
     if (action == 'action1') {
@@ -76,6 +76,16 @@ class _TextBlockPrueba1State extends State<TextBlockPrueba1> {
   @override
   void initState() {
     super.initState();
+
+
+    // print('-----------------------');
+
+    print(widget.cuerpo);
+    // print(widget.cuerpo);
+    // print(widget.cuerpo);
+    // print(widget.cuerpo);
+    // print('-----------------------');
+
   }
 
   @override
@@ -96,7 +106,7 @@ class _TextBlockPrueba1State extends State<TextBlockPrueba1> {
             Expanded(
               child: RichEditor(
                 key: widget._editorKey,
-                value: hola,
+                value:  widget.cuerpo ?? '',
                 editorOptions: RichEditorOptions(
                   placeholder: 'Start typing',
                   padding: const EdgeInsets.symmetric(horizontal: 20.0),
