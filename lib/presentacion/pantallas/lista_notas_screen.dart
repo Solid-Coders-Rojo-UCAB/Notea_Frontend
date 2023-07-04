@@ -13,6 +13,7 @@ import 'package:notea_frontend/presentacion/widgets/card.dart';
 import 'package:notea_frontend/presentacion/widgets/desplegable.dart';
 
 import '../../dominio/agregados/usuario.dart';
+import '../../infraestructura/bloc/usuario/usuario_bloc.dart';
 
 // ignore: must_be_immutable
 class MyDropdown extends StatefulWidget {
@@ -31,46 +32,35 @@ class _MyDropdownState extends State<MyDropdown> {
   String cantNotas = '';
 
   Map<String, dynamic> cont = {
-    "contenido":[
+    "contenido": [
       {
-          "texto":{
-            "cuerpo":"<p>​Wwewwww</p>"
-          }
+        "texto": {"cuerpo": "<p>​Wwewwww</p>"}
       },
       {
-          "texto":{
-            "cuerpo":"<b>​Essseeeeee</b>"
-          }
+        "texto": {"cuerpo": "<b>​Essseeeeee</b>"}
       }
     ]
   };
 
-  Map<String, dynamic> contenido = {              //Este se supone sera lo que traiga el contenido de la nota
+  Map<String, dynamic> contenido = {
+    //Este se supone sera lo que traiga el contenido de la nota
     "contenido": [
       {
-        "texto": {
-          "cuerpo": "Este es un texto con estilo 1"
-        }
+        "texto": {"cuerpo": "Este es un texto con estilo 1"}
       },
       {
-        "texto": {
-          "cuerpo": "Este es un texto con estilo 2"
-        }
+        "texto": {"cuerpo": "Este es un texto con estilo 2"}
       },
       {
         "tarea": {
           "value": [
             {
-              "id": {
-                "id": "c75b914c-4e14-4a92-8462-28ea357b5b3e"
-              },
+              "id": {"id": "c75b914c-4e14-4a92-8462-28ea357b5b3e"},
               "titulo": "Contenido Tarea 1 de 1",
               "check": true
             },
             {
-              "id": {
-                "id": "c1151004-e0b9-4177-a222-4b90d402f38e"
-              },
+              "id": {"id": "c1151004-e0b9-4177-a222-4b90d402f38e"},
               "titulo": "Contenido Tarea 1 de 2",
               "check": false
             }
@@ -79,24 +69,18 @@ class _MyDropdownState extends State<MyDropdown> {
         }
       },
       {
-        "texto": {
-          "cuerpo": "Este es un texto con estilo 3"
-        }
+        "texto": {"cuerpo": "Este es un texto con estilo 3"}
       },
       {
         "tarea": {
           "value": [
             {
-              "id": {
-                "id": "ae01c6b6-b69b-4011-a1b0-8eb9602b4378"
-              },
+              "id": {"id": "ae01c6b6-b69b-4011-a1b0-8eb9602b4378"},
               "titulo": "Contenido Tarea 2 de 1",
               "check": false
             },
             {
-              "id": {
-                "id": "a471a6b1-5b06-4c0c-afeb-aeec7dc4e37b"
-              },
+              "id": {"id": "a471a6b1-5b06-4c0c-afeb-aeec7dc4e37b"},
               "titulo": "Contenido Tarea 2 de 2",
               "check": true
             }
@@ -112,7 +96,6 @@ class _MyDropdownState extends State<MyDropdown> {
     return jsonDecode(jsonString);
   }
 
-
   @override
   void initState() {
     super.initState();
@@ -125,6 +108,11 @@ class _MyDropdownState extends State<MyDropdown> {
   @override
   Widget build(BuildContext context) {
     return BlocBuilder<NotaBloc, NotaState>(builder: (context, state) {
+      
+       if (state is NotasFailureState) {
+        return const Center(child: Text('Error al cargar las notas'));
+      }
+
       if (state is NotasCatchSuccessState) {
         notas = state.notas;
 
@@ -143,32 +131,24 @@ class _MyDropdownState extends State<MyDropdown> {
           }
         }
 
+        // print('----------------------cantNas');
+        //   print(cantNotasTotal);
+        //   print('----------------------cantNas');
 
-
-      // print('----------------------cantNas');
-      //   print(cantNotasTotal);
-      //   print('----------------------cantNas');
-        
-
-
-      //             Column(
-      //               children: [
-      //                 Container(
-      //                   width: MediaQuery.of(context).size.width / 2, // Ancho igual a la mitad de la pantalla
-      //                   height: MediaQuery.of(context).size.height / 2, // Alto igual a la mitad de la pantalla
-      //                   decoration: const BoxDecoration(
-      //                     image: DecorationImage(
-      //                       image: AssetImage('assets/images/notes_not_found.png'),
-      //                       fit: BoxFit.contain,
-      //                     ),
-      //                   ),
-      //                 ),
-      //               ],
-                  // );
-
-
-
-
+        //             Column(
+        //               children: [
+        //                 Container(
+        //                   width: MediaQuery.of(context).size.width / 2, // Ancho igual a la mitad de la pantalla
+        //                   height: MediaQuery.of(context).size.height / 2, // Alto igual a la mitad de la pantalla
+        //                   decoration: const BoxDecoration(
+        //                     image: DecorationImage(
+        //                       image: AssetImage('assets/images/notes_not_found.png'),
+        //                       fit: BoxFit.contain,
+        //                     ),
+        //                   ),
+        //                 ),
+        //               ],
+        // );
 
         return ListView.builder(
             itemCount: gruposPapelera.length,
@@ -193,56 +173,60 @@ class _MyDropdownState extends State<MyDropdown> {
                               children: notasDeGrupo.map((nota) {
                             return SizedBox(
                                 child: CartaWidget(
-                                  idNota: nota.id,
-                                  habilitado: false,
-                                  fecha: nota.getFechaCreacion(),
-                                  titulo: nota.titulo.tituloNota,
-                                  // contenidoTotal1: cont,
-                                  contenidoTotal1: convertStringToMap(nota.getContenido()),         //Esto hace que se me muera toda la aplicacion
-                                  tags: const ['Tag1', 'Tag2', 'Tag3sssssss'],
-                                  onDeletePressed: () {
-                                    showDialog(
-                                      context: context,
-                                      builder: (BuildContext context) {
-                                        return AlertDialog(
-                                          title: const Text('Confirmación'),
-                                          content: const Text(
-                                              '¿Estás seguro de que deseas mover a la papelera?'),
-                                          actions: [
-                                            TextButton(
-                                              child: const Text('Cancelar'),
-                                              onPressed: () {
-                                                Navigator.pop(
-                                                    context); // Cerrar el cuadro de diálogo
-                                              },
-                                            ),
-                                            TextButton(
-                                              child: const Text('Aceptar'),
-                                              onPressed: () {
-                                                BlocProvider.of<NotaBloc>(context)
-                                                    .add(ModificarEstadoNotaEvent(
-                                                        idNota: nota.id,
-                                                        estado: "PAPELERA"));
-                                                Navigator.push(
-                                                    context,
-                                                    MaterialPageRoute(
-                                                        builder: (context) =>
-                                                            MessagesScreen(
-                                                              usuario:
-                                                                  widget.usuario,
-                                                            )
-                                                          )
-                                                        );
-                                                // mover a la papelera
-                                              },
-                                            ),
-                                          ],
-                                        );
-                                      },
+                              idNota: nota.id,
+                              habilitado: false,
+                              fecha: nota.getFechaCreacion(),
+                              titulo: nota.titulo.tituloNota,
+                              // contenidoTotal1: cont,
+                              contenidoTotal1: convertStringToMap(nota
+                                  .getContenido()), //Esto hace que se me muera toda la aplicacion
+                              tags: const ['Tag1', 'Tag2', 'Tag3sssssss'],
+                              onDeletePressed: () {
+                                showDialog(
+                                  context: context,
+                                  builder: (BuildContext context) {
+                                    return AlertDialog(
+                                      title: const Text('Confirmación'),
+                                      content: const Text(
+                                          '¿Estás seguro de que deseas mover a la papelera?'),
+                                      actions: [
+                                        TextButton(
+                                          child: const Text('Cancelar'),
+                                          onPressed: () {
+                                            Navigator.pop(
+                                                context); // Cerrar el cuadro de diálogo
+                                          },
+                                        ),
+                                        TextButton(
+                                          child: const Text('Aceptar'),
+                                          onPressed: () {
+                                            BlocProvider.of<NotaBloc>(context)
+                                                .add(ModificarEstadoNotaEvent(
+                                                    idNota: nota.id,
+                                                    estado: "PAPELERA"));
+
+                                            Navigator.pop(context);
+                                            Navigator.pushReplacement(
+                                              context,
+                                              MaterialPageRoute(
+                                                  builder: (context) =>
+                                                      MessagesScreen(
+                                                          usuario: context
+                                                              .read<
+                                                                  UsuarioBloc>()
+                                                              .state
+                                                              .usuario!)),
+                                            );
+                                             // mover a la papelera
+                                          },
+                                        ),
+                                      ],
                                     );
-                                    // Lógica para eliminar la nota
                                   },
-                                  onChangePressed: null,
+                                );
+                                // Lógica para eliminar la nota
+                              },
+                              onChangePressed: null,
                             ));
                           }).toList()),
                         ),
