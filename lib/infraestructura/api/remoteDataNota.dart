@@ -187,6 +187,7 @@ class RemoteDataNotaImp implements RemoteDataNota {
     return notas;
   }
 
+  //Hay que verificar con lo que esta haciendo italo para saber como lo tiene que recibir esto aun no funciona
   Future<Either<int, Exception>> editarNotaApi(Map<String, dynamic> jsonString) async {
 
     String idNota = jsonString['idNota'];

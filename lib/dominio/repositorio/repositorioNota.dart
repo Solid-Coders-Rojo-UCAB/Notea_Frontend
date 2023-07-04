@@ -9,4 +9,6 @@ abstract class INotaRepository {
   Future<Either<int, Exception>> borrarNota(String id);
   Future<Either<List<Nota>, Exception>> buscarNotasGrupos(
       List<Grupo> grupos);
+  Future<Either<int, Exception>?> editarNota(String? idNota, String titulo, Map<String, dynamic> listInfoContenido, List<dynamic> etiquetas, Grupo grupo);
+
 }

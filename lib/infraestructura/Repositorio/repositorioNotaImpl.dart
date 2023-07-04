@@ -84,19 +84,19 @@ class RepositorioNotaImpl implements INotaRepository {
     return result;
   }
 
+  @override
   Future<Either<int, Exception>?> editarNota(
       String? idNota,
       String titulo,
-      List<dynamic> listInfoContenido,
+      Map<String, dynamic> listInfoContenido,
       List<dynamic> etiquetas,
       Grupo grupo) async {
 
     Map<String, dynamic> notaDTO = {
       "idNota": idNota,
       "titulo": titulo,
-      "contenido": obtenerContenidoDelContenidoBlock(listInfoContenido),
+      "contenido": listInfoContenido,
       "grupo": grupo.idGrupo,
-      "tareas": crearEstructuraTareasJson(listInfoContenido),
     };
     var result = await remoteDataSource.editarNotaApi(notaDTO);
     return result;

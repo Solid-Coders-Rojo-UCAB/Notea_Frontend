@@ -71,12 +71,10 @@ class NotaBloc extends Bloc<NotaEvent, NotaState> {
     on<EditarNotaEvent>((event, emit) async {
       emit(const NotaInitialState());
 
-        mapContenido(event.listInfo);
-
       emit(const NotasCreateSuccessState());
 
       // final repositorio = RepositorioNotaImpl(remoteDataSource: RemoteDataNotaImp(client: http.Client()));
-      // final nota = await repositorio.editarNota(event.idNota ,event.tituloNota, event.listInfo, event.etiquetas, event.grupo);
+      // final nota = await repositorio.editarNota(event.idNota ,event.tituloNota, await mapContenido(event.listInfo), event.etiquetas, event.grupo);
 
       // await Future.delayed(const Duration(milliseconds: 300));
       // nota!.isLeft() ?  emit(const NotasCreateSuccessState()): emit(const NotasFailureState());//emitimos el estado de error
@@ -131,8 +129,9 @@ class NotaBloc extends Bloc<NotaEvent, NotaState> {
 
 Future<Map<String, dynamic>> mapContenido(List<dynamic> listInfo) async {
   List<Map<String, dynamic>> contenidoList = [];
-
+  int cant = 0;
   for (var element in listInfo) {
+    cant = cant + 1;
     if (element is TextBlockPrueba1) {
       final textBlock = element;
       String? html = await textBlock.editorKey.currentState?.getHtml();
@@ -140,6 +139,7 @@ Future<Map<String, dynamic>> mapContenido(List<dynamic> listInfo) async {
       if (html != null) {
         contenidoList.add({
           'texto': {'cuerpo': html},
+          'orden': cant,
         });
       }
     } else if (element is TareaBlock) {
@@ -156,6 +156,7 @@ Future<Map<String, dynamic>> mapContenido(List<dynamic> listInfo) async {
       contenidoList.add({
         'tarea': {
           'value': tareaValue,
+          'orden': cant,
         },
       });
     } else if (element is ImageBlock){
