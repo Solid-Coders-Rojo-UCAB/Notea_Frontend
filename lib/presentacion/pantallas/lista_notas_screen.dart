@@ -129,7 +129,7 @@ class _MyDropdownState extends State<MyDropdown> {
         notas = state.notas;
 
         List<Grupo> gruposPapelera = [];
-
+        int cantNotasTotal = 0;
         for (int i = 0; i < widget.grupos!.length; i++) {
           final grupo = widget.grupos![i]; //Tenemos el grupo que se renderizará
           final cant = notas
@@ -137,10 +137,38 @@ class _MyDropdownState extends State<MyDropdown> {
                   nota.idGrupo.getIdGrupoNota() == grupo.idGrupo &&
                   !(nota.getEstado() == "PAPELERA"))
               .toList();
+          cantNotasTotal += cantNotasTotal + cant!.length;
           if (cant!.isNotEmpty) {
             gruposPapelera.add(widget.grupos![i]);
           }
         }
+
+
+
+      // print('----------------------cantNas');
+      //   print(cantNotasTotal);
+      //   print('----------------------cantNas');
+        
+
+
+      //             Column(
+      //               children: [
+      //                 Container(
+      //                   width: MediaQuery.of(context).size.width / 2, // Ancho igual a la mitad de la pantalla
+      //                   height: MediaQuery.of(context).size.height / 2, // Alto igual a la mitad de la pantalla
+      //                   decoration: const BoxDecoration(
+      //                     image: DecorationImage(
+      //                       image: AssetImage('assets/images/notes_not_found.png'),
+      //                       fit: BoxFit.contain,
+      //                     ),
+      //                   ),
+      //                 ),
+      //               ],
+                  // );
+
+
+
+
 
         return ListView.builder(
             itemCount: gruposPapelera.length,
