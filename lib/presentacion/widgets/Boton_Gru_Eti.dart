@@ -252,28 +252,7 @@ class _AnimatedButtonState extends State<AnimatedButton>
       child: Row(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
-          FadeTransition(
-            opacity: _opacityAnimation,
-            child: ScaleTransition(
-              scale: _scaleAnimation,
-              child: ElevatedButton(
-                onPressed: () {
-                  openBottomSheetGrupo(context);
-                  setState(() {});
-                  _toggleExpanded();
-                },
-                style: ElevatedButton.styleFrom(
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(10.0),
-                  ),
-                  padding: const EdgeInsets.all(10.0),
-                  minimumSize: const Size(120, 60),
-                ),
-                child: const Text('Grupo'),
-              ),
-            ),
-          ),
-          const SizedBox(width: 16.0), // Espacio entre los botones
+
           FadeTransition(
             opacity: _opacityAnimation,
             child: ScaleTransition(
@@ -292,6 +271,28 @@ class _AnimatedButtonState extends State<AnimatedButton>
                   minimumSize: const Size(120, 60),
                 ),
                 child: const Text('Etiquetas'),
+              ),
+            ),
+          ),
+          const SizedBox(width: 16.0), // Espacio entre los botones
+          FadeTransition(
+            opacity: _opacityAnimation,
+            child: ScaleTransition(
+              scale: _scaleAnimation,
+              child: ElevatedButton(
+                onPressed: () {
+                  openBottomSheetGrupo(context);
+                  setState(() {});
+                  _toggleExpanded();
+                },
+                style: ElevatedButton.styleFrom(
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(10.0),
+                  ),
+                  padding: const EdgeInsets.all(10.0),
+                  minimumSize: const Size(120, 60),
+                ),
+                child: const Text('Grupo'),
               ),
             ),
           ),
