@@ -55,9 +55,18 @@ class _TextBlockPrueba1State extends State<TextBlockPrueba1> {
       });
     } else if (action == 'action2') {
       print('Accion 2');
+
       setState(() async {
         Future<String> future = imagenATexto().EscanearTexto(
             await ImagePicker().pickImage(source: ImageSource.gallery));
+        String textoEscaneado = await future;
+        widget._editorKey.currentState!.setHtml(textoEscaneado);
+      });
+    } else if (action == 'action3') {
+      print('Accion 3');
+      setState(() async {
+        Future<String> future = imagenATexto().EscanearTexto(
+            await ImagePicker().pickImage(source: ImageSource.camera));
         String textoEscaneado = await future;
         widget._editorKey.currentState!.setHtml(textoEscaneado);
       });
@@ -101,11 +110,15 @@ class _TextBlockPrueba1State extends State<TextBlockPrueba1> {
               itemBuilder: (context) => [
                 const PopupMenuItem<String>(
                   value: 'action1',
-                  child: Text('Audio a Texto'),
+                  child: Text('Audio a texto'),
                 ),
                 const PopupMenuItem<String>(
                   value: 'action2',
-                  child: Text('Imagen a Texto'),
+                  child: Text('Escanear imagen'),
+                ),
+                const PopupMenuItem<String>(
+                  value: 'action3',
+                  child: Text('Escanear una foto'),
                 ),
               ],
               onSelected: customAction,
