@@ -5,7 +5,7 @@ import 'package:flutter/services.dart';
 import 'package:notea_frontend/presentacion/widgets/ImageBlock.dart';
 import 'package:notea_frontend/presentacion/widgets/TareaBlock.dart';
 import 'package:notea_frontend/presentacion/widgets/TextBlock.dart';
-import 'package:notea_frontend/presentacion/widgets/textF.dart';
+import 'package:notea_frontend/presentacion/widgets/TextBlock.dart';
 import 'package:notea_frontend/presentacion/widgets/textOptions.dart';
 
 
@@ -45,7 +45,7 @@ class _ContainerEditorNotaState extends State<ContainerEditorNota> {
         if (item.containsKey('texto')) {
           var cuerpo = item['texto']['cuerpo'];
           _children.add(
-            TextBlockPrueba1(cuerpo: cuerpo),           //Aca se agrega el texblock que indica el contenido
+            TextBlocPrueba3(cuerpo: cuerpo),           //Aca se agrega el texblock que indica el contenido
           );
         } else if (item.containsKey('imagen')) {
           var imagen = item['imagen'];
@@ -60,7 +60,7 @@ class _ContainerEditorNotaState extends State<ContainerEditorNota> {
       }
     }else {
       _children.add(
-        TextBlockPrueba1(),           //Ahora esto maneja lo de los estilos mis oabna 
+        TextBlocPrueba3(),           //Ahora esto maneja lo de los estilos mis oabna 
       );
     }
   }
@@ -91,11 +91,11 @@ class _ContainerEditorNotaState extends State<ContainerEditorNota> {
         setState(() {
         for (var i = 0; i < _children.length; i++) {
           if (FocusScope.of(context).focusedChild == _children[i].focus) {  //Estas parado en el TextBlock seleccionado
-            _children.insert(i + 1, TextBlock());                       //Le insertas a _children un nuevo TextBlock
+            _children.insert(i + 1, TextBlocPrueba3());                       //Le insertas a _children un nuevo TextBlock
             _children[i + 1].focus.requestFocus();                          //y ahora selecciona el focus del nuevo TextBlock
           }
         }
-        _children.insert(_children.length + 1, TextBlock());
+        _children.insert(_children.length + 1, TextBlocPrueba3());
       });
       }
     }
@@ -134,7 +134,7 @@ class _ContainerEditorNotaState extends State<ContainerEditorNota> {
     return SingleChildScrollView(
       controller: _scrollController,
       child: SizedBox(
-        height: _children.length == 1 ? 500 : 350 * _children.length.toDouble(), // Establecer una altura explícita
+        height: _children.length == 1 ? 500 : 380 * _children.length.toDouble(), //Aca se establece la altura de  los hijos, ESTO REVISARLO
         child: Align(
           alignment: Alignment.topCenter,
           child: Padding(
@@ -174,7 +174,7 @@ class _ContainerEditorNotaState extends State<ContainerEditorNota> {
                       setState(() {
                         if (value == 'text_block') {
                           _children.add(
-                            TextBlockPrueba1(),           //Ahora esto maneja lo de los estilos mis oabna 
+                            TextBlocPrueba3(),           //Ahora esto maneja lo de los estilos mis oabna
                           );
                         }else if (value == 'image_block') {
                           _children.add(ImageBlock());

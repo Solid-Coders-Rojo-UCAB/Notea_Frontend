@@ -1,7 +1,7 @@
 name: notea_frontend
 description: A new Flutter project.
 
-publish_to: 'none' 
+publish_to: 'none'
 
 version: 1.0.0+1
 
@@ -32,6 +32,7 @@ dependencies:
   google_ml_kit: ^0.15.0
   animated_text_kit: ^4.2.2
   universal_io: ^2.2.0
+  quill_html_editor: ^2.1.9
   #universal_io: ^2.2.2
 
 dev_dependencies:

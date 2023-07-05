@@ -15,7 +15,7 @@ import 'package:notea_frontend/presentacion/pantallas/home_screen.dart';
 import 'package:notea_frontend/presentacion/widgets/Boton_Gru_Eti.dart';
 import 'package:notea_frontend/presentacion/widgets/ImageBlock.dart';
 import 'package:notea_frontend/presentacion/widgets/TareaBlock.dart';
-import 'package:notea_frontend/presentacion/widgets/textF.dart';
+import 'package:notea_frontend/presentacion/widgets/TextBlock.dart';
 
 
 class AccionesConNota extends StatefulWidget {
@@ -322,9 +322,9 @@ void hol11(List<dynamic> listInfo) async {
   List<Map<String, dynamic>> contenidoList = [];
 
   for (var element in listInfo) {
-    if (element is TextBlockPrueba1) {
+    if (element is TextBlocPrueba3) {
       final textBlock = element;
-      String? html = await textBlock.editorKey.currentState?.getHtml();
+      String? html = await textBlock.editorKey.getText();
 
       if (html != null) {
         contenidoList.add({

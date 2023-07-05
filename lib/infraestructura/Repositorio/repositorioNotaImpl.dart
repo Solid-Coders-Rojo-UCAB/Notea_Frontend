@@ -108,10 +108,10 @@ String obtenerContenidoDelContenidoBlock(List<dynamic> lista) {
   String contenido = '';
 
   for (dynamic elemento in lista) {
-    if (elemento is TextBlock) {
+    if (elemento is TextBlocPrueba3) {
       final textBlock = elemento; // Crea una instancia del widget TextBlock
       final texto =
-          textBlock.controller.text; // Obtiene el texto del controlador
+          textBlock.editorKey.getText(); // Obtiene el texto del controlador
       contenido += '$texto\n';
     }
   }

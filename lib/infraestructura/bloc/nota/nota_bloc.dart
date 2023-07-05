@@ -10,8 +10,7 @@ import 'package:notea_frontend/infraestructura/Repositorio/repositorioNotaImpl.d
 import 'package:notea_frontend/infraestructura/api/remoteDataNota.dart';
 import 'package:notea_frontend/presentacion/widgets/ImageBlock.dart';
 import 'package:notea_frontend/presentacion/widgets/TareaBlock.dart';
-import 'package:notea_frontend/presentacion/widgets/textF.dart';
-import '../../../dominio/agregados/VONota/EstadoEnum.dart';
+import 'package:notea_frontend/presentacion/widgets/TextBlock.dart';
 import '../../../dominio/agregados/grupo.dart';
 import '../../../dominio/agregados/nota.dart';
 
@@ -132,16 +131,14 @@ Future<Map<String, dynamic>> mapContenido(List<dynamic> listInfo) async {
   int cant = 0;
   for (var element in listInfo) {
     cant = cant + 1;
-    if (element is TextBlockPrueba1) {
+    if (element is TextBlocPrueba3) {
       final textBlock = element;
-      String? html = await textBlock.editorKey.currentState?.getHtml();
+      String? html = await textBlock.editorKey.getText();
 
-      if (html != null) {
-        contenidoList.add({
-          'texto': {'cuerpo': html},
-          'orden': cant,
-        });
-      }
+      contenidoList.add({
+        'texto': {'cuerpo': html},
+        'orden': cant,
+      });
     } else if (element is TareaBlock) {
       final tareaBlock = element;
       List<Task> tasks = tareaBlock.controller1.listaTareas;
