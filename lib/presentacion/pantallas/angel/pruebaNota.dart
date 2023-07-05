@@ -1,14 +1,14 @@
 import 'dart:convert';
 import 'package:flutter/material.dart';
 
-class Nota {
+class Note {
   String contenido;
   List<Estilo> estilos;
 
-  Nota({required this.contenido, required this.estilos});
+  Note({required this.contenido, required this.estilos});
 
-  factory Nota.fromJson(Map<String, dynamic> json) {
-    return Nota(
+  factory Note.fromJson(Map<String, dynamic> json) {
+    return Note(
       contenido: json['contenido'],
       estilos: List<Estilo>.from(json['estilos'].map((x) => Estilo.fromJson(x))),
     );
@@ -48,7 +48,7 @@ class NotaEditor extends StatefulWidget {
 }
 
 class _NotaEditorState extends State<NotaEditor> {
-  Nota miNota = Nota(contenido: '', estilos: []);
+  Note miNota = Note(contenido: '', estilos: []);
 
   @override
   Widget build(BuildContext context) {
@@ -72,7 +72,7 @@ class _NotaEditorState extends State<NotaEditor> {
 
               String notaJson = jsonEncode(miNota);
 
-              Nota notaCargada = Nota.fromJson(jsonDecode(notaJson));
+              Note notaCargada = Note.fromJson(jsonDecode(notaJson));
               String contenidoConEstilos = notaCargada.contenido;
               for (Estilo estilo in notaCargada.estilos) {
                 contenidoConEstilos = contenidoConEstilos.replaceRange(

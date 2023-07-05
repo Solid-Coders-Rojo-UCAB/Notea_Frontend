@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:notea_frontend/infraestructura/bloc/Grupo/grupo_bloc.dart';
 import 'package:notea_frontend/presentacion/pantallas/home_screen.dart';
+import 'package:notea_frontend/presentacion/pantallas/papelera_home.dart';
 import 'package:notea_frontend/presentacion/pantallas/papelera_screen.dart';
 import '../../dominio/agregados/usuario.dart';
 
@@ -47,8 +48,7 @@ class BottomBar extends StatelessWidget {
                 Navigator.push(
                   context,
                   MaterialPageRoute(
-                      builder: (context) => Papelera(
-                            grupos: context.read<GrupoBloc>().state.grupos,
+                      builder: (context) => PapeleraHomeScreen(
                             usuario: usuario,
                           )),
                 );
