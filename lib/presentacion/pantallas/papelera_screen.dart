@@ -8,11 +8,14 @@ import 'package:notea_frontend/dominio/agregados/grupo.dart';
 import 'package:notea_frontend/dominio/agregados/nota.dart';
 import 'package:notea_frontend/infraestructura/bloc/Grupo/grupo_bloc.dart';
 import 'package:notea_frontend/infraestructura/bloc/nota/nota_bloc.dart';
+import 'package:notea_frontend/presentacion/pantallas/home_screen.dart';
 import 'package:notea_frontend/presentacion/widgets/BottomBar.dart';
 import 'package:notea_frontend/presentacion/widgets/card.dart';
 import 'package:notea_frontend/presentacion/widgets/desplegable.dart';
 import '../../dominio/agregados/usuario.dart';
 import '../../infraestructura/bloc/usuario/usuario_bloc.dart';
+import '../widgets/MenuDesplegable.dart';
+import 'angel/pruebaNota.dart';
 
 // ignore: must_be_immutable
 class Papelera extends StatefulWidget {
@@ -291,9 +294,8 @@ class _PapeleraState extends State<Papelera> {
                                                                 MaterialPageRoute(
                                                                     builder:
                                                                         (context) =>
-                                                                            Papelera(
+                                                                            MessagesScreen(
                                                                               usuario: context.read<UsuarioBloc>().state.usuario!,
-                                                                              grupos: context.read<GrupoBloc>().state.grupos,
                                                                             )),
                                                               );
                                                               /* Navigator.push(
@@ -349,15 +351,13 @@ class _PapeleraState extends State<Papelera> {
                                                                       estado:
                                                                           "GUARDADO"));
 
-                                                              
-                                                             Navigator.push(
+                                                              Navigator.push(
                                                                 context,
                                                                 MaterialPageRoute(
                                                                     builder:
                                                                         (context) =>
-                                                                            Papelera(
-                                                                              usuario: context.read<UsuarioBloc>().state.usuario!,
-                                                                              grupos: context.read<GrupoBloc>().state.grupos,
+                                                                            MessagesScreen(
+                                                                              usuario: widget.usuario,
                                                                             )),
                                                               );
 
