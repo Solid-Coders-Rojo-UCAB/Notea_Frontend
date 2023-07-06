@@ -3,7 +3,7 @@
 import '../../dominio/repositorio/repositorioUsuario.dart';
 import '../../utils/Either.dart';
 import '../api/remoteDataUsuario.dart';
-import '/dominio/agregados/usuario.dart';             //Esto es de dominio, se pude tener aca?
+import '/dominio/agregados/usuario.dart'; //Esto es de dominio, se pude tener aca?
 
 class RepositorioUsuarioImpl implements IUsuarioRepository {
   final RemoteDataUsuarioImp remoteDataSource;
@@ -26,7 +26,7 @@ class RepositorioUsuarioImpl implements IUsuarioRepository {
       "clave": usuario.getClave(),
       "suscripcion": usuario.isSuscribed(),
     };
-    
+
     final respuesta = await remoteDataSource.crearUsuarioApi(usuarioDTO);
     if (respuesta.isLeft()) {
       return Either.left(respuesta.left!["id"]["id"]);
@@ -41,6 +41,11 @@ class RepositorioUsuarioImpl implements IUsuarioRepository {
     return result;
   }
 
+  @override
+  Future<Either<String, Exception>> suscriptionusuario(String IdUsuario) async {
+    final result = await remoteDataSource.SuscribeUsuarioApi(IdUsuario);
+    return result;
+  }
 
   // @override
   // Future<Either<int, Exception>> eliminarUsuario(int id) async {

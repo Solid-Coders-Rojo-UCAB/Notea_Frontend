@@ -9,9 +9,7 @@ import 'package:image_picker/image_picker.dart';
 import 'package:notea_frontend/presentacion/pantallas/Speech_to_Text_Screen.dart';
 import 'package:notea_frontend/aplicacion/ImagenATexto.dart';
 
-
 class TextBlocPrueba3 extends StatefulWidget {
-
   String? cuerpo;
   TextBlocPrueba3({Key? key, this.cuerpo});
   @override
@@ -20,23 +18,18 @@ class TextBlocPrueba3 extends StatefulWidget {
   QuillEditorController get editorKey => _editorKey;
 }
 
-
 class _TextBlocPrueba3 extends State<TextBlocPrueba3> {
-
-
   @override
   void initState() {
     super.initState();
-
   }
-    Future<String?>? getEditorValue() async {
-      String? htmlText = await widget._editorKey.getText();
-      return htmlText;
-    }
 
+  Future<String?>? getEditorValue() async {
+    String? htmlText = await widget._editorKey.getText();
+    return htmlText;
+  }
 
   void customAction(String action) {
-
     if (action == 'action1') {
       getEditorValue()!.then((textoNota) {
         String text = htmlParser.parse(textoNota).documentElement!.text;
@@ -48,20 +41,19 @@ class _TextBlocPrueba3 extends State<TextBlocPrueba3> {
         ).then((value) {
           if (value != null) {
             setState(() {
-                // Lógica para actualizar el estado con el valor devuelto de SpeechToTextScreen
-                widget._editorKey.setText(value);
+              // Lógica para actualizar el estado con el valor devuelto de SpeechToTextScreen
+              widget._editorKey.setText(value);
             });
           }
         });
       });
-
     } else if (action == 'action2') {
       setState(() async {
-          Future<String> future = imagenATexto().EscanearTexto(
-              await ImagePicker().pickImage(source: ImageSource.gallery));
-          String textoEscaneado = await future;
-          widget._editorKey.setText(textoEscaneado);
-        });
+        Future<String> future = imagenATexto().EscanearTexto(
+            await ImagePicker().pickImage(source: ImageSource.gallery));
+        String textoEscaneado = await future;
+        widget._editorKey.setText(textoEscaneado);
+      });
     } else if (action == 'action3') {
       print('Accion 3');
       setState(() async {
@@ -72,8 +64,6 @@ class _TextBlocPrueba3 extends State<TextBlocPrueba3> {
       });
     }
   }
-  
-
 
   final customToolBarList = [
     ToolBarStyle.bold,
@@ -93,7 +83,6 @@ class _TextBlocPrueba3 extends State<TextBlocPrueba3> {
     ToolBarStyle.headerTwo,
     ToolBarStyle.undo,
     ToolBarStyle.redo,
-    
   ];
 
   @override
@@ -106,7 +95,8 @@ class _TextBlocPrueba3 extends State<TextBlocPrueba3> {
             builder: (BuildContext context, BoxConstraints constraints) {
               return Container(
                 height: 320,
-                width: constraints.maxWidth * 1, // Establece el ancho al 90% del padre
+                width: constraints.maxWidth *
+                    1, // Establece el ancho al 90% del padre
                 decoration: BoxDecoration(
                   border: Border.all(
                     color: Color.fromARGB(255, 158, 158, 158),
@@ -145,18 +135,22 @@ class _TextBlocPrueba3 extends State<TextBlocPrueba3> {
                             child: Container(
                               decoration: BoxDecoration(
                                 border: Border.all(
-                                  color: const Color.fromARGB(64, 158, 158, 158),
+                                  color:
+                                      const Color.fromARGB(64, 158, 158, 158),
                                   width: 1.0,
                                 ),
                                 borderRadius: BorderRadius.circular(8.0),
                               ),
                               child: FractionallySizedBox(
-                                widthFactor: 0.9, // Establece el ancho al 90% del padre
-                                child:  ConstrainedBox(
-                                  constraints: const BoxConstraints(maxHeight: 255),
+                                widthFactor:
+                                    0.9, // Establece el ancho al 90% del padre
+                                child: ConstrainedBox(
+                                  constraints:
+                                      const BoxConstraints(maxHeight: 255),
                                   child: QuillHtmlEditor(
                                     text: widget.cuerpo ?? '',
-                                    hintText: 'Ingrese el contenido de su nota...',
+                                    hintText:
+                                        'Ingrese el contenido de su nota...',
                                     controller: widget._editorKey,
                                     isEnabled: true,
                                     minHeight: 255,
@@ -207,5 +201,4 @@ class _TextBlocPrueba3 extends State<TextBlocPrueba3> {
       ),
     );
   }
-
 }
