@@ -6,7 +6,6 @@ import 'package:notea_frontend/dominio/agregados/grupo.dart';
 import 'package:notea_frontend/infraestructura/bloc/nota/nota_bloc.dart';
 import 'package:notea_frontend/infraestructura/bloc/usuario/usuario_bloc.dart';
 import 'package:notea_frontend/presentacion/pantallas/home_screen.dart';
-import 'package:notea_frontend/presentacion/widgets/TextBlock.dart';
 
 class Tag {
   final int id;
