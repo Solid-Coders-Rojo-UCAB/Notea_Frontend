@@ -49,7 +49,7 @@ class _TextBlocPrueba3 extends State<TextBlocPrueba3> {
           if (value != null) {
             setState(() {
                 // Lógica para actualizar el estado con el valor devuelto de SpeechToTextScreen
-                widget._editorKey.setText(text);
+                widget._editorKey.setText(value);
             });
           }
         });
