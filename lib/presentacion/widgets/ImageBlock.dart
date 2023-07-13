@@ -1,5 +1,7 @@
 // ignore_for_file: library_private_types_in_public_api, file_names
 
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 
@@ -8,6 +10,7 @@ class ImageBlock extends StatefulWidget {
   final ImageBlockController controller = ImageBlockController();
   
   ImageBlock({Key? key}) : super(key: key);
+  Image? selectedImage;
 
   @override
   _ImageBlockState createState() => _ImageBlockState();
@@ -16,7 +19,6 @@ class ImageBlock extends StatefulWidget {
 
 class _ImageBlockState extends State<ImageBlock> {
   final ImagePicker _imagePicker = ImagePicker();
-  Image? _selectedImage;
   
 
 
@@ -24,18 +26,19 @@ class _ImageBlockState extends State<ImageBlock> {
     final pickedImage = await _imagePicker.pickImage(source: ImageSource.gallery);
     if (pickedImage != null) {
       setState(() {
-        _selectedImage = Image.network(
-          pickedImage.path,
+        widget.selectedImage = Image.file(
+          File(pickedImage.path),  // Agregar import 'dart:io';
           fit: BoxFit.cover,
+          height: 380,
         );
       });
-        widget.controller.setImage(_selectedImage, pickedImage.name);
+      widget.controller.setImage(widget.selectedImage, pickedImage.name);
     }
   }
 
   void _removeImage() {
     setState(() {
-      _selectedImage = null;
+      widget.selectedImage = null;
     });
   }
 
@@ -43,7 +46,7 @@ class _ImageBlockState extends State<ImageBlock> {
   Widget build(BuildContext context) {
     return Column(
       children: [
-        if (_selectedImage != null)
+        if (widget.selectedImage != null)
           Container(
             margin: const EdgeInsets.only(bottom: 20),
             decoration: BoxDecoration(
@@ -61,7 +64,7 @@ class _ImageBlockState extends State<ImageBlock> {
               children: [
                 ClipRRect(
                   borderRadius: BorderRadius.circular(10),
-                  child: _selectedImage,
+                  child: widget.selectedImage,
                 ),
                 Positioned(
                   top: 5,

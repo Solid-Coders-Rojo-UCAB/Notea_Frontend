@@ -8,6 +8,7 @@ class TareaBlock extends StatefulWidget {
 
   List<TextEditingController> controllers = []; // Controladores de texto
   final TareaBlockController controller1 =TareaBlockController(); // Controladores de texto
+  int cantTareas = 0;
 
   TareaBlock({Key? key, this.tareas}) : super(key: key);
 
@@ -17,7 +18,6 @@ class TareaBlock extends StatefulWidget {
 
 class _TareaBlockState extends State<TareaBlock> {
   List<Task> tasks = []; // Lista de tareas
-
   @override
   void dispose() {
     // Liberar los controladores de texto al salir del Widget
@@ -33,6 +33,7 @@ class _TareaBlockState extends State<TareaBlock> {
     if (widget.tareas != null) {
       List<dynamic> valueList = widget.tareas!['value'];
       tasks = valueList.map((taskJson) => parseTask(taskJson)).toList();
+      widget.cantTareas = tasks.length;
     }
   }
 
@@ -106,6 +107,7 @@ class _TareaBlockState extends State<TareaBlock> {
                         tasks.removeAt(index);
                         widget.controllers.removeAt(index); // Eliminar el controlador correspondiente
                       });
+                      widget.cantTareas -= 1;
                     },
                     icon: const Icon(Icons.close),
                   ),
@@ -144,6 +146,7 @@ class _TareaBlockState extends State<TareaBlock> {
                               text: newTask.description,
                             ));
                             Navigator.pop(context);
+                            widget.cantTareas += 1;
                           });
                         },
                         child: const Text('Agregar'),

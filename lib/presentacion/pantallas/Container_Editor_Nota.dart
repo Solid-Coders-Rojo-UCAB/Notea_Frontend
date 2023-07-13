@@ -38,7 +38,6 @@ class _ContainerEditorNotaState extends State<ContainerEditorNota> {
   @override
   void initState() {
     super.initState();
-
     if (widget.contenidoTotal1 != null) {
       List<dynamic> contenidoList = widget.contenidoTotal1!['contenido'];
       for (var item in contenidoList) {
@@ -62,7 +61,11 @@ class _ContainerEditorNotaState extends State<ContainerEditorNota> {
       _children.add(
         TextBlocPrueba3(),           //Ahora esto maneja lo de los estilos mis oabna 
       );
+      // _children.add(
+      //   TareaBlock(),           //Ahora esto maneja lo de los estilos mis oabna 
+      // );
     }
+    sendDataToWrapperWidget();
   }
 
   @override
@@ -127,14 +130,28 @@ class _ContainerEditorNotaState extends State<ContainerEditorNota> {
     widget.onDataReceived('data', _children);
   }
 
-
-
+  //Esta funcion es la encargada de asignar la altura deacuerdo a la cantidad de componentes en _children
+  int calcularAlturaPadre(List<dynamic> lista){
+    int altura = 100;
+      for (var element in lista) {
+        if (element is TextBlocPrueba3){
+          altura += 350;
+        }
+        if (element is ImageBlock){
+          altura += 400;
+        }
+        if (element is TareaBlock){
+          altura += 150 + 45 * element.cantTareas;
+        }
+      }
+    return altura;
+  }
 
   Widget _textBuilder() {
     return SingleChildScrollView(
       controller: _scrollController,
       child: SizedBox(
-        height: _children.length == 1 ? 500 : 380 * _children.length.toDouble(), //Aca se establece la altura de  los hijos, ESTO REVISARLO
+        height: calcularAlturaPadre(_children).toDouble(), //Aca se establece la altura de  los hijos, ESTO REVISARLO
         child: Align(
           alignment: Alignment.topCenter,
           child: Padding(

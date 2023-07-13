@@ -55,7 +55,6 @@ class _TextBlocPrueba3 extends State<TextBlocPrueba3> {
         widget._editorKey.setText(textoEscaneado);
       });
     } else if (action == 'action3') {
-      print('Accion 3');
       setState(() async {
         Future<String> future = imagenATexto().EscanearTexto(
             await ImagePicker().pickImage(source: ImageSource.camera));
