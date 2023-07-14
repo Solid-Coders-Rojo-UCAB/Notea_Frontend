@@ -1,6 +1,6 @@
 // ignore_for_file: use_build_context_synchronously, sort_child_properties_last
 import 'dart:convert';
-
+import 'HomeScreenWithDrawer.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:notea_frontend/dominio/agregados/usuario.dart';
@@ -33,8 +33,8 @@ class _LoginScreenState extends State<LoginScreen> {
   void initState() {
     emailController = TextEditingController();
     passwordController = TextEditingController();
-    emailController.text = 'qwer@gmail.com';
-    passwordController.text = '12345678';
+    emailController.text = 'sergiocapon12@gmail.com';
+    passwordController.text = '101298';
     super.initState();
   }
 
@@ -80,7 +80,7 @@ class _LoginScreenState extends State<LoginScreen> {
         if (state is UsuarioSuccessState) {
           return Scaffold(
             resizeToAvoidBottomInset: true,
-            body: Center(child: MessagesScreen(usuario : state.usuario)),
+            body: Center(child: HomeScreenWithDrawer(usuario : state.usuario)),
           ); //pagina principal
         }
         if (state is UsuarioInitialState) {
