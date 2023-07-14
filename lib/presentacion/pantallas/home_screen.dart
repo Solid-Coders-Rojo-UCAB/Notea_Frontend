@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:notea_frontend/dominio/agregados/grupo.dart';
@@ -32,6 +34,9 @@ class _MessagesScreenState extends State<MessagesScreen> {
   @override
   void initState() {
     super.initState();
+    print('Nombre -> '+widget.usuario.getNombre());
+    print('Email -> '+widget.usuario.getEmail());
+    print('Contrasena -> '+widget.usuario.getClave());
 
     WidgetsBinding.instance.addPostFrameCallback((_) {
       final grupoBloc = BlocProvider.of<GrupoBloc>(context);

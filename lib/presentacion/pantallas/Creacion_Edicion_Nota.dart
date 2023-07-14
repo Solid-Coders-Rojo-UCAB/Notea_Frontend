@@ -120,14 +120,6 @@ class _AccionesConNotaState extends State<AccionesConNota> {
   }
   @override
   Widget build(BuildContext context) {
-    return  BlocBuilder<NotaBloc, NotaState>(
-    builder: (context, state) {
-      if (state is NotasFailureState){
-        return widget.titulo!.isEmpty ? const Center(child: Text('Error al crear la nota')) : const Center(child: Text('Error al editar la nota'));
-      }
-      if(state is NotasCreateSuccessState){
-
-      }
       return Scaffold(
         appBar: AppBar(
           title: Text(widget.accion),
@@ -302,8 +294,6 @@ class _AccionesConNotaState extends State<AccionesConNota> {
         ),
       );
       }
-    );
-  }
 }
 
 
