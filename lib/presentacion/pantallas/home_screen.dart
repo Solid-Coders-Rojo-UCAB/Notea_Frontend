@@ -224,7 +224,7 @@ class _MessagesScreenState extends State<MessagesScreen> {
                     ],
                   ),
                   Expanded(
-                    child: MyDropdown(grupos: grupos, usuario: widget.usuario),
+                    child: MyDropdown(grupos: grupos, usuario: widget.usuario, etiquetas: etiquetas),
                   ),
                 ],
               ),

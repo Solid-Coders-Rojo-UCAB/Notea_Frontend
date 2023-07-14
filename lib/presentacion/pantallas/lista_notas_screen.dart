@@ -22,9 +22,10 @@ import '../../infraestructura/bloc/usuario/usuario_bloc.dart';
 // ignore: must_be_immutable
 class MyDropdown extends StatefulWidget {
   List<Grupo>? grupos;
+  List<Etiqueta>? etiquetas;
   final Usuario usuario;
 
-  MyDropdown({super.key, required this.grupos, required this.usuario});
+  MyDropdown({super.key, required this.grupos, required this.usuario, required this.etiquetas});
 
   @override
   // ignore: library_private_types_in_public_api
@@ -184,7 +185,9 @@ class _MyDropdownState extends State<MyDropdown> {
                                 // contenidoTotal1: cont,
                                 contenidoTotal1: convertStringToMap(nota
                                     .getContenido()), //Esto hace que se me muera toda la aplicacion
-                                tags: const ['Tag1', 'Tag2', 'Tag3sssssss'],                              //Aca llenamos con las etiquetas que trae la nota
+                                tags: const ['Tag1', 'Tag2', 'Tag3sssssss'],
+                                etiquetas: widget.etiquetas,                         //Aca llenamos con las etiquetas que trae la nota
+                                grupos: widget.grupos,
                                 onDeletePressed: () {
                                   showDialog(
                                     context: context,
@@ -247,11 +250,6 @@ class _MyDropdownState extends State<MyDropdown> {
         return const SizedBox.shrink();
       }
     }
-    
-    
-    
-    
-    
     );
   }
 }

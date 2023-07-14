@@ -14,6 +14,7 @@ class CartaWidget extends StatelessWidget {
   final VoidCallback? onDeletePressed;
   final List<Grupo>? grupos;
   final List<Etiqueta>? etiquetas;
+  final List<Etiqueta>? etiquetasTomadas;
 
   final  Map<String, dynamic> contenidoTotal1;
   final String? idNota;
@@ -30,6 +31,7 @@ class CartaWidget extends StatelessWidget {
     required this.tags,
     this.grupos,
     this.etiquetas,
+    this.etiquetasTomadas,
     this.onDeletePressed,
     this.onChangePressed,
     required this.habilitado,
@@ -51,6 +53,7 @@ class CartaWidget extends StatelessWidget {
                 accion: 'Editar Nota',
                 grupos: grupos,
                 titulo: titulo,
+                etiquetas: etiquetas,
                 contenidoTotal1: contenidoTotal1,
               )),
           );
