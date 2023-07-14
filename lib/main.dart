@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:notea_frontend/infraestructura/bloc/Grupo/grupo_bloc.dart';
+import 'package:notea_frontend/infraestructura/bloc/etiqueta/etiqueta_bloc.dart';
 import 'package:notea_frontend/infraestructura/bloc/nota/nota_bloc.dart';
 import 'package:notea_frontend/infraestructura/bloc/usuario/usuario_bloc.dart';
 import 'package:notea_frontend/presentacion/pantallas/login_screen.dart';
@@ -17,6 +18,7 @@ class MyApp extends StatelessWidget {
         BlocProvider(create: ( _ ) => UsuarioBloc()), //las instancias pasan al contexto
         BlocProvider(create: ( _ ) => GrupoBloc()), //las instancias pasan al contexto
         BlocProvider(create: ( _ ) => NotaBloc()), //las instancias pasan al contexto
+        BlocProvider(create: ( _ ) => EtiquetaBloc()), //las instancias pasan al contexto
       ],
       child: MaterialApp(
           debugShowCheckedModeBanner: false,

@@ -5,6 +5,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:notea_frontend/dominio/agregados/grupo.dart';
 import 'package:notea_frontend/dominio/agregados/usuario.dart';
 import 'package:notea_frontend/infraestructura/bloc/Grupo/grupo_bloc.dart';
+import 'package:notea_frontend/infraestructura/bloc/etiqueta/etiqueta_bloc.dart';
 import 'package:notea_frontend/presentacion/pantallas/Suscripcion_screen.dart';
 import 'package:notea_frontend/presentacion/pantallas/lista_notas_screen.dart';
 import 'package:notea_frontend/presentacion/widgets/BottomBar.dart';
@@ -34,14 +35,21 @@ class _MessagesScreenState extends State<MessagesScreen> {
   @override
   void initState() {
     super.initState();
-    print('Nombre -> '+widget.usuario.getNombre());
-    print('Email -> '+widget.usuario.getEmail());
-    print('Contrasena -> '+widget.usuario.getClave());
+    // print('Nombre -> '+widget.usuario.getNombre());
+    // print('Email -> '+widget.usuario.getEmail());
+    // print('Contrasena -> '+widget.usuario.getClave());
 
     WidgetsBinding.instance.addPostFrameCallback((_) {
       final grupoBloc = BlocProvider.of<GrupoBloc>(context);
       grupoBloc.add(GrupoCatchEvent(idUsuarioDueno: widget.usuario.id));
     });
+
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      final grupoBloc = BlocProvider.of<EtiquetaBloc>(context);
+      grupoBloc.add(EtiquetaCatchEvent(idUsuarioDueno: widget.usuario.id));
+    });
+
+    // print(context.read<GrupoBloc>().state.);
 
     Future.delayed(const Duration(milliseconds: 2000), () {
       setState(() {
@@ -53,7 +61,12 @@ class _MessagesScreenState extends State<MessagesScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return BlocBuilder<GrupoBloc, GrupoState>(
+    return 
+    
+    
+    
+    
+    BlocBuilder<GrupoBloc, GrupoState>(
       builder: (context, state) {
         if (state is GruposFailureState) {
           return const Center(child: Text('Error al cargar los grupos'));
@@ -61,6 +74,12 @@ class _MessagesScreenState extends State<MessagesScreen> {
         if (state is GrupoInitialState) {
           final grupoBloc = BlocProvider.of<GrupoBloc>(context);
           grupoBloc.add(GrupoCatchEvent(idUsuarioDueno: widget.usuario.id));
+
+          final etiquetaBloc = BlocProvider.of<EtiquetaBloc>(context);
+          etiquetaBloc.add(EtiquetaCatchEvent(idUsuarioDueno: widget.usuario.id));
+
+           
+
           // Future.delayed(const Duration(milliseconds: 300), () {
           //   setState(() {
           //     alignment = Alignment.topRight;
@@ -76,6 +95,7 @@ class _MessagesScreenState extends State<MessagesScreen> {
             floatingActionButton: MyFloatingButton(
               onPressed: () {},
               grupos: grupos,
+              etiquetas: const [],
             ),
             bottomNavigationBar:
                 BottomBar(scaffoldKey: _scaffoldKey, usuario: widget.usuario),
@@ -209,6 +229,11 @@ class _MessagesScreenState extends State<MessagesScreen> {
         return const Center(child: CircularProgressIndicator());
       },
     );
+
+
+
+
+    
   }
 }
 
