@@ -14,7 +14,7 @@ class CreateNotaEvent extends NotaEvent {
   final String tituloNota;
   final List<dynamic> listInfo;
   final dynamic grupo;
-  final List<dynamic> etiquetas;
+  final List<Etiqueta>? etiquetas;
   CreateNotaEvent({
     required this.tituloNota,
     required this.listInfo,
@@ -41,7 +41,7 @@ class EditarNotaEvent extends NotaEvent {
   final String tituloNota;
   final List<dynamic> listInfo;
   final dynamic grupo;
-  final List<dynamic> etiquetas;
+  final List<Etiqueta>? etiquetas;
   EditarNotaEvent({
     required this.idNota,
     required this.tituloNota,

@@ -25,5 +25,6 @@ class GrupoBloc extends  Bloc<GrupoEvent, GrupoState> {
       grupos.isLeft() ?  emit(GruposSuccessState(grupos: grupos.left!)): emit(const GruposFailureState());  //Se mite el estado de SUCCESS o FAILURE
     });
   }
+
 }
 

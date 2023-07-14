@@ -2,6 +2,7 @@
 
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:notea_frontend/dominio/agregados/etiqueta.dart';
 import 'package:notea_frontend/dominio/agregados/grupo.dart';
 import 'package:notea_frontend/infraestructura/bloc/Grupo/grupo_bloc.dart';
 import 'package:notea_frontend/presentacion/pantallas/Creacion_Edicion_Nota.dart';
@@ -9,8 +10,8 @@ import 'package:notea_frontend/presentacion/pantallas/Creacion_Edicion_Nota.dart
 
 class MyFloatingButton extends StatefulWidget {
   final List<Grupo>? grupos;
-  const MyFloatingButton({Key? key, required Null Function() onPressed, required this.grupos});
-
+  final List<Etiqueta>? etiquetas;
+  const MyFloatingButton({Key? key, required Null Function() onPressed, required this.grupos, required this.etiquetas});
   @override
   State<MyFloatingButton> createState() => FloatingButtonState();
 }
@@ -30,7 +31,7 @@ class FloatingButtonState extends State<MyFloatingButton> {
 
           Navigator.push(
             context,
-            MaterialPageRoute(builder: (context) => AccionesConNota(accion: 'Creando Nota', grupos: widget.grupos)),
+            MaterialPageRoute(builder: (context) => AccionesConNota(accion: 'Creando Nota', grupos: widget.grupos, etiquetas: widget.etiquetas,)),
           );
         },
         // child: const Icon(Icons.addchart_sharp),

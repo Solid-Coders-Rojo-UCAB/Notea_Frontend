@@ -6,6 +6,7 @@ import 'package:http/http.dart' as http;
 import 'package:flutter/material.dart';
 
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:notea_frontend/dominio/agregados/etiqueta.dart';
 import 'package:notea_frontend/infraestructura/Repositorio/repositorioNotaImpl.dart';
 import 'package:notea_frontend/infraestructura/api/remoteDataNota.dart';
 import 'package:notea_frontend/presentacion/widgets/ImageBlock.dart';

@@ -2,6 +2,7 @@
 
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:notea_frontend/dominio/agregados/etiqueta.dart';
 import 'package:notea_frontend/dominio/agregados/grupo.dart';
 import 'package:notea_frontend/infraestructura/bloc/nota/nota_bloc.dart';
 import 'package:notea_frontend/infraestructura/bloc/usuario/usuario_bloc.dart';
@@ -25,13 +26,13 @@ class Tag {
 class AnimatedButton extends StatefulWidget {
   final List<Grupo>? grupos;
   final Function(Grupo) onDataReceivedGrupo;
-  final Function(List<dynamic>) onDataReceivedEtiqueta;
+  final Function(List<Etiqueta>) onDataReceivedEtiqueta;
   final bool puedeCrear;
 
   final String tituloNota;
   final List<dynamic> listInfo;
   final Grupo? grupo;
-  final List<dynamic> etiquetas;
+  final List<Etiqueta>? etiquetas;
 
   const AnimatedButton({Key? key, required this.onDataReceivedGrupo, required this.onDataReceivedEtiqueta, required this.grupos, required this.puedeCrear, required this.tituloNota, required this.listInfo, required this.grupo, required this.etiquetas}) : super(key: key);
 
@@ -73,7 +74,7 @@ class _AnimatedButtonState extends State<AnimatedButton>
   }
 
   //Boton de las Etiquetas--------------------------------
-  List<Tag> selectedTags = [];
+  List<Etiqueta> selectedTags = [];
   void sendDataToWrapperWidgetEtiqueta() {
     widget.onDataReceivedEtiqueta(selectedTags);
   }
@@ -108,13 +109,13 @@ class _AnimatedButtonState extends State<AnimatedButton>
                   const SizedBox(height: 16.0),
                   Expanded(
                     child: ListView.builder(
-                      itemCount: tags.length,
+                      itemCount: widget.etiquetas!.length,
                       itemBuilder: (context, index) {
-                        final tag = tags[index];
+                        final tag = widget.etiquetas![index];
                         final isSelected = selectedTags.contains(tag);
                         return Card(
                           child: ListTile(
-                            title: Text(tag.nombre),
+                            title: Text(tag.getNombre()),
                             trailing: Checkbox(
                               value: isSelected,
                               onChanged: (value) {
@@ -149,7 +150,7 @@ class _AnimatedButtonState extends State<AnimatedButton>
     ).then((value) {
       if (value != null) {
         setState(() {
-          selectedTags = List<Tag>.from(value);
+          selectedTags = List<Etiqueta>.from(value);
         });
       }
     });

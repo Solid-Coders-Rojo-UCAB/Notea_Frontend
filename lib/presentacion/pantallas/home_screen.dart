@@ -3,9 +3,11 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_zoom_drawer/flutter_zoom_drawer.dart';
+import 'package:notea_frontend/dominio/agregados/etiqueta.dart';
 import 'package:notea_frontend/dominio/agregados/grupo.dart';
 import 'package:notea_frontend/dominio/agregados/usuario.dart';
 import 'package:notea_frontend/infraestructura/bloc/Grupo/grupo_bloc.dart';
+import 'package:notea_frontend/infraestructura/bloc/etiqueta/etiqueta_bloc.dart';
 import 'package:notea_frontend/presentacion/pantallas/Suscripcion_screen.dart';
 import 'package:notea_frontend/presentacion/pantallas/lista_notas_screen.dart';
 import 'package:notea_frontend/presentacion/widgets/BottomBar.dart';
@@ -16,7 +18,7 @@ import 'package:notea_frontend/presentacion/pantallas/angel/pruebaNota.dart';
 class MessagesScreen extends StatefulWidget {
   final Usuario usuario;
 
-  const MessagesScreen({Key? key, required this.usuario}) : super(key: key);
+  MessagesScreen({Key? key, required this.usuario}) : super(key: key);
 
   @override
   State<MessagesScreen> createState() => _MessagesScreenState();
@@ -31,19 +33,27 @@ class _MessagesScreenState extends State<MessagesScreen> {
   int notesCount = 0;
   bool showNotesCount = true;
   List<Grupo>? grupos = [];
+  List<Etiqueta>? etiquetas = [];
 
   Timer? _delayTimer;
 
   @override
   void initState() {
     super.initState();
-    print('Nombre -> ' + widget.usuario.getNombre());
-    print('Email -> ' + widget.usuario.getEmail());
-    print('Contrasena -> ' + widget.usuario.getClave());
-
     WidgetsBinding.instance.addPostFrameCallback((_) {
       final grupoBloc = BlocProvider.of<GrupoBloc>(context);
       grupoBloc.add(GrupoCatchEvent(idUsuarioDueno: widget.usuario.id));
+    });
+
+    WidgetsBinding.instance.addPostFrameCallback((_) async{
+      final etiquetaBloc = BlocProvider.of<EtiquetaBloc>(context);
+      etiquetaBloc.add(EtiquetaCatchEvent(idUsuarioDueno: widget.usuario.getId()));
+
+      await Future.delayed(const Duration(milliseconds: 500), () {});
+      if (etiquetaBloc.state.etiquetas != null) {
+        print('entra aca');
+        etiquetas = etiquetaBloc.state.etiquetas;
+      }
     });
 
     _delayTimer = Timer(const Duration(milliseconds: 2000), () {
@@ -81,6 +91,7 @@ class _MessagesScreenState extends State<MessagesScreen> {
             floatingActionButton: MyFloatingButton(
               onPressed: () {},
               grupos: grupos,
+              etiquetas: etiquetas,
             ),
             appBar: AppBar(
               title: const Text('Inicio'),
@@ -213,7 +224,7 @@ class _MessagesScreenState extends State<MessagesScreen> {
                     ],
                   ),
                   Expanded(
-                    child: MyDropdown(grupos: grupos, usuario: widget.usuario),
+                    child: MyDropdown(grupos: grupos, usuario: widget.usuario, etiquetas: etiquetas),
                   ),
                 ],
               ),
