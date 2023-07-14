@@ -43,7 +43,7 @@ class NotaBloc extends Bloc<NotaEvent, NotaState> {
       final notas = await repositorio.modificarEstadoNota(
           event.idNota, event.estado);
       notas.isLeft()
-          ? emit(NotaModifyStateSuccessSate(status: notas.isLeft()))
+          ? emit(const CeroNotasFailureState())
           : emit(const NotasFailureState());
     });
 

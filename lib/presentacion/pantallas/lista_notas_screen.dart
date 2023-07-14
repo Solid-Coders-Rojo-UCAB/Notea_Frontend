@@ -110,7 +110,7 @@ class _MyDropdownState extends State<MyDropdown> {
   Widget build(BuildContext context) {
     return BlocBuilder<NotaBloc, NotaState>(builder: (context, state) {
       notas = state.notas;
-      if (state is CeroNotasFailureState) {
+      if (state is CeroNotasFailureState ) {
         return Center(
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
@@ -166,6 +166,9 @@ class _MyDropdownState extends State<MyDropdown> {
       }
 
       if (state is NotasCatchSuccessState) {
+        
+
+
         List<Grupo> gruposPapelera = [];
         int cantNotasTotal = 0;
         for (int i = 0; i < widget.grupos!.length; i++) {
@@ -180,7 +183,36 @@ class _MyDropdownState extends State<MyDropdown> {
             gruposPapelera.add(widget.grupos![i]);
           }
         }
-          return ListView.builder(
+        final cant = notas?.where((nota) =>(nota.getEstado() == "GUARDADO")).toList();
+          return cant!.isEmpty
+          ?
+            Center(
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Image.asset(
+                    'assets/images/new_note.png',
+                    width: 250,
+                    height: 250,
+                  ),
+                  AnimatedTextKit(
+                      animatedTexts: [TypewriterAnimatedText(
+                        "No tienes notas, créala ⤵",
+                        textStyle: const TextStyle(
+                          fontSize: 22.0,
+                          fontWeight: FontWeight.bold,
+                          color: Color(0XFF21579C),
+                        ),
+                        speed: const Duration(milliseconds: 100),
+                      )],
+                    onTap: () {
+                    //
+                    }),
+                ],
+              ),
+            )
+          :
+          ListView.builder(
               itemCount: gruposPapelera.length,
               itemBuilder: (context, index) {
                 final grupo =
@@ -276,29 +308,12 @@ class _MyDropdownState extends State<MyDropdown> {
   }
 }
 
-          // notas?.forEach((nota) {
-          //   print('Título: ${nota.titulo.tituloNota}');
-          //   print('Contenido: ${nota.contenido.contenidoNota}');
-          //   print('Fecha de creación: ${nota.fechaCreacion}');
-          //   print('Estado: ${nota.estado.name}');
-          //   print('Ubicación Latitud: ${nota.ubicacion.latitud}');
-          //   print('Ubicación Longitud: ${nota.ubicacion.longitud}');
-          //   print('ID: ${nota.id}');
-          //   print('---------------------');
-          // });
-          // print('--------------------------');
-          // print('--------------------------');
-
-                  //   notasDeGrupo?.forEach((nota) {
-                  //   print('Título: ${nota.titulo.tituloNota}');
-                  //   print('Contenido: ${nota.contenido.contenidoNota}');
-                  //   print('Fecha de creación: ${nota.fechaCreacion}');
-                  //   print('Estado: ${nota.estado.name}');
-                  //   print('Ubicación Latitud: ${nota.ubicacion.latitud}');
-                  //   print('Ubicación Longitud: ${nota.ubicacion.longitud}');
-                  //   print('ID grupo: ${nota.idGrupo.getIdGrupoNota()}');
-                  //   print('ID: ${nota.id}');
-                  //   print('---------------------');
-                  // });
-
-
+bool hayNotasActivas(List<Nota>? notas) {
+  print(notas![0]);
+  for (var element in notas!) {
+    if (element.getEstado() == 'Guardado'){
+      return true;
+    }
+  }
+  return false;
+}
