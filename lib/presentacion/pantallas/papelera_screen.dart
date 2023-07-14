@@ -2,6 +2,7 @@
 
 import 'dart:convert';
 
+import 'package:animated_text_kit/animated_text_kit.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:notea_frontend/dominio/agregados/grupo.dart';
@@ -179,23 +180,31 @@ class _PapeleraState extends State<Papelera> {
                       ),
                     ],
                   ),
-                  const SizedBox(height: 50),
                   suma == 0 //Si no hay ninguna nota en la papelera, pues vulve a la pantalla anterior
-                      ? Column(
+                      ?
+                      Center(
+                        child: Column(
+                          mainAxisAlignment: MainAxisAlignment.center,
                           children: [
-                            Container(
-                              width: MediaQuery.of(context).size.width /
-                                  2, // Ancho igual a la mitad de la pantalla
-                              height: MediaQuery.of(context).size.height /
-                                  2, // Alto igual a la mitad de la pantalla
-                              decoration: const BoxDecoration(
-                                image: DecorationImage(
-                                  image: AssetImage(
-                                      'assets/images/notes_not_found.png'),
-                                  fit: BoxFit.contain,
-                                ),
-                              ),
+                            const SizedBox(height: 120),
+                            Image.asset(
+                              'assets/images/notes_deletes.png',
+                              width: 250,
+                              height: 250,
                             ),
+                            AnimatedTextKit(
+                                animatedTexts: [TypewriterAnimatedText(
+                                  "Papelera vacía 👀",
+                                  textStyle: const TextStyle(
+                                    fontSize: 22.0,
+                                    fontWeight: FontWeight.bold,
+                                    color: Color(0XFF21579C),
+                                  ),
+                                  speed: const Duration(milliseconds: 100),
+                                )],
+                              onTap: () {
+                              //
+                              }),
                             ElevatedButton(
                               style: ElevatedButton.styleFrom(
                                 foregroundColor: Colors.white,
@@ -217,8 +226,10 @@ class _PapeleraState extends State<Papelera> {
                               child: const Text('Volver'),
                             ),
                           ],
-                        )
+                        ),
+                      )
                       : //Si hay alguna nota en la papelera, pues muetrala en pantalla
+                      const SizedBox(height: 20),
                       Expanded(
                           child: ListView.builder(
                               itemCount: gruposPapelera.length,

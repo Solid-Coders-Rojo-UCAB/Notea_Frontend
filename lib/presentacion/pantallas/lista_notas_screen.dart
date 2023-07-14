@@ -139,36 +139,36 @@ class _MyDropdownState extends State<MyDropdown> {
       }
       if (state is NotasFailureState) {
         return Center(
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              Image.asset(
-                'assets/images/error_500.png',
-                width: 250,
-                height: 250,
-              ),
-              AnimatedTextKit(
-                  animatedTexts: [TypewriterAnimatedText(
-                    "Error al obtener tus notas ⤵",
-                    textStyle: const TextStyle(
-                      fontSize: 22.0,
-                      fontWeight: FontWeight.bold,
-                      color: Color(0XFF21579C),
-                    ),
-                    speed: const Duration(milliseconds: 100),
-                  )],
-                onTap: () {
-                //
-                }),
-            ],
+          child: Padding(
+            padding: const EdgeInsets.only(bottom: 100),
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Image.asset(
+                  'assets/images/error_500.png',
+                  width: 250,
+                  height: 250,
+                ),
+                AnimatedTextKit(
+                    animatedTexts: [TypewriterAnimatedText(
+                      "Error al obtener tus notas ⤵",
+                      textStyle: const TextStyle(
+                        fontSize: 22.0,
+                        fontWeight: FontWeight.bold,
+                        color: Color(0XFF21579C),
+                      ),
+                      speed: const Duration(milliseconds: 100),
+                    )],
+                  onTap: () {
+                  //
+                  }),
+              ],
+            ),
           ),
         );
       }
 
       if (state is NotasCatchSuccessState) {
-        
-
-
         List<Grupo> gruposPapelera = [];
         int cantNotasTotal = 0;
         for (int i = 0; i < widget.grupos!.length; i++) {
@@ -306,14 +306,4 @@ class _MyDropdownState extends State<MyDropdown> {
       }
     });
   }
-}
-
-bool hayNotasActivas(List<Nota>? notas) {
-  print(notas![0]);
-  for (var element in notas!) {
-    if (element.getEstado() == 'Guardado'){
-      return true;
-    }
-  }
-  return false;
 }
