@@ -2,6 +2,8 @@ import 'dart:async';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_zoom_drawer/flutter_zoom_drawer.dart';
+import 'package:notea_frontend/dominio/agregados/etiqueta.dart';
 import 'package:notea_frontend/dominio/agregados/grupo.dart';
 import 'package:notea_frontend/dominio/agregados/usuario.dart';
 import 'package:notea_frontend/infraestructura/bloc/Grupo/grupo_bloc.dart';
@@ -16,7 +18,7 @@ import 'package:notea_frontend/presentacion/pantallas/angel/pruebaNota.dart';
 class MessagesScreen extends StatefulWidget {
   final Usuario usuario;
 
-  const MessagesScreen({Key? key, required this.usuario}) : super(key: key);
+  MessagesScreen({Key? key, required this.usuario}) : super(key: key);
 
   @override
   State<MessagesScreen> createState() => _MessagesScreenState();
@@ -31,42 +33,42 @@ class _MessagesScreenState extends State<MessagesScreen> {
   int notesCount = 0;
   bool showNotesCount = true;
   List<Grupo>? grupos = [];
+  List<Etiqueta>? etiquetas = [];
+
+  Timer? _delayTimer;
 
   @override
   void initState() {
     super.initState();
-    // print('Nombre -> '+widget.usuario.getNombre());
-    // print('Email -> '+widget.usuario.getEmail());
-    // print('Contrasena -> '+widget.usuario.getClave());
-
     WidgetsBinding.instance.addPostFrameCallback((_) {
       final grupoBloc = BlocProvider.of<GrupoBloc>(context);
       grupoBloc.add(GrupoCatchEvent(idUsuarioDueno: widget.usuario.id));
     });
 
-    WidgetsBinding.instance.addPostFrameCallback((_) {
-      final grupoBloc = BlocProvider.of<EtiquetaBloc>(context);
-      grupoBloc.add(EtiquetaCatchEvent(idUsuarioDueno: widget.usuario.id));
+    WidgetsBinding.instance.addPostFrameCallback((_) async{
+      final etiquetaBloc = BlocProvider.of<EtiquetaBloc>(context);
+      etiquetaBloc.add(EtiquetaCatchEvent(idUsuarioDueno: widget.usuario.getId()));
+
+      await Future.delayed(const Duration(milliseconds: 500), () {});
+      if (etiquetaBloc.state.etiquetas != null) {
+        print('entra aca');
+        etiquetas = etiquetaBloc.state.etiquetas;
+      }
     });
 
-    // print(context.read<GrupoBloc>().state.);
-
-    Future.delayed(const Duration(milliseconds: 2000), () {
-      setState(() {
-        alignment = Alignment.topRight;
-        stopScaleAnimtion = true;
-      });
+    _delayTimer = Timer(const Duration(milliseconds: 2000), () {
+      if (mounted) {
+        setState(() {
+          alignment = Alignment.topRight;
+          stopScaleAnimtion = true;
+        });
+      }
     });
   }
 
   @override
   Widget build(BuildContext context) {
-    return 
-    
-    
-    
-    
-    BlocBuilder<GrupoBloc, GrupoState>(
+    return BlocBuilder<GrupoBloc, GrupoState>(
       builder: (context, state) {
         if (state is GruposFailureState) {
           return const Center(child: Text('Error al cargar los grupos'));
@@ -74,12 +76,6 @@ class _MessagesScreenState extends State<MessagesScreen> {
         if (state is GrupoInitialState) {
           final grupoBloc = BlocProvider.of<GrupoBloc>(context);
           grupoBloc.add(GrupoCatchEvent(idUsuarioDueno: widget.usuario.id));
-
-          final etiquetaBloc = BlocProvider.of<EtiquetaBloc>(context);
-          etiquetaBloc.add(EtiquetaCatchEvent(idUsuarioDueno: widget.usuario.id));
-
-           
-
           // Future.delayed(const Duration(milliseconds: 300), () {
           //   setState(() {
           //     alignment = Alignment.topRight;
@@ -95,11 +91,20 @@ class _MessagesScreenState extends State<MessagesScreen> {
             floatingActionButton: MyFloatingButton(
               onPressed: () {},
               grupos: grupos,
-              etiquetas: const [],
+              etiquetas: etiquetas,
             ),
-            bottomNavigationBar:
-                BottomBar(scaffoldKey: _scaffoldKey, usuario: widget.usuario),
-            drawer: CustomDrawer(
+            appBar: AppBar(
+              title: const Text('Inicio'),
+              backgroundColor:
+                  const Color.fromARGB(255, 23, 100, 202), // Cambia el color de la AppBar a rojo.
+              leading: IconButton(
+                icon: const Icon(Icons.menu),
+                onPressed: () {
+                  ZoomDrawer.of(context)!.toggle();
+                },
+              ),
+            ),
+ /*           drawer: CustomDrawer(
               username: capitalizeFirstLetter(widget.usuario.getNombre()),
               email: widget.usuario.getEmail(),
               onBackButtonPressed: () {
@@ -178,7 +183,7 @@ class _MessagesScreenState extends State<MessagesScreen> {
                   },
                 );
               },
-            ),
+            ),*/
             body: Padding(
               padding: const EdgeInsets.only(top: 80),
               child: Column(
@@ -229,11 +234,6 @@ class _MessagesScreenState extends State<MessagesScreen> {
         return const Center(child: CircularProgressIndicator());
       },
     );
-
-
-
-
-    
   }
 }
 

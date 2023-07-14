@@ -7,6 +7,7 @@ import 'dart:typed_data';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 import 'package:flutter/material.dart';
+import 'package:notea_frontend/dominio/agregados/etiqueta.dart';
 import 'package:notea_frontend/dominio/agregados/grupo.dart';
 import 'package:notea_frontend/infraestructura/bloc/nota/nota_bloc.dart';
 import 'package:notea_frontend/infraestructura/bloc/usuario/usuario_bloc.dart';
@@ -21,7 +22,7 @@ import 'package:notea_frontend/presentacion/widgets/TextBlock.dart';
 class AccionesConNota extends StatefulWidget {
   final String accion;
   final List<Grupo>? grupos;
-  final List<dynamic>? etiquetas;
+  final List<Etiqueta>? etiquetas;
 
   final String? titulo;
   final String? idNota;
@@ -40,7 +41,7 @@ class _AccionesConNotaState extends State<AccionesConNota> {
 
 
   late List<dynamic> recivedDataList = [];
-  late List<dynamic> recivedDataEitquetas = [];         //ACA HAY QUE SETEAR LAS ETIQUETAS QUE TIENE LA NOTA
+  late List<Etiqueta>? recivedDataEitquetas = [];         //ACA HAY QUE SETEAR LAS ETIQUETAS QUE TIENE LA NOTA
   late Grupo? receivedDataGrupo = null;
 
   bool hayGrupo = false;
@@ -71,9 +72,9 @@ class _AccionesConNotaState extends State<AccionesConNota> {
   }
 
 //Traemos de la lista de etiquetas, las etiquetas que seleccione el usuario
-  void handleDataEtiquetas(List<dynamic> dataEiquetas) {
+  void handleDataEtiquetas(List<Etiqueta> dataEiquetas) {
       recivedDataEitquetas = dataEiquetas;
-    if(recivedDataEitquetas.isEmpty){
+    if(recivedDataEitquetas!.isEmpty){
       hayEtiquetas = false;
     }else{
       hayEtiquetas = true;
@@ -185,20 +186,20 @@ class _AccionesConNotaState extends State<AccionesConNota> {
                   const SizedBox(height: 16.0),
                   Column(
                     children: [
-                      Text('Etiquetas seleccionadas: ${recivedDataEitquetas.length}'),
+                      Text('Etiquetas seleccionadas: ${recivedDataEitquetas!.length}'),
                       const SizedBox(height: 8.0),
                       Wrap(
                         spacing: 8.0,
                         runSpacing: 8.0,
-                        children: recivedDataEitquetas.map((tag) {
+                        children: recivedDataEitquetas!.map((tag) {
                           return Container(
                             padding: const EdgeInsets.symmetric(horizontal: 12.0, vertical: 4.0),
                             decoration: BoxDecoration(
-                              color: tag.color,
+                              color:  getColorTag(tag.getColorEtiqueta()),
                               borderRadius: BorderRadius.circular(12.0),
                             ),
                             child: Text(
-                              tag.nombre,
+                              tag.getNombre(),
                               style: const TextStyle(
                                 color: Colors.white,
                                 fontSize: 12.0,
@@ -231,7 +232,7 @@ class _AccionesConNotaState extends State<AccionesConNota> {
                     onDataReceivedEtiqueta: handleDataEtiquetas,
                     grupos: widget.grupos,
                     puedeCrear: hayGrupo && hayEtiquetas ? true : false,
-                    etiquetas: recivedDataEitquetas,
+                    etiquetas: widget.etiquetas,
                     grupo: receivedDataGrupo,
                     listInfo: recivedDataList,
                     tituloNota:_tituloController.text,
@@ -343,4 +344,27 @@ void hol11(List<dynamic> listInfo) async {
   Map<String, dynamic> contenido = {'contenido': contenidoList};
 
   print(contenido);
+}
+
+Color getColorTag(String color) {
+  switch (color) {
+    case 'AMBER':
+      return Colors.amber;
+    case 'BLUE':
+      return Colors.blue;
+    case 'RED':
+      return Colors.red;
+    case 'PURPLE':
+      return Colors.purple;
+    case 'GREEN':
+      return Colors.green;
+    case 'INDIGO':
+      return Colors.indigo;
+    case 'BLACK':
+      return Colors.black;
+    case 'ORANGE':
+      return Colors.orange;
+    default:
+      return Colors.grey; // Color predeterminado si no se encuentra el nombre de color
+  }
 }

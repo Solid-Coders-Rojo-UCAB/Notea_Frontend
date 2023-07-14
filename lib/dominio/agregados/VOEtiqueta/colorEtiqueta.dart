@@ -8,7 +8,7 @@ class VOColorEtiqueta {
     return VOColorEtiqueta(color);
   }
 
-  String getcolorEtiqueta() {
+  String getColorEtiqueta() {
     return color;
   }
 }

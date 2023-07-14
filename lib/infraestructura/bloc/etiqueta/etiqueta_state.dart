@@ -5,7 +5,7 @@ part of 'etiqueta_bloc.dart';
 @immutable
 abstract class EtiquetaState {
   final bool existeEtiqueta;
-  final List<dynamic>? etiquetas;
+  final List<Etiqueta>? etiquetas;
 
   const EtiquetaState({this.existeEtiqueta = false, this.etiquetas});
 }
@@ -17,7 +17,7 @@ class EtiquetaInitialState extends EtiquetaState {
 
 class EtiquetasSuccessState extends EtiquetaState {
   @override
-  final List<dynamic> etiquetas;
+  final List<Etiqueta> etiquetas;
   const EtiquetasSuccessState({required this.etiquetas}) : super(existeEtiqueta: true);
 }
 

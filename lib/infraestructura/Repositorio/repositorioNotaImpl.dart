@@ -4,6 +4,7 @@ import 'dart:io';
 import 'package:flutter/widgets.dart';
 import 'package:http/http.dart' as http;
 import 'package:intl/intl.dart';
+import 'package:notea_frontend/dominio/agregados/etiqueta.dart';
 import 'package:notea_frontend/dominio/agregados/grupo.dart';
 import 'dart:typed_data';
 
@@ -31,7 +32,7 @@ class RepositorioNotaImpl implements INotaRepository {
   Future<Either<int, Exception>?> crearNota(
       String titulo,
       Map<String, dynamic> listInfoContenido,
-      List<dynamic> etiquetas,
+      List<Etiqueta>? etiquetas,
       Grupo grupo) async {
       print('Entro en el repositorio de la notaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa');
 

@@ -42,6 +42,9 @@ class Etiqueta {
   String getNombreEtiqueta() {
     return nombre.getNombreEtiqueta();
   }
+  String getColorEtiqueta() {
+    return color.getColorEtiqueta();
+  }
 
   void setNombre(VONombreEtiqueta nombre) {
     this.nombre = nombre;

@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:notea_frontend/dominio/agregados/etiqueta.dart';
 import 'package:notea_frontend/infraestructura/Repositorio/repositorioEtiquetaImpl.dart';
 import 'package:notea_frontend/infraestructura/api/remoteDataEtiqueta.dart';
 
