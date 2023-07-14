@@ -25,7 +25,7 @@ class ContainerEditorNota extends StatefulWidget {
 class _ContainerEditorNotaState extends State<ContainerEditorNota> {
   final ScrollController _scrollController = ScrollController();
   final TextEditingController titleController = TextEditingController();
-
+  final int altuAc = 0;
 
   final focusNode = FocusNode();
   final  List<dynamic> _children = [
@@ -38,6 +38,7 @@ class _ContainerEditorNotaState extends State<ContainerEditorNota> {
   @override
   void initState() {
     super.initState();
+
     if (widget.contenidoTotal1 != null) {
       List<dynamic> contenidoList = widget.contenidoTotal1!['contenido'];
       for (var item in contenidoList) {
@@ -57,6 +58,7 @@ class _ContainerEditorNotaState extends State<ContainerEditorNota> {
           _children.add(TareaBlock(tareas: tareas));      //Aca se agrega la tarea que indica el contenido
         }
       }
+
     }else {
       _children.add(
         TextBlocPrueba3(),           //Ahora esto maneja lo de los estilos mis oabna 
@@ -65,6 +67,7 @@ class _ContainerEditorNotaState extends State<ContainerEditorNota> {
       //   TareaBlock(),           //Ahora esto maneja lo de los estilos mis oabna 
       // );
     }
+    reload();
     sendDataToWrapperWidget();
   }
 
@@ -72,6 +75,13 @@ class _ContainerEditorNotaState extends State<ContainerEditorNota> {
   void dispose() {
     focusNode.dispose();
     super.dispose();
+  }
+
+  void reload() async{
+    await Future.delayed(const Duration(milliseconds: 100), () {});
+    setState(() {
+      
+    });
   }
 
   handleKey(key) {
