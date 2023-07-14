@@ -305,6 +305,9 @@ class _AnimatedButtonState extends State<AnimatedButton>
 
   @override
   Widget build(BuildContext context) {
+        print(widget.etiquetas!.length);
+        print('000000000000000000');
+
     return Stack(
       alignment: Alignment.center,
       children: [
