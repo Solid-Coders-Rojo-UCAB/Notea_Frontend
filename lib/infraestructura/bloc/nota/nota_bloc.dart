@@ -161,8 +161,8 @@ Future<Map<String, dynamic>> mapContenido(List<dynamic> listInfo) async {
       contenidoList.add({
         'tarea': {
           'value': tareaValue,
-          'orden': cant,
         },
+        'orden': cant,
       });
     } else if (element is ImageBlock){
       contenidoList.add({
