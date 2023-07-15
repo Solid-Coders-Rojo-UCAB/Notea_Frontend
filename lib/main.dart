@@ -5,8 +5,13 @@ import 'package:notea_frontend/infraestructura/bloc/etiqueta/etiqueta_bloc.dart'
 import 'package:notea_frontend/infraestructura/bloc/nota/nota_bloc.dart';
 import 'package:notea_frontend/infraestructura/bloc/usuario/usuario_bloc.dart';
 import 'package:notea_frontend/presentacion/pantallas/login_screen.dart';
+import 'aplicacion/Notifications.dart';
 
-void main() => runApp(const MyApp());
+void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  await InitNotifications();
+  runApp(const MyApp());
+}
 
 class MyApp extends StatelessWidget {
   const MyApp({super.key});
@@ -14,11 +19,16 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MultiBlocProvider(
-      providers: [ //aca se agregan todos los blocs que se van a usar en la app
-        BlocProvider(create: ( _ ) => UsuarioBloc()), //las instancias pasan al contexto
-        BlocProvider(create: ( _ ) => GrupoBloc()), //las instancias pasan al contexto
-        BlocProvider(create: ( _ ) => NotaBloc()), //las instancias pasan al contexto
-        BlocProvider(create: ( _ ) => EtiquetaBloc()), //las instancias pasan al contexto
+      providers: [
+        //aca se agregan todos los blocs que se van a usar en la app
+        BlocProvider(
+            create: (_) => UsuarioBloc()), //las instancias pasan al contexto
+        BlocProvider(
+            create: (_) => GrupoBloc()), //las instancias pasan al contexto
+        BlocProvider(
+            create: (_) => NotaBloc()), //las instancias pasan al contexto
+        BlocProvider(
+            create: (_) => EtiquetaBloc()), //las instancias pasan al contexto
       ],
       child: MaterialApp(
           debugShowCheckedModeBanner: false,
@@ -70,8 +80,7 @@ class MyApp extends StatelessWidget {
               ),
             ),
           ),
-          home:  const LoginScreen()),
+          home: const LoginScreen()),
     );
   }
 }
-
