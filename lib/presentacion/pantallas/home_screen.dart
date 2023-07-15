@@ -1,5 +1,4 @@
 import 'dart:async';
-
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_zoom_drawer/flutter_zoom_drawer.dart';
@@ -8,12 +7,9 @@ import 'package:notea_frontend/dominio/agregados/grupo.dart';
 import 'package:notea_frontend/dominio/agregados/usuario.dart';
 import 'package:notea_frontend/infraestructura/bloc/Grupo/grupo_bloc.dart';
 import 'package:notea_frontend/infraestructura/bloc/etiqueta/etiqueta_bloc.dart';
-import 'package:notea_frontend/presentacion/pantallas/Suscripcion_screen.dart';
 import 'package:notea_frontend/presentacion/pantallas/lista_notas_screen.dart';
-import 'package:notea_frontend/presentacion/widgets/BottomBar.dart';
-import 'package:notea_frontend/presentacion/widgets/MenuDesplegable.dart';
 import 'package:notea_frontend/presentacion/widgets/floating_button.dart';
-import 'package:notea_frontend/presentacion/pantallas/angel/pruebaNota.dart';
+
 
 class MessagesScreen extends StatefulWidget {
   final Usuario usuario;
@@ -51,7 +47,6 @@ class _MessagesScreenState extends State<MessagesScreen> {
 
       await Future.delayed(const Duration(milliseconds: 1000), () {});
       if (etiquetaBloc.state.etiquetas != null) {
-        print('entra aca');
         etiquetas = etiquetaBloc.state.etiquetas;
       }
     });
@@ -76,16 +71,9 @@ class _MessagesScreenState extends State<MessagesScreen> {
         if (state is GrupoInitialState) {
           final grupoBloc = BlocProvider.of<GrupoBloc>(context);
           grupoBloc.add(GrupoCatchEvent(idUsuarioDueno: widget.usuario.id));
-          // Future.delayed(const Duration(milliseconds: 300), () {
-          //   setState(() {
-          //     alignment = Alignment.topRight;
-          //     stopScaleAnimtion = true;
-          //   });
-          // });
         }
         if (state is GruposSuccessState) {
           grupos = state.grupos;
-          // print(context.read<NombreUsuario>);
           return Scaffold(
             key: _scaffoldKey,
             floatingActionButton: MyFloatingButton(
@@ -96,7 +84,7 @@ class _MessagesScreenState extends State<MessagesScreen> {
             appBar: AppBar(
               title: const Text('Inicio'),
               backgroundColor:
-                  const Color.fromARGB(255, 23, 100, 202), // Cambia el color de la AppBar a rojo.
+                  const Color.fromARGB(255, 23, 100, 202), 
               leading: IconButton(
                 icon: const Icon(Icons.menu),
                 onPressed: () {

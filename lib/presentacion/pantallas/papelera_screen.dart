@@ -117,7 +117,6 @@ class _PapeleraState extends State<Papelera> {
   Widget build(BuildContext context) {
     final navigationProvider = context.watch<NavigationProvider>();
     final reloadCounter = navigationProvider.reloadCounter;
-    print('reloadCurrentScreen()');
 
     return ChangeNotifierProvider(
         create: (_) => NavigationProvider(usuario: widget.usuario),
@@ -297,31 +296,10 @@ class _PapeleraState extends State<Papelera> {
                                                             child: const Text(
                                                                 'Aceptar'),
                                                             onPressed: () {
-                                                              BlocProvider.of<
-                                                                          NotaBloc>(
-                                                                      context)
-                                                                  .add(
-                                                                      DeleteNoteEvent(
-                                                                idNota: nota.id,
-                                                              ));
-                                                              context
-                                                                  .read<
-                                                                      NavigationProvider>()
-                                                                  .reloadCurrentScreen();
-
-                                                              /* Navigator.push(
-                                                                    context,
-                                                                    MaterialPageRoute(
-                                                                        builder:
-                                                                            (context) =>
-                                                                                Papelera(
-                                                                                  grupos:
-                                                                                      widget.grupos,
-                                                                                  usuario:
-                                                                                      widget.usuario,
-                                                                                )));*/
-
-                                                              // mover a la papelera
+                                                              BlocProvider.of<NotaBloc>(context).add(DeleteNoteEvent(idNota: nota.id, ));
+                                                              navigationProvider.reloadCurrentScreen();
+                                                              BlocProvider.of<NotaBloc>(context).add(NotaCatchEvent(grupos: widget.grupos!));
+                                                              Navigator.pop(context);
                                                             },
                                                           ),
                                                         ],
@@ -354,7 +332,6 @@ class _PapeleraState extends State<Papelera> {
                                                                 'Aceptar'),
                                                             onPressed: () {
                                                               BlocProvider.of<NotaBloc>(context).add(ModificarEstadoNotaEvent(idNota: nota.id,estado:"GUARDADO"));
-                                                               print('Button pressed, calling reloadCurrentScreen()'); 
                                                                navigationProvider.reloadCurrentScreen();
                                                                BlocProvider.of<NotaBloc>(context).add(NotaCatchEvent(grupos: widget.grupos!));
                                                                Navigator.pop(context);
