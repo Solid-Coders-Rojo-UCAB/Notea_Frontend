@@ -22,18 +22,20 @@ import 'navigation_provider.dart';
 
 // ignore: must_be_immutable
 class MyDropdown extends StatefulWidget {
-  List<Grupo>? grupos;
-  List<Etiqueta>? etiquetas;
+  final List<Grupo>? grupos;
+  final List<Etiqueta>? etiquetas;
   final Usuario usuario;
 
+
   MyDropdown(
-      {super.key,
-      required this.grupos,
+      {Key? key,
+      this.grupos,
       required this.usuario,
-      required this.etiquetas});
+      this.etiquetas,
+      }) // Añade esto
+      : super(key: key);
 
   @override
-  // ignore: library_private_types_in_public_api
   _MyDropdownState createState() => _MyDropdownState();
 }
 
@@ -53,10 +55,22 @@ class _MyDropdownState extends State<MyDropdown> {
       notaBloc.add(NotaCatchEvent(grupos: widget.grupos!));
     });
   }
+void handleDelete(Nota nota) {
+    BlocProvider.of<NotaBloc>(context)
+     .add(ModificarEstadoNotaEvent(idNota: nota.id, estado: "PAPELERA"));
+
+    // Espera un poco para darle tiempo a la nota para ser eliminada
+
+     
+        BlocProvider.of<NotaBloc>(context)
+            .add(NotaCatchEvent(grupos:widget.grupos!));
+ 
+}
 
   @override
   Widget build(BuildContext context) {
     return BlocBuilder<NotaBloc, NotaState>(builder: (context, state) {
+
       notas = state.notas;
       if (state is CeroNotasFailureState) {
         return Center(
@@ -200,6 +214,7 @@ class _MyDropdownState extends State<MyDropdown> {
                                       .etiquetas, //Aca llenamos con las etiquetas que trae la nota
                                   grupos: widget.grupos,
                                   onDeletePressed: () {
+                            
                                     showDialog(
                                       context: context,
                                       builder: (BuildContext context) {
@@ -211,6 +226,7 @@ class _MyDropdownState extends State<MyDropdown> {
                                             TextButton(
                                               child: const Text('Cancelar'),
                                               onPressed: () {
+                                 
                                                 Navigator.pop(
                                                     context); // Cerrar el cuadro de diálogo
                                               },
@@ -218,22 +234,9 @@ class _MyDropdownState extends State<MyDropdown> {
                                             TextButton(
                                               child: const Text('Aceptar'),
                                               onPressed: () {
-                                                BlocProvider.of<NotaBloc>(
-                                                        context)
-                                                    .add(
-                                                        ModificarEstadoNotaEvent(
-                                                            idNota: nota.id,
-                                                            estado:
-                                                                "PAPELERA"));
+                                                handleDelete(nota);
 
                                                 Navigator.pop(context);
-                                                Navigator.pop(
-                                                    context); // Cierra el cuadro de diálogo
-
-                                                // Navega a la pantalla de mensajes utilizando el NavigationProvider
-                                                context
-                                                    .read<NavigationProvider>()
-                                                    .toMessagesScreen();
                                               },
                                             ),
                                           ],

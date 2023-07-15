@@ -97,7 +97,7 @@ class _MENU_SCREENState extends State<MENU_SCREEN> {
                             _selectedOption = index;
                           });
                           if (index == 0) {
-                            navigationProvider.toMessagesScreen();
+                       context.read<NavigationProvider>().toMessagesScreen();
                           }
                           if (index == 1) {
                             List<Grupo>? grupos =

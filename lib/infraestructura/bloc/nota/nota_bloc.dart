@@ -24,15 +24,20 @@ class NotaBloc extends Bloc<NotaEvent, NotaState> {
 
     on<NotaCatchEvent>((event, emit) async {
       emit(const NotaInitialState());
-      final repositorio = RepositorioNotaImpl(remoteDataSource: RemoteDataNotaImp(client: http.Client()));
+      final repositorio = RepositorioNotaImpl(
+          remoteDataSource: RemoteDataNotaImp(client: http.Client()));
       final notas = await repositorio.buscarNotasGrupos(event.grupos);
-      if(notas.isLeft()){             //Ver que les parece esta manera de devolver
-        if (notas.left!.isEmpty){
+
+   
+
+      if (notas.isLeft()) {
+        //Ver que les parece esta manera de devolver
+        if (notas.left!.isEmpty) {
           emit(const CeroNotasFailureState());
-        }else{
+        } else {
           emit(NotasCatchSuccessState(notas: notas.left!));
         }
-      }else{
+      } else {
         emit(const NotasFailureState());
       }
     });
@@ -41,11 +46,16 @@ class NotaBloc extends Bloc<NotaEvent, NotaState> {
       emit(const NotaInitialState());
       final repositorio = RepositorioNotaImpl(
           remoteDataSource: RemoteDataNotaImp(client: http.Client()));
-      final notas = await repositorio.modificarEstadoNota(
-          event.idNota, event.estado);
+
+  
+      final notas =
+          await repositorio.modificarEstadoNota(event.idNota, event.estado);
+
+
       notas.isLeft()
           ? emit(const CeroNotasFailureState())
           : emit(const NotasFailureState());
+         
     });
 
     on<DeleteNoteEvent>(
@@ -65,11 +75,15 @@ class NotaBloc extends Bloc<NotaEvent, NotaState> {
     on<CreateNotaEvent>((event, emit) async {
       emit(const NotaInitialState());
 
-      final repositorio = RepositorioNotaImpl(remoteDataSource: RemoteDataNotaImp(client: http.Client()));
-      final nota = await repositorio.crearNota(event.tituloNota, await mapContenido(event.listInfo), event.etiquetas, event.grupo);
+      final repositorio = RepositorioNotaImpl(
+          remoteDataSource: RemoteDataNotaImp(client: http.Client()));
+      final nota = await repositorio.crearNota(event.tituloNota,
+          await mapContenido(event.listInfo), event.etiquetas, event.grupo);
 
       await Future.delayed(const Duration(milliseconds: 300));
-      nota!.isLeft() ?  emit(const NotasCreateSuccessState()): emit(const NotasFailureState());//emitimos el estado de error
+      nota!.isLeft()
+          ? emit(const NotasCreateSuccessState())
+          : emit(const NotasFailureState()); //emitimos el estado de error
     });
 
     on<EditarNotaEvent>((event, emit) async {
@@ -130,7 +144,6 @@ class NotaBloc extends Bloc<NotaEvent, NotaState> {
 //     }
 //   }
 
-
 Future<Map<String, dynamic>> mapContenido(List<dynamic> listInfo) async {
   List<Map<String, dynamic>> contenidoList = [];
   int cant = 0;
@@ -161,7 +174,7 @@ Future<Map<String, dynamic>> mapContenido(List<dynamic> listInfo) async {
           'orden': cant,
         },
       });
-    } else if (element is ImageBlock){
+    } else if (element is ImageBlock) {
       print('Es imagen');
     }
   }
