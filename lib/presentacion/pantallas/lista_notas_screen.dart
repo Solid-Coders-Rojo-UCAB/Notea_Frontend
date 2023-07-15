@@ -18,6 +18,7 @@ import '../../dominio/agregados/usuario.dart';
 import '../../infraestructura/bloc/Grupo/grupo_bloc.dart';
 import '../../infraestructura/bloc/etiqueta/etiqueta_bloc.dart';
 import '../../infraestructura/bloc/usuario/usuario_bloc.dart';
+import 'navigation_provider.dart';
 
 // ignore: must_be_immutable
 class MyDropdown extends StatefulWidget {
@@ -25,7 +26,11 @@ class MyDropdown extends StatefulWidget {
   List<Etiqueta>? etiquetas;
   final Usuario usuario;
 
-  MyDropdown({super.key, required this.grupos, required this.usuario, required this.etiquetas});
+  MyDropdown(
+      {super.key,
+      required this.grupos,
+      required this.usuario,
+      required this.etiquetas});
 
   @override
   // ignore: library_private_types_in_public_api
@@ -53,7 +58,7 @@ class _MyDropdownState extends State<MyDropdown> {
   Widget build(BuildContext context) {
     return BlocBuilder<NotaBloc, NotaState>(builder: (context, state) {
       notas = state.notas;
-      if (state is CeroNotasFailureState ) {
+      if (state is CeroNotasFailureState) {
         return Center(
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
@@ -64,18 +69,20 @@ class _MyDropdownState extends State<MyDropdown> {
                 height: 250,
               ),
               AnimatedTextKit(
-                  animatedTexts: [TypewriterAnimatedText(
-                    "No tienes notas, créala ⤵",
-                    textStyle: const TextStyle(
-                      fontSize: 22.0,
-                      fontWeight: FontWeight.bold,
-                      color: Color(0XFF21579C),
-                    ),
-                    speed: const Duration(milliseconds: 100),
-                  )],
-                onTap: () {
-                //
-                }),
+                  animatedTexts: [
+                    TypewriterAnimatedText(
+                      "No tienes notas, créala ⤵",
+                      textStyle: const TextStyle(
+                        fontSize: 22.0,
+                        fontWeight: FontWeight.bold,
+                        color: Color(0XFF21579C),
+                      ),
+                      speed: const Duration(milliseconds: 100),
+                    )
+                  ],
+                  onTap: () {
+                    //
+                  }),
             ],
           ),
         );
@@ -93,18 +100,20 @@ class _MyDropdownState extends State<MyDropdown> {
                   height: 250,
                 ),
                 AnimatedTextKit(
-                    animatedTexts: [TypewriterAnimatedText(
-                      "Error al obtener tus notas ⤵",
-                      textStyle: const TextStyle(
-                        fontSize: 22.0,
-                        fontWeight: FontWeight.bold,
-                        color: Color(0XFF21579C),
-                      ),
-                      speed: const Duration(milliseconds: 100),
-                    )],
-                  onTap: () {
-                  //
-                  }),
+                    animatedTexts: [
+                      TypewriterAnimatedText(
+                        "Error al obtener tus notas ⤵",
+                        textStyle: const TextStyle(
+                          fontSize: 22.0,
+                          fontWeight: FontWeight.bold,
+                          color: Color(0XFF21579C),
+                        ),
+                        speed: const Duration(milliseconds: 100),
+                      )
+                    ],
+                    onTap: () {
+                      //
+                    }),
               ],
             ),
           ),
@@ -126,130 +135,129 @@ class _MyDropdownState extends State<MyDropdown> {
             gruposPapelera.add(widget.grupos![i]);
           }
         }
-        final cant = notas?.where((nota) =>(nota.getEstado() == "GUARDADO")).toList();
-          return cant!.isEmpty
-          ?
-            Center(
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  Image.asset(
-                    'assets/images/new_note.png',
-                    width: 250,
-                    height: 250,
-                  ),
-                  AnimatedTextKit(
-                      animatedTexts: [TypewriterAnimatedText(
-                        "No tienes notas, créala ⤵",
-                        textStyle: const TextStyle(
-                          fontSize: 22.0,
-                          fontWeight: FontWeight.bold,
-                          color: Color(0XFF21579C),
-                        ),
-                        speed: const Duration(milliseconds: 100),
-                      )],
-                    onTap: () {
-                    //
-                    }),
-                ],
-              ),
-            )
-          :
-          ListView.builder(
-              itemCount: gruposPapelera.length,
-              itemBuilder: (context, index) {
-                final grupo =
-                    gruposPapelera[index]; //Tenemos el grupo que se renderizará
-                final notasDeGrupo = notas
-                    ?.where((nota) =>
-                        nota.getIdGrupoNota() == grupo.idGrupo &&
-                        !(nota.getEstado() == "PAPELERA"))
-                    .toList();
-                if (notasDeGrupo != null && notasDeGrupo.isNotEmpty) {
-                  return FractionallySizedBox(
-                    widthFactor: 0.9, // Establece
-                    child: Column(
-                      children: <Widget>[
-                        Tooltip(
-                          message: grupo.idGrupo,
-                          child: Desplegable(
-                            titulo: grupo.nombre.nombre,
-                            contenido: Column(
-                                children: notasDeGrupo.map((nota) {
-                              return SizedBox(
-                                  child: CartaWidget(
-                                idNota: nota.id,
-                                habilitado: false,
-                                fecha: nota.getFechaCreacion(),
-                                titulo: nota.titulo.tituloNota,
-                                // contenidoTotal1: cont,
-                                contenidoTotal1: convertStringToMap(nota
-                                    .getContenido()), //Esto hace que se me muera toda la aplicacion
-                                tags: const ['Tag1', 'Tag2', 'Tag3sssssss'],
-                                etiquetas: widget.etiquetas,                         //Aca llenamos con las etiquetas que trae la nota
-                                grupos: widget.grupos,
-                                onDeletePressed: () {
-                                  showDialog(
-                                    context: context,
-                                    builder: (BuildContext context) {
-                                      return AlertDialog(
-                                        title: const Text('Confirmación'),
-                                        content: const Text(
-                                            '¿Estás seguro de que deseas mover a la papelera?'),
-                                        actions: [
-                                          TextButton(
-                                            child: const Text('Cancelar'),
-                                            onPressed: () {
-                                              Navigator.pop(
-                                                  context); // Cerrar el cuadro de diálogo
-                                            },
-                                          ),
-                                          TextButton(
-                                            child: const Text('Aceptar'),
-                                            onPressed: () {
-                                              BlocProvider.of<NotaBloc>(context)
-                                                  .add(ModificarEstadoNotaEvent(
-                                                      idNota: nota.id,
-                                                      estado: "PAPELERA"));
-
-                                              Navigator.pop(context);
-                                              Navigator.pushReplacement(
-                                                context,
-                                                MaterialPageRoute(
-                                                    builder: (context) =>
-                                                        MessagesScreen(
-                                                            usuario: context
-                                                                .read<
-                                                                    UsuarioBloc>()
-                                                                .state
-                                                                .usuario!)),
-                                              );
-                                              // mover a la papelera
-                                            },
-                                          ),
-                                        ],
-                                      );
-                                    },
-                                  );
-                                  // Lógica para eliminar la nota
-                                },
-                                onChangePressed: null,
-                              ));
-                            }).toList()),
-                          ),
-                        ),
-                        const SizedBox(height: 8.0),
-                        // Separación entre los desplegables
-                      ],
+        final cant =
+            notas?.where((nota) => (nota.getEstado() == "GUARDADO")).toList();
+        return cant!.isEmpty
+            ? Center(
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Image.asset(
+                      'assets/images/new_note.png',
+                      width: 250,
+                      height: 250,
                     ),
-                  );
-                }
-              });
+                    AnimatedTextKit(
+                        animatedTexts: [
+                          TypewriterAnimatedText(
+                            "No tienes notas, créala ⤵",
+                            textStyle: const TextStyle(
+                              fontSize: 22.0,
+                              fontWeight: FontWeight.bold,
+                              color: Color(0XFF21579C),
+                            ),
+                            speed: const Duration(milliseconds: 100),
+                          )
+                        ],
+                        onTap: () {
+                          //
+                        }),
+                  ],
+                ),
+              )
+            : ListView.builder(
+                itemCount: gruposPapelera.length,
+                itemBuilder: (context, index) {
+                  final grupo = gruposPapelera[
+                      index]; //Tenemos el grupo que se renderizará
+                  final notasDeGrupo = notas
+                      ?.where((nota) =>
+                          nota.getIdGrupoNota() == grupo.idGrupo &&
+                          !(nota.getEstado() == "PAPELERA"))
+                      .toList();
+                  if (notasDeGrupo != null && notasDeGrupo.isNotEmpty) {
+                    return FractionallySizedBox(
+                      widthFactor: 0.9, // Establece
+                      child: Column(
+                        children: <Widget>[
+                          Tooltip(
+                            message: grupo.idGrupo,
+                            child: Desplegable(
+                              titulo: grupo.nombre.nombre,
+                              contenido: Column(
+                                  children: notasDeGrupo.map((nota) {
+                                return SizedBox(
+                                    child: CartaWidget(
+                                  idNota: nota.id,
+                                  habilitado: false,
+                                  fecha: nota.getFechaCreacion(),
+                                  titulo: nota.titulo.tituloNota,
+                                  // contenidoTotal1: cont,
+                                  contenidoTotal1: convertStringToMap(nota
+                                      .getContenido()), //Esto hace que se me muera toda la aplicacion
+                                  tags: const ['Tag1', 'Tag2', 'Tag3sssssss'],
+                                  etiquetas: widget
+                                      .etiquetas, //Aca llenamos con las etiquetas que trae la nota
+                                  grupos: widget.grupos,
+                                  onDeletePressed: () {
+                                    showDialog(
+                                      context: context,
+                                      builder: (BuildContext context) {
+                                        return AlertDialog(
+                                          title: const Text('Confirmación'),
+                                          content: const Text(
+                                              '¿Estás seguro de que deseas mover a la papelera?'),
+                                          actions: [
+                                            TextButton(
+                                              child: const Text('Cancelar'),
+                                              onPressed: () {
+                                                Navigator.pop(
+                                                    context); // Cerrar el cuadro de diálogo
+                                              },
+                                            ),
+                                            TextButton(
+                                              child: const Text('Aceptar'),
+                                              onPressed: () {
+                                                BlocProvider.of<NotaBloc>(
+                                                        context)
+                                                    .add(
+                                                        ModificarEstadoNotaEvent(
+                                                            idNota: nota.id,
+                                                            estado:
+                                                                "PAPELERA"));
+
+                                                Navigator.pop(context);
+                                                Navigator.pop(
+                                                    context); // Cierra el cuadro de diálogo
+
+                                                // Navega a la pantalla de mensajes utilizando el NavigationProvider
+                                                context
+                                                    .read<NavigationProvider>()
+                                                    .toMessagesScreen();
+                                              },
+                                            ),
+                                          ],
+                                        );
+                                      },
+                                    );
+                                    // Lógica para eliminar la nota
+                                  },
+                                  onChangePressed: null,
+                                ));
+                              }).toList()),
+                            ),
+                          ),
+                          const SizedBox(height: 8.0),
+                          // Separación entre los desplegables
+                        ],
+                      ),
+                    );
+                  }
+                });
       } else {
         // No mostrar el grupo si no tiene notas que pertenecen a él
         return const SizedBox.shrink();
       }
-    }
-    );
+    });
   }
 }

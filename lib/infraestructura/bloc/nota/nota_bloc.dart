@@ -1,6 +1,8 @@
 // ignore_for_file: unrelated_type_equality_checks
 
 import 'dart:convert';
+import 'dart:typed_data';
+import 'dart:io';
 
 import 'package:http/http.dart' as http;
 import 'package:flutter/material.dart';
@@ -64,9 +66,10 @@ class NotaBloc extends Bloc<NotaEvent, NotaState> {
 
     on<CreateNotaEvent>((event, emit) async {
       emit(const NotaInitialState());
+      print('Entro -> Infraestructura => Bloc => NotaBloc');
 
       final repositorio = RepositorioNotaImpl(remoteDataSource: RemoteDataNotaImp(client: http.Client()));
-      final nota = await repositorio.crearNota(event.tituloNota, await mapContenido(event.listInfo), event.etiquetas, event.grupo);
+      final nota = await repositorio.crearNota(event.tituloNota, await mapContenido(event.listInfo), etiqeutasListId(event.etiquetas), event.grupo);
 
       await Future.delayed(const Duration(milliseconds: 300));
       nota!.isLeft() ?  emit(const NotasCreateSuccessState()): emit(const NotasFailureState());//emitimos el estado de error
@@ -162,9 +165,20 @@ Future<Map<String, dynamic>> mapContenido(List<dynamic> listInfo) async {
         },
       });
     } else if (element is ImageBlock){
-      print('Es imagen');
+      contenidoList.add({
+        'imagen': {
+          'buffer': element.controller.getBase64(),
+          'nombre': element.controller.getImageName()
+        },
+        'orden': cant,
+      });
+      // Resto del código...
     }
   }
   Map<String, dynamic> contenido = {'contenido': contenidoList};
   return contenido;
+}
+
+List<String> etiqeutasListId(List<Etiqueta>? etiquetas) {
+  return etiquetas!.map((etiqueta) => etiqueta.idEtiqueta).toList();
 }

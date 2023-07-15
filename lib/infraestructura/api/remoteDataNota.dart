@@ -70,7 +70,9 @@ class RemoteDataNotaImp implements RemoteDataNota {
       Map<String, dynamic> jsonString) async {
     if (await const ConectivityCheck().checkConectivity()) {
 
-      print('entes del response-0000000000000000000000000000000-----------------------');
+      print('Entro -> Infraestructura => Api => CrearNotaApiTareas');
+
+
       final response = await http.post(
         Uri.parse('${ApiConfig.apiBaseUrl}/nota'),
         body: json.encode(jsonString),
@@ -78,8 +80,13 @@ class RemoteDataNotaImp implements RemoteDataNota {
       );
 
       if (response.statusCode == 200) {
+        print('Entro -> Infraestructura => Api => CrearNotaApiTareas => FUNCIONO');
+
         return Either.left(response.statusCode);
       } else {
+
+        print('Entro -> Infraestructura => Api => CrearNotaApiTareas => NO FUNCIONO');
+
         return Either.right(Exception("Error al crear la nota en el servidor"));
       }
     } else {

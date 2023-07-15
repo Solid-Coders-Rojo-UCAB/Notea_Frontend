@@ -92,11 +92,11 @@ class _LoginScreenState extends State<LoginScreen> {
                               padding: const EdgeInsets.symmetric(horizontal: 50.0),
                               child: SingleChildScrollView(
                                 child: Padding(
-                                  padding: const EdgeInsets.only(top: 120.0),
+                                  padding: const EdgeInsets.only(top: 30.0),
                                   child: Column(
                                     crossAxisAlignment: CrossAxisAlignment.start,
                                     children: [
-                                      const SizedBox(height: 50),
+                                      const SizedBox(height: 40),
                                       TweenAnimationBuilder<double>(
                                         duration: const Duration(milliseconds: 300),
                                         tween: Tween(begin: 1, end: _elementsOpacity),
@@ -120,7 +120,7 @@ class _LoginScreenState extends State<LoginScreen> {
                                                   ),
                                                 ],
                                               ),
-                                              const SizedBox(height: 30),
+                                              const SizedBox(height: 50),
                                               const Text(
                                                 "Bienvenido,",
                                                 style: TextStyle(
@@ -136,7 +136,7 @@ class _LoginScreenState extends State<LoginScreen> {
                                           ),
                                         ),
                                       ),
-                                      const SizedBox(height: 25),
+                                      const SizedBox(height: 35),
                                 
                                       //Formulario para validación
                                       Form(

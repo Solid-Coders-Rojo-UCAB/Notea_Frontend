@@ -88,9 +88,6 @@ class _AccionesConNotaState extends State<AccionesConNota> {
   //Traemos de la lista de grupos el grupo seleccionado
   void handleDataGrupo(Grupo dataGrupo) {
     receivedDataGrupo = dataGrupo;
-    print('--------Grupo-------');
-    print(receivedDataGrupo!.getNombre());
-    print('---------------------------------');
     hayGrupo = true;
     setState(() {
       receivedDataGrupo = receivedDataGrupo;
@@ -245,11 +242,6 @@ class _AccionesConNotaState extends State<AccionesConNota> {
                         alignment: Alignment.bottomRight,
                         child: FloatingActionButton(
                           onPressed: () {
-                            // pintaLista();
-                            // print(_tituloController.text);
-                            // print(recivedDataList.length);
-                            // print(receivedDataGrupo!.getNombre());
-                            // print(recivedDataEitquetas.length);
 
                             if (widget.accion == 'Creando Nota') {
                               BlocProvider.of<NotaBloc>(context).add(
@@ -271,11 +263,6 @@ class _AccionesConNotaState extends State<AccionesConNota> {
                                 ),
                               );
                             }
-
-                            hol11(recivedDataList);
-
-
-
                             _regresar();
                           },
                           backgroundColor: Colors.blue,
@@ -306,44 +293,6 @@ String obtenerPrimerasDosLetrasMayusculas(String texto) {
   } else {
     return texto.toUpperCase();
   }
-}
-
-
-void hol11(List<dynamic> listInfo) async {
-  List<Map<String, dynamic>> contenidoList = [];
-
-  for (var element in listInfo) {
-    if (element is TextBlocPrueba3) {
-      final textBlock = element;
-      String? html = await textBlock.editorKey.getText();
-
-      if (html != null) {
-        contenidoList.add({
-          'texto': {'cuerpo': html},
-        });
-      }
-    } else if (element is TareaBlock) {
-      final tareaBlock = element;
-      List<Task> tasks = tareaBlock.controller1.listaTareas;
-
-      List<Map<String, dynamic>> tareaValue = [];
-      for (var task in tasks) {
-        tareaValue.add({
-          'titulo': task.description,
-          'check': task.completed,
-        });
-      }
-      contenidoList.add({
-        'tarea': {
-          'value': tareaValue,
-        },
-      });
-    }
-  }
-
-  Map<String, dynamic> contenido = {'contenido': contenidoList};
-
-  print(contenido);
 }
 
 Color getColorTag(String color) {

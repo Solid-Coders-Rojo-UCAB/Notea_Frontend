@@ -49,9 +49,8 @@ class _MessagesScreenState extends State<MessagesScreen> {
       final etiquetaBloc = BlocProvider.of<EtiquetaBloc>(context);
       etiquetaBloc.add(EtiquetaCatchEvent(idUsuarioDueno: widget.usuario.getId()));
 
-      await Future.delayed(const Duration(milliseconds: 500), () {});
+      await Future.delayed(const Duration(seconds: 1), () {});
       if (etiquetaBloc.state.etiquetas != null) {
-        print('entra aca');
         etiquetas = etiquetaBloc.state.etiquetas;
       }
     });

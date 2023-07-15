@@ -30,30 +30,34 @@ class RepositorioNotaImpl implements INotaRepository {
 
   @override
   Future<Either<int, Exception>?> crearNota(
-      String titulo,
-      Map<String, dynamic> listInfoContenido,
-      List<Etiqueta>? etiquetas,
-      Grupo grupo) async {
-      print('Entro en el repositorio de la notaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa');
+    String titulo,
+    Map<String, dynamic> listInfoContenido,
+    List<String> etiquetas,
+    Grupo grupo) async {
 
-    final now = DateTime.now();
-    var datetimeString = DateFormat('yyyy-MM-ddTHH:mm:ssZ')
-        .format(now); // Formato de fecha 'dd/MM/yyyy'
-    // List<File>? listaImagen= await imageToFile(listInfoContenido);
+      print('Entro -> Infraestructura => Repositorio => RepositorioNotaImpl');
+      
+      final now = DateTime.now();
+      var datetimeString = DateFormat('yyyy-MM-ddTHH:mm:ssZ')
+          .format(now); // Formato de fecha 'dd/MM/yyyy'
+      // List<File>? listaImagen= await imageToFile(listInfoContenido);
 
-    Map<String, dynamic> notaDTO = {
-      "titulo": titulo,
-      "contenido": listInfoContenido,
-      "fechaCreacion": datetimeString.toString(),
-      "latitud": '40.0238823', //Colocar aca lo de la ubicacion
-      "longitud": '20.0238823',
-      "grupo": grupo.idGrupo,
-    };
+      Map<String, dynamic> notaDTO = {
+        "titulo": titulo,
+        "fechaCreacion": datetimeString.toString(),
+        "grupo": grupo.idGrupo,
+        "latitud": '40.0238823', //Colocar aca lo de la ubicacion
+        "longitud": '20.0238823',
+        "etiquetas": etiquetas,
+        "contenido": listInfoContenido,
+      };
 
-   
-    var result = await remoteDataSource.crearNotaApiTareas(notaDTO);
-    // var result = await remoteDataSource.crearNotaApi(notaDTO, listaImagen);
-    return result;
+
+      print(notaDTO);
+    
+      var result = await remoteDataSource.crearNotaApiTareas(notaDTO);
+      // var result = await remoteDataSource.crearNotaApi(notaDTO, listaImagen);
+      return result;
   }
 
   @override
