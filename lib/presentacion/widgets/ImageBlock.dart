@@ -157,9 +157,6 @@ class ImageBlockController {
 
 Future<String> convertir(File imagen) async {
 
-    // print("antes de Comprimir");
-    // print(imagen.lengthSync());
-
       var result = await FlutterImageCompress.compressAndGetFile(
         imagen.absolute.path,
         "${imagen.absolute.path}compressed.jpg",
@@ -175,6 +172,6 @@ Future<String> convertir(File imagen) async {
 
     // print("base64");
     // print(base64Image.length);
-    
+
     return base64Image;
   }
