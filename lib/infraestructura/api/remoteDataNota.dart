@@ -45,7 +45,7 @@ class RemoteDataNotaImp implements RemoteDataNota {
     }
   }
 
-  Future<Either<List<Nota>, Exception>> buscarNotasByUserApi(
+  Future<Either<List<Nota>, Exception>> buscarNotasByGruposApi(
       List<String> grupos) async {
     if (await const ConectivityCheck().checkConectivity()) {
       final response = await http.patch(
@@ -55,7 +55,11 @@ class RemoteDataNotaImp implements RemoteDataNota {
           'Content-Type': 'application/json; charset=UTF-8',
         },
       ); //Creo que esto no es lo mejor, porque treemos todas las notas
+      print('Entro => Nota Bloc => buscarNotasGrupos => buscarNotasByGruposApi');
+
       if (response.statusCode == 200) {
+        print('SALIO => Nota Bloc => buscarNotasGrupos => buscarNotasByGruposApi');
+
         return Either.left(parseNota(response.body));
       } else {
         return Either.right(Exception("Error al buscar las notas"));
@@ -70,9 +74,6 @@ class RemoteDataNotaImp implements RemoteDataNota {
       Map<String, dynamic> jsonString) async {
     if (await const ConectivityCheck().checkConectivity()) {
 
-      print('Entro -> Infraestructura => Api => CrearNotaApiTareas');
-
-
       final response = await http.post(
         Uri.parse('${ApiConfig.apiBaseUrl}/nota'),
         body: json.encode(jsonString),
@@ -80,13 +81,8 @@ class RemoteDataNotaImp implements RemoteDataNota {
       );
 
       if (response.statusCode == 200) {
-        print('Entro -> Infraestructura => Api => CrearNotaApiTareas => FUNCIONO');
-
         return Either.left(response.statusCode);
       } else {
-
-        print('Entro -> Infraestructura => Api => CrearNotaApiTareas => NO FUNCIONO');
-
         return Either.right(Exception("Error al crear la nota en el servidor"));
       }
     } else {
@@ -107,13 +103,6 @@ class RemoteDataNotaImp implements RemoteDataNota {
         ..fields['latitud'] = jsonString['latitud']
         ..fields['longitud'] = jsonString['longitud'];
 
-      // for (var item in listaImages) {
-      //   // open a bytestream
-      //   var stream = item.readAsBytes().asStream();
-      //   // get file length
-      //   var length = item.lengthSync();
-      //   request.files.add(MultipartFile('imagen',stream,length, filename: item.path));
-      // }
       final response = await request.send();
 
       if (response.statusCode == 200) {
@@ -177,20 +166,26 @@ class RemoteDataNotaImp implements RemoteDataNota {
   List<Nota> parseNota(String responseBody) {
     List<dynamic> decodedResponse = jsonDecode(responseBody);
     List<Nota> notas = [];
+    print('Verificando el response-----------');
+    printContent(decodedResponse);
+
+    Map<String, dynamic> ;
+
     for (var item in decodedResponse) {
       EstadoEnum estado = EstadoEnum.values.byName(item['estado']);
 
       //hay que usar la funcion Nota.FromJson que lo hace de una
       Nota nota = Nota(
-          titulo: VOTituloNota(item['titulo']['titulo']),
-          contenido: VOContenidoNota(item['contenido']['contenido']),
-          fechaCreacion: DateTime.parse(item['fechaCreacion']),
+          titulo: VOTituloNota(item['titulo']),
+          contenido: VOContenidoNota({'contenido':item['contenido']}.toString()),
+          fechaCreacion: DateTime.parse('2023-07-15T10:42:27'),
           estado: estado,
-          ubicacion: VOUbicacionNota(111, -11111),
-          id: item['id']['id'],
-          idGrupo: VOIdGrupoNota(item['grupo']['id']));
+          ubicacion: VOUbicacionNota(1111, 222222),
+          id: item['id'],
+          idGrupo: VOIdGrupoNota(item['grupo']));
       notas.add(nota);
     }
+    print('sale');
     return notas;
   }
 
@@ -215,5 +210,37 @@ class RemoteDataNotaImp implements RemoteDataNota {
       return Either.right(Exception(
           "No hay conexion a internet")); //guardado en la base de datos local
     }
+  }
+}
+
+
+void printContent(List<dynamic> data) {
+  for (var item in data) {
+    print("Titulo: ${item['titulo']}");
+    print("Fecha de creación: ${item['fechaCreacion']}");
+    print("Estado: ${item['estado']}");
+    print("Grupo: ${item['grupo']}");
+
+    print("Ubicación - Latitud: ${item['ubicacion']['latitud']}");
+    print("Ubicación - Longitud: ${item['ubicacion']['longitud']}");
+
+    var etiquetas = item['etiquetas'];
+    print("Etiquetas:");
+    for (var etiqueta in etiquetas) {
+      print("- $etiqueta");
+    }
+
+    var contenido = item['contenido'];
+    print("Contenido:");
+    print( {'contenido':contenido});
+    for (var contenidoItem in contenido) {
+      print("- ID: ${contenidoItem['id']}");
+      print("  Orden: ${contenidoItem['orden']}");
+      var texto = contenidoItem['texto'];
+      print("  Texto - Cuerpo: ${texto['cuerpo']}");
+    }
+
+    print("ID: ${item['id']}");
+    print("----------------------------");
   }
 }

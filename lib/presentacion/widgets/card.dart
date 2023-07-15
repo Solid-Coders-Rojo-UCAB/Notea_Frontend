@@ -39,6 +39,7 @@ class CartaWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    print('CARD => Recibiendo el map de contenido');
     String formattedDate = fecha.month < 9 ? '0${fecha.month} - ${fecha.day}' : '${fecha.month} - ${fecha.day}'; // Formateo de la fecha
     return Center(
       child: GestureDetector(

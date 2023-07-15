@@ -48,7 +48,7 @@ class _MyDropdownState extends State<MyDropdown> {
   @override
   void initState() {
     super.initState();
-    WidgetsBinding.instance.addPostFrameCallback((_) {
+    WidgetsBinding.instance.addPostFrameCallback((_) async{
       final notaBloc = BlocProvider.of<NotaBloc>(context);
       notaBloc.add(NotaCatchEvent(grupos: widget.grupos!));
     });
@@ -123,6 +123,7 @@ class _MyDropdownState extends State<MyDropdown> {
       if (state is NotasCatchSuccessState) {
         List<Grupo> gruposPapelera = [];
         int cantNotasTotal = 0;
+        print('Entra - > For1');
         for (int i = 0; i < widget.grupos!.length; i++) {
           final grupo = widget.grupos![i]; //Tenemos el grupo que se renderizará
           final cant = notas
@@ -135,8 +136,12 @@ class _MyDropdownState extends State<MyDropdown> {
             gruposPapelera.add(widget.grupos![i]);
           }
         }
+        print('Entra - > For1');
+
         final cant =
             notas?.where((nota) => (nota.getEstado() == "GUARDADO")).toList();
+        print('saleeeee - > antes retur');
+
         return cant!.isEmpty
             ? Center(
                 child: Column(
@@ -168,6 +173,7 @@ class _MyDropdownState extends State<MyDropdown> {
             : ListView.builder(
                 itemCount: gruposPapelera.length,
                 itemBuilder: (context, index) {
+                  print('Entro a la lista de view');
                   final grupo = gruposPapelera[
                       index]; //Tenemos el grupo que se renderizará
                   final notasDeGrupo = notas
@@ -186,6 +192,8 @@ class _MyDropdownState extends State<MyDropdown> {
                               titulo: grupo.nombre.nombre,
                               contenido: Column(
                                   children: notasDeGrupo.map((nota) {
+                                    print('RECORRIENDO NOTAS ');
+
                                 return SizedBox(
                                     child: CartaWidget(
                                   idNota: nota.id,
@@ -193,8 +201,9 @@ class _MyDropdownState extends State<MyDropdown> {
                                   fecha: nota.getFechaCreacion(),
                                   titulo: nota.titulo.tituloNota,
                                   // contenidoTotal1: cont,
-                                  contenidoTotal1: convertStringToMap(nota
-                                      .getContenido()), //Esto hace que se me muera toda la aplicacion
+
+                                  //{contenido: [{id: bb1ceb30-67a9-46e5-b743-a2b26779cc20, orden: 1, texto: {cuerpo: <p>Weewee</p>}}]} CONTENIDO QUE TRAE LA NOTA Y FALLA
+                                  contenidoTotal1: convertStringToMap(nota.getContenido()), //ESTO ES LO QUE DA PROBLEMAS
                                   tags: const ['Tag1', 'Tag2', 'Tag3sssssss'],
                                   etiquetas: widget
                                       .etiquetas, //Aca llenamos con las etiquetas que trae la nota

@@ -27,14 +27,21 @@ class NotaBloc extends Bloc<NotaEvent, NotaState> {
     on<NotaCatchEvent>((event, emit) async {
       emit(const NotaInitialState());
       final repositorio = RepositorioNotaImpl(remoteDataSource: RemoteDataNotaImp(client: http.Client()));
+      print('Entro => Nota Bloc');
       final notas = await repositorio.buscarNotasGrupos(event.grupos);
+      print('Salio => Nota Bloc');
       if(notas.isLeft()){             //Ver que les parece esta manera de devolver
         if (notas.left!.isEmpty){
+          print('cero notas');
           emit(const CeroNotasFailureState());
         }else{
+          print('mas notas');
+
           emit(NotasCatchSuccessState(notas: notas.left!));
         }
       }else{
+          print('Error');
+
         emit(const NotasFailureState());
       }
     });
