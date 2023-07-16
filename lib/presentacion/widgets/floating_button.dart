@@ -31,7 +31,7 @@ class FloatingButtonState extends State<MyFloatingButton> {
 
           Navigator.push(
             context,
-            MaterialPageRoute(builder: (context) => AccionesConNota(accion: 'Creando Nota', grupos: widget.grupos, etiquetas: widget.etiquetas,)),
+            MaterialPageRoute(builder: (context) => AccionesConNota(accion: 'Creando Nota', gruposGeneral: widget.grupos, etiquetasGeneral: widget.etiquetas,)),
           );
         },
         // child: const Icon(Icons.addchart_sharp),

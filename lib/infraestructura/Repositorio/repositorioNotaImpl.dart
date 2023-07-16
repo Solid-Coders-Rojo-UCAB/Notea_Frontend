@@ -35,7 +35,6 @@ class RepositorioNotaImpl implements INotaRepository {
     List<String> etiquetas,
     Grupo grupo) async {
 
-      print('Entro -> Infraestructura => Repositorio => RepositorioNotaImpl');
       
       final now = DateTime.now();
       var datetimeString = DateFormat('yyyy-MM-ddTHH:mm:ssZ')
@@ -52,9 +51,6 @@ class RepositorioNotaImpl implements INotaRepository {
         "contenido": listInfoContenido,
       };
 
-      print('nota dto-----');
-      print(notaDTO);
-    
       var result = await remoteDataSource.crearNotaApiTareas(notaDTO);
       // var result = await remoteDataSource.crearNotaApi(notaDTO, listaImagen);
       return result;
@@ -63,11 +59,9 @@ class RepositorioNotaImpl implements INotaRepository {
   @override
   Future<Either<List<Nota>, Exception>> buscarNotasGrupos(
       List<Grupo> grupos) async {
-      print('Entro => Nota Bloc => buscarNotasGrupos');
     
     List<String> idsGrupos = grupos.map((grupo) => grupo.idGrupo).toList();
     final result = await remoteDataSource.buscarNotasByGruposApi(idsGrupos);
-    print('Salio => Nota Bloc => buscarNotasGrupos');
 
     return result;
   }

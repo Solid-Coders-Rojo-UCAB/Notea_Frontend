@@ -1,4 +1,4 @@
-// ignore_for_file: unrelated_type_equality_checks, unnecessary_null_comparison
+// ignore_for_file: unrelated_type_equality_checks, unnecessary_null_comparison, iterable_contains_unrelated_type
 
 import 'dart:convert';
 
@@ -126,7 +126,7 @@ class _MyDropdownState extends State<MyDropdown> {
       if (state is NotasCatchSuccessState) {
         List<Grupo> gruposPapelera = [];
         int cantNotasTotal = 0;
-        print('Entra - > For1');
+        // print('Entra - > For1');
         for (int i = 0; i < widget.grupos!.length; i++) {
           final grupo = widget.grupos![i]; //Tenemos el grupo que se renderizará
           final cant = notas
@@ -139,11 +139,11 @@ class _MyDropdownState extends State<MyDropdown> {
             gruposPapelera.add(widget.grupos![i]);
           }
         }
-        print('Entra - > For1');
+        // print('Entra - > For1');
 
         final cant =
             notas?.where((nota) => (nota.getEstado() == "GUARDADO")).toList();
-        print('saleeeee - > antes retur');
+        // print('saleeeee - > antes retur');
 
         return cant!.isEmpty
             ? Center(
@@ -176,7 +176,7 @@ class _MyDropdownState extends State<MyDropdown> {
             : ListView.builder(
                 itemCount: gruposPapelera.length,
                 itemBuilder: (context, index) {
-                  print('Entro a la lista de view');
+                  // print('Entro a la lista de view');
                   final grupo = gruposPapelera[
                       index]; //Tenemos el grupo que se renderizará
                   final notasDeGrupo = notas
@@ -195,6 +195,13 @@ class _MyDropdownState extends State<MyDropdown> {
                               titulo: grupo.nombre.nombre,
                               contenido: Column(
                                   children: notasDeGrupo.map((nota) {
+                                    // print('CONTENIDO DE LA NOTA-------------------------');
+                                    // print(nota.getContenido());
+
+                                    print('------------------------ETIQUETAS----------------------------');
+                                    grupoTomado(widget.grupos, nota.getIdGrupoNota());
+                                    print('------------------------ETIQUETAS----------------------------');
+
                                 return SizedBox(
                                     child: CartaWidget(
                                         idNota: nota.id,
@@ -202,11 +209,11 @@ class _MyDropdownState extends State<MyDropdown> {
                                         fecha: nota.getFechaCreacion(),
                                         titulo: nota.titulo.getTituloNota(),
                                         contenidoTotal1:  jsonDecode(nota.getContenido()),
-                                        // contenidoTotal1: convertStringToMap('{"contenido": [{"id": "bb1ceb30-67a9-46e5-b743-a2b26779cc20","orden": 1,"texto": {"cuerpo": "<p>Weewee</p>"}}]}'), //ESTO ES LO QUE DA PROBLEMAS
                                         tags: const ['Tag1', 'Tag2', 'Tag3sssssss'],
-                                        etiquetas: widget
-                                            .etiquetas, //Aca llenamos con las etiquetas que trae la nota
-                                        grupos: widget.grupos,
+                                        gruposGeneral: widget.grupos,       //GRUPOS GENERALES
+                                        grupoNota: grupoTomado(widget.grupos, nota.getIdGrupoNota()),
+                                        etiqeutasGeneral: widget.etiquetas, //ETIQUETAS GENERALES
+                                        etiquetasNota: listaEtiquetasTomadas(widget.etiquetas, nota.getEtiquetas()),
                                         onDeletePressed: () {
                                           showDialog(
                                             context: context,
@@ -269,4 +276,24 @@ class _MyDropdownState extends State<MyDropdown> {
     });
   }
 }
+List<Etiqueta> listaEtiquetasTomadas(List<Etiqueta>? listaEtiquetasGeneral, List<dynamic> listaEtiquetasId){
+  List<Etiqueta> etiquetasCoincidentes = [];
+
+  for (Etiqueta etiqueta in listaEtiquetasGeneral!) {
+    if (listaEtiquetasId.contains(etiqueta.idEtiqueta)) {
+      etiquetasCoincidentes.add(etiqueta);
+    }
+  }
+  return etiquetasCoincidentes;
+}
+
+Grupo? grupoTomado(List<Grupo>? listaGrupoGeneral, String idGrupo){
+  for (Grupo grupo in listaGrupoGeneral!) {
+    if (grupo.idGrupo == idGrupo) {
+      return grupo;
+    }
+  }
+  return null;
+}
+
 

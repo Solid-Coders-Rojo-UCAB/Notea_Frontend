@@ -6,6 +6,7 @@ import 'package:async/async.dart';
 import 'package:http/http.dart' as http;
 import 'package:http/http.dart';
 import 'package:notea_frontend/dominio/agregados/VONota/VOContenidoNota.dart';
+import 'package:notea_frontend/dominio/agregados/VONota/VOListaEtiquetas.dart';
 import 'package:notea_frontend/dominio/agregados/VONota/VOTituloNota.dart';
 import 'package:notea_frontend/dominio/agregados/VONota/VOUbicacionNota.dart';
 import 'package:notea_frontend/dominio/agregados/VONota/VOidGrupo.dart';
@@ -55,11 +56,11 @@ class RemoteDataNotaImp implements RemoteDataNota {
           'Content-Type': 'application/json; charset=UTF-8',
         },
       ); //Creo que esto no es lo mejor, porque treemos todas las notas
-      print('Entro => Nota Bloc => buscarNotasGrupos => buscarNotasByGruposApi');
 
+      print('RESPONSE BODY______________----------------------');
+      print(response.body);
       if (response.statusCode == 200) {
-        print('SALIO => Nota Bloc => buscarNotasGrupos => buscarNotasByGruposApi');
-
+        
         return Either.left(parseNota(response.body));
       } else {
         return Either.right(Exception("Error al buscar las notas"));
@@ -166,10 +167,12 @@ class RemoteDataNotaImp implements RemoteDataNota {
   List<Nota> parseNota(String responseBody) {
     List<Map<String, dynamic>> decodedResponse = List<Map<String, dynamic>>.from(jsonDecode(responseBody));
     List<Nota> notas = [];
+    
 
     for (var item in decodedResponse) {
       EstadoEnum estado = EstadoEnum.values.byName(item['estado']);
-
+      // print('item[etiquetas]-----------------------------------------');
+      // print(item['etiquetas']);
       // Utiliza jsonEncode para convertir el mapa a una cadena JSON
       String contenidoJson = jsonEncode(item['contenido']);
 
@@ -181,6 +184,7 @@ class RemoteDataNotaImp implements RemoteDataNota {
         ubicacion: VOUbicacionNota(1111, 222222),
         id: item['id'],
         idGrupo: VOIdGrupoNota(item['grupo']),
+        etiquetas: VOIdEtiquetas(item['etiquetas']),
       );
       notas.add(nota);
     }

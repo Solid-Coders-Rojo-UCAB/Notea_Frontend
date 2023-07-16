@@ -51,8 +51,10 @@ class _ContainerEditorNotaState extends State<ContainerEditorNota> {
         } else if (item.containsKey('imagen')) {
           var imagen = item['imagen'];
           // Realizar acción para imagen
+          print('entro en IMGENNNNNNNNNNNNNNNNNNNN');
           print('Imagen: $imagen');
-        } else if (item.containsKey('tarea')) {
+
+        } else if (item.containsKey('tareas')) {
           var tareas = item['tareas'];
           // Realizar acción para tarea
           print(tareas);

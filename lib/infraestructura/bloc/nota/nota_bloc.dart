@@ -73,8 +73,6 @@ class NotaBloc extends Bloc<NotaEvent, NotaState> {
 
     on<CreateNotaEvent>((event, emit) async {
       emit(const NotaInitialState());
-      print('Entro -> Infraestructura => Bloc => NotaBloc');
-
       final repositorio = RepositorioNotaImpl(remoteDataSource: RemoteDataNotaImp(client: http.Client()));
       final nota = await repositorio.crearNota(event.tituloNota, await mapContenido(event.listInfo), etiqeutasListId(event.etiquetas), event.grupo);
 
