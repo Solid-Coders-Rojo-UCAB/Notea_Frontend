@@ -139,12 +139,8 @@ class _MyDropdownState extends State<MyDropdown> {
             gruposPapelera.add(widget.grupos![i]);
           }
         }
-        // print('Entra - > For1');
-
         final cant =
             notas?.where((nota) => (nota.getEstado() == "GUARDADO")).toList();
-        // print('saleeeee - > antes retur');
-
         return cant!.isEmpty
             ? Center(
                 child: Column(
