@@ -12,10 +12,13 @@ import 'package:notea_frontend/infraestructura/Repositorio/repositorioNotaImpl.d
 
 class ImageBlock extends StatefulWidget {
 
+  String? nombre;
+  String? base64;
+
   final ImageBlockController controller = ImageBlockController();
   final ImageBlockController controller1 = ImageBlockController();
   
-  ImageBlock({Key? key}) : super(key: key);
+  ImageBlock({Key? key, this.base64, this.nombre}) : super(key: key);
   Image? selectedImage;
   Image? selectedImage1;
 
@@ -26,9 +29,6 @@ class ImageBlock extends StatefulWidget {
 
 class _ImageBlockState extends State<ImageBlock> {
   final ImagePicker _imagePicker = ImagePicker();
-  
-
-
   Future<void> _pickImageFromGallery() async {
     final pickedImage = await _imagePicker.pickImage(source: ImageSource.gallery);
     if (pickedImage != null) {
@@ -48,7 +48,6 @@ class _ImageBlockState extends State<ImageBlock> {
       widget.controller.setImage(widget.selectedImage, pickedImage.name, pickedImage.path, base64Image);
       widget.controller1.setImage(widget.selectedImage1, pickedImage.name, pickedImage.path, base64Image);
     }
-
   }
 
   void _removeImage() {
@@ -56,6 +55,26 @@ class _ImageBlockState extends State<ImageBlock> {
       widget.selectedImage = null;
     });
   }
+
+  @override
+  void initState() {
+    super.initState();
+    if(widget.nombre != null && widget.base64 != null) {
+      print('nombre -> '+ widget.nombre!);
+      print('base64 -> '+ widget.base64!);
+
+      // widget.selectedImage = imageFromBase64String(widget.hola);
+      widget.selectedImage = imageFromBase64String(widget.base64!);
+    }
+  }
+
+  Image imageFromBase64String(String base64String) {
+    return Image.memory(
+      base64Decode(base64String),
+      height: 380,
+    );
+  }
+
 
   @override
   Widget build(BuildContext context) {

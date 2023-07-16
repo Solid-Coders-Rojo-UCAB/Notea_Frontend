@@ -43,6 +43,7 @@ class _ContainerEditorNotaState extends State<ContainerEditorNota> {
     if (widget.contenidoTotal1 != null) {
       List<dynamic> contenidoList = widget.contenidoTotal1!;
       for (var item in contenidoList) {
+        
         if (item.containsKey('texto')) {
           var cuerpo = item['texto']['cuerpo'];
           _children.add(
@@ -51,13 +52,12 @@ class _ContainerEditorNotaState extends State<ContainerEditorNota> {
         } else if (item.containsKey('imagen')) {
           var imagen = item['imagen'];
           // Realizar acción para imagen
-          print('entro en IMGENNNNNNNNNNNNNNNNNNNN');
-          print('Imagen: $imagen');
-
+          _children.add(
+            ImageBlock(nombre: imagen['nombre'],base64: imagen['buffer'],),           //Aca se agrega el texblock que indica el contenido
+          );
         } else if (item.containsKey('tareas')) {
           var tareas = item['tareas'];
           // Realizar acción para tarea
-          print(tareas);
           _children.add(TareaBlock(tareas: tareas));      //Aca se agrega la tarea que indica el contenido
         }
       }
@@ -81,7 +81,7 @@ class _ContainerEditorNotaState extends State<ContainerEditorNota> {
   }
 
   void reload() async{
-    await Future.delayed(const Duration(milliseconds: 100), () {});
+    await Future.delayed(const Duration(seconds: 5), () {});
     setState(() {
       
     });
