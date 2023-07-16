@@ -27,21 +27,14 @@ class NotaBloc extends Bloc<NotaEvent, NotaState> {
     on<NotaCatchEvent>((event, emit) async {
       emit(const NotaInitialState());
       final repositorio = RepositorioNotaImpl(remoteDataSource: RemoteDataNotaImp(client: http.Client()));
-      print('Entro => Nota Bloc');
       final notas = await repositorio.buscarNotasGrupos(event.grupos);
-      print('Salio => Nota Bloc');
       if(notas.isLeft()){             //Ver que les parece esta manera de devolver
         if (notas.left!.isEmpty){
-          print('cero notas');
           emit(const CeroNotasFailureState());
         }else{
-          print('mas notas');
-
           emit(NotasCatchSuccessState(notas: notas.left!));
         }
       }else{
-          print('Error');
-
         emit(const NotasFailureState());
       }
     });
@@ -178,7 +171,7 @@ Future<Map<String, dynamic>> mapContenido(List<dynamic> listInfo) async {
     } else if (element is ImageBlock){
       contenidoList.add({
         'imagen': {
-          'buffer': element.controller.getBase64(),
+          'buffer': '8838728738278732878237',
           'nombre': element.controller.getImageName()
         },
         'orden': cant,
@@ -187,6 +180,12 @@ Future<Map<String, dynamic>> mapContenido(List<dynamic> listInfo) async {
     }
   }
   Map<String, dynamic> contenido = {'contenido': contenidoList};
+
+  print('Contenido oooooooooooooooooooooooooooooooooooooooo');
+
+  print(contenido);
+
+
   return contenido;
 }
 

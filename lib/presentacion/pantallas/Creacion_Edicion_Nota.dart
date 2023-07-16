@@ -234,7 +234,8 @@ class _AccionesConNotaState extends State<AccionesConNota> {
                     listInfo: recivedDataList,
                     tituloNota:_tituloController.text,
                     gruposGeneral: widget.gruposGeneral,
-                    etiquetasGeneral: widget.etiquetasGeneral
+                    etiquetasGeneral: widget.etiquetasGeneral,
+                    accion: widget.accion,
                   )
                   :
                     AnimatedButton(
@@ -248,6 +249,7 @@ class _AccionesConNotaState extends State<AccionesConNota> {
                       etiquetasGeneral: widget.etiquetasGeneral,
                       etiquetasNota: widget.etiquetasNota,
                       grupoNota: widget.grupoNota,
+                      accion: widget.accion,
                     ),
 
                   if (hayEtiquetas && hayGrupo && recivedDataList.isNotEmpty && _tituloController.text.isNotEmpty)
