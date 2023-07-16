@@ -12,7 +12,8 @@ import 'package:notea_frontend/presentacion/widgets/textOptions.dart';
 class ContainerEditorNota extends StatefulWidget {
   // final List<dynamic>? contenidoTotal;
 
-  final  Map<String, dynamic>? contenidoTotal1;
+  final  List<dynamic>? contenidoTotal1;
+  // final  Map<String, dynamic>? contenidoTotal1;
 
   final Function(String, List<dynamic>) onDataReceived;
 
@@ -40,7 +41,7 @@ class _ContainerEditorNotaState extends State<ContainerEditorNota> {
     super.initState();
 
     if (widget.contenidoTotal1 != null) {
-      List<dynamic> contenidoList = widget.contenidoTotal1!['contenido'];
+      List<dynamic> contenidoList = widget.contenidoTotal1!;
       for (var item in contenidoList) {
         if (item.containsKey('texto')) {
           var cuerpo = item['texto']['cuerpo'];
@@ -52,7 +53,7 @@ class _ContainerEditorNotaState extends State<ContainerEditorNota> {
           // Realizar acción para imagen
           print('Imagen: $imagen');
         } else if (item.containsKey('tarea')) {
-          var tareas = item['tarea'];
+          var tareas = item['tareas'];
           // Realizar acción para tarea
           print(tareas);
           _children.add(TareaBlock(tareas: tareas));      //Aca se agrega la tarea que indica el contenido

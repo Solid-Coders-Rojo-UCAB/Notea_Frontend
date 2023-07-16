@@ -42,6 +42,9 @@ class _MyDropdownState extends State<MyDropdown> {
   String cantNotas = '';
 
   Map<String, dynamic> convertStringToMap(String jsonString) {
+    print('-----------------------------------------------------------dddddddddddd');
+    print(jsonDecode(jsonString));
+    print('-----------------------------------------------------------dddddddddddd');
     return jsonDecode(jsonString);
   }
 
@@ -192,65 +195,61 @@ class _MyDropdownState extends State<MyDropdown> {
                               titulo: grupo.nombre.nombre,
                               contenido: Column(
                                   children: notasDeGrupo.map((nota) {
-                                    print('RECORRIENDO NOTAS ');
-
                                 return SizedBox(
                                     child: CartaWidget(
-                                  idNota: nota.id,
-                                  habilitado: false,
-                                  fecha: nota.getFechaCreacion(),
-                                  titulo: nota.titulo.tituloNota,
-                                  // contenidoTotal1: cont,
+                                        idNota: nota.id,
+                                        habilitado: false,
+                                        fecha: nota.getFechaCreacion(),
+                                        titulo: nota.titulo.getTituloNota(),
+                                        contenidoTotal1:  jsonDecode(nota.getContenido()),
+                                        // contenidoTotal1: convertStringToMap('{"contenido": [{"id": "bb1ceb30-67a9-46e5-b743-a2b26779cc20","orden": 1,"texto": {"cuerpo": "<p>Weewee</p>"}}]}'), //ESTO ES LO QUE DA PROBLEMAS
+                                        tags: const ['Tag1', 'Tag2', 'Tag3sssssss'],
+                                        etiquetas: widget
+                                            .etiquetas, //Aca llenamos con las etiquetas que trae la nota
+                                        grupos: widget.grupos,
+                                        onDeletePressed: () {
+                                          showDialog(
+                                            context: context,
+                                            builder: (BuildContext context) {
+                                              return AlertDialog(
+                                                title: const Text('Confirmación'),
+                                                content: const Text(
+                                                    '¿Estás seguro de que deseas mover a la papelera?'),
+                                                actions: [
+                                                  TextButton(
+                                                    child: const Text('Cancelar'),
+                                                    onPressed: () {
+                                                      Navigator.pop(
+                                                          context); // Cerrar el cuadro de diálogo
+                                                    },
+                                                  ),
+                                                  TextButton(
+                                                    child: const Text('Aceptar'),
+                                                    onPressed: () {
+                                                      BlocProvider.of<NotaBloc>(
+                                                              context)
+                                                          .add(
+                                                              ModificarEstadoNotaEvent(
+                                                                  idNota: nota.id,
+                                                                  estado:
+                                                                      "PAPELERA"));
 
-                                  //{contenido: [{id: bb1ceb30-67a9-46e5-b743-a2b26779cc20, orden: 1, texto: {cuerpo: <p>Weewee</p>}}]} CONTENIDO QUE TRAE LA NOTA Y FALLA
-                                  contenidoTotal1: convertStringToMap(nota.getContenido()), //ESTO ES LO QUE DA PROBLEMAS
-                                  tags: const ['Tag1', 'Tag2', 'Tag3sssssss'],
-                                  etiquetas: widget
-                                      .etiquetas, //Aca llenamos con las etiquetas que trae la nota
-                                  grupos: widget.grupos,
-                                  onDeletePressed: () {
-                                    showDialog(
-                                      context: context,
-                                      builder: (BuildContext context) {
-                                        return AlertDialog(
-                                          title: const Text('Confirmación'),
-                                          content: const Text(
-                                              '¿Estás seguro de que deseas mover a la papelera?'),
-                                          actions: [
-                                            TextButton(
-                                              child: const Text('Cancelar'),
-                                              onPressed: () {
-                                                Navigator.pop(
-                                                    context); // Cerrar el cuadro de diálogo
-                                              },
-                                            ),
-                                            TextButton(
-                                              child: const Text('Aceptar'),
-                                              onPressed: () {
-                                                BlocProvider.of<NotaBloc>(
-                                                        context)
-                                                    .add(
-                                                        ModificarEstadoNotaEvent(
-                                                            idNota: nota.id,
-                                                            estado:
-                                                                "PAPELERA"));
+                                                      Navigator.pop(context);
+                                                      Navigator.pop(
+                                                          context); // Cierra el cuadro de diálogo
 
-                                                Navigator.pop(context);
-                                                Navigator.pop(
-                                                    context); // Cierra el cuadro de diálogo
-
-                                                // Navega a la pantalla de mensajes utilizando el NavigationProvider
-                                                context
-                                                    .read<NavigationProvider>()
-                                                    .toMessagesScreen();
-                                              },
-                                            ),
-                                          ],
-                                        );
-                                      },
-                                    );
-                                    // Lógica para eliminar la nota
-                                  },
+                                                      // Navega a la pantalla de mensajes utilizando el NavigationProvider
+                                                      context
+                                                          .read<NavigationProvider>()
+                                                          .toMessagesScreen();
+                                                    },
+                                                  ),
+                                                ],
+                                              );
+                                            },
+                                          );
+                                          // Lógica para eliminar la nota
+                                        },
                                   onChangePressed: null,
                                 ));
                               }).toList()),
@@ -270,3 +269,4 @@ class _MyDropdownState extends State<MyDropdown> {
     });
   }
 }
+

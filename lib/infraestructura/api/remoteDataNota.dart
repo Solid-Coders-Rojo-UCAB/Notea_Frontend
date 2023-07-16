@@ -164,28 +164,26 @@ class RemoteDataNotaImp implements RemoteDataNota {
   }
 
   List<Nota> parseNota(String responseBody) {
-    List<dynamic> decodedResponse = jsonDecode(responseBody);
+    List<Map<String, dynamic>> decodedResponse = List<Map<String, dynamic>>.from(jsonDecode(responseBody));
     List<Nota> notas = [];
-    print('Verificando el response-----------');
-    printContent(decodedResponse);
-
-    Map<String, dynamic> ;
 
     for (var item in decodedResponse) {
       EstadoEnum estado = EstadoEnum.values.byName(item['estado']);
 
-      //hay que usar la funcion Nota.FromJson que lo hace de una
+      // Utiliza jsonEncode para convertir el mapa a una cadena JSON
+      String contenidoJson = jsonEncode(item['contenido']);
+
       Nota nota = Nota(
-          titulo: VOTituloNota(item['titulo']),
-          contenido: VOContenidoNota({'contenido':item['contenido']}.toString()),
-          fechaCreacion: DateTime.parse('2023-07-15T10:42:27'),
-          estado: estado,
-          ubicacion: VOUbicacionNota(1111, 222222),
-          id: item['id'],
-          idGrupo: VOIdGrupoNota(item['grupo']));
+        titulo: VOTituloNota(item['titulo']),
+        contenido: VOContenidoNota(contenidoJson),
+        fechaCreacion: DateTime.parse(item['fechaCreacion']),
+        estado: estado,
+        ubicacion: VOUbicacionNota(1111, 222222),
+        id: item['id'],
+        idGrupo: VOIdGrupoNota(item['grupo']),
+      );
       notas.add(nota);
     }
-    print('sale');
     return notas;
   }
 

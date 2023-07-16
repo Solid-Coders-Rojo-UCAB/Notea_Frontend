@@ -27,7 +27,8 @@ class AccionesConNota extends StatefulWidget {
   final String? titulo;
   final String? idNota;
   // final List<String>? contenidosTotal;
-  final  Map<String, dynamic>? contenidoTotal1;
+  final  List<dynamic>? contenidoTotal1;
+  // final  Map<String, dynamic>? contenidoTotal1;
 
   const AccionesConNota({Key? key, required this.accion, required this.grupos,this.idNota, this.titulo, this.contenidoTotal1, this.etiquetas}) : super(key: key);
 
