@@ -1,24 +1,18 @@
 // ignore_for_file: unrelated_type_equality_checks
 
 import 'dart:convert';
-
 import 'package:animated_text_kit/animated_text_kit.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_zoom_drawer/flutter_zoom_drawer.dart';
 import 'package:notea_frontend/dominio/agregados/grupo.dart';
 import 'package:notea_frontend/dominio/agregados/nota.dart';
-import 'package:notea_frontend/infraestructura/bloc/Grupo/grupo_bloc.dart';
 import 'package:notea_frontend/infraestructura/bloc/nota/nota_bloc.dart';
-import 'package:notea_frontend/presentacion/pantallas/home_screen.dart';
-import 'package:notea_frontend/presentacion/widgets/BottomBar.dart';
 import 'package:notea_frontend/presentacion/widgets/card.dart';
 import 'package:notea_frontend/presentacion/widgets/desplegable.dart';
 import 'package:provider/provider.dart';
 import '../../dominio/agregados/usuario.dart';
 import '../../infraestructura/bloc/usuario/usuario_bloc.dart';
-import '../widgets/MenuDesplegable.dart';
-import 'angel/pruebaNota.dart';
 import 'navigation_provider.dart';
 
 // ignore: must_be_immutable
@@ -115,9 +109,7 @@ class _PapeleraState extends State<Papelera> {
 
   @override
   Widget build(BuildContext context) {
-    final navigationProvider = context.watch<NavigationProvider>();
-    final reloadCounter = navigationProvider.reloadCounter;
-
+    print('RECARGANDOMEEEE');
     return ChangeNotifierProvider(
         create: (_) => NavigationProvider(usuario: widget.usuario),
         child: BlocBuilder<NotaBloc, NotaState>(builder: (context, state) {
@@ -265,7 +257,8 @@ class _PapeleraState extends State<Papelera> {
                                                 habilitado: true,
                                                 fecha: nota.getFechaCreacion(),
                                                 titulo: nota.titulo.tituloNota,
-                                                contenidoTotal1: jsonDecode(nota.getContenido()),
+                                                contenidoTotal1: jsonDecode(
+                                                    nota.getContenido()),
                                                 tags: const [
                                                   'Tag1',
                                                   'Tag2',
@@ -294,10 +287,15 @@ class _PapeleraState extends State<Papelera> {
                                                             child: const Text(
                                                                 'Aceptar'),
                                                             onPressed: () {
-                                                              BlocProvider.of<NotaBloc>(context).add(DeleteNoteEvent(idNota: nota.id, ));
-                                                              navigationProvider.reloadCurrentScreen();
-                                                              BlocProvider.of<NotaBloc>(context).add(NotaCatchEvent(grupos: widget.grupos!));
-                                                              Navigator.pop(context);
+                                                            BlocProvider.of< NotaBloc>(context).add(DeleteNoteEvent(idNota: nota.id));
+                                                              BlocProvider.of<
+                                                                          NotaBloc>(
+                                                                      context)
+                                                                  .add(NotaCatchEvent( 
+                                                                      grupos: widget
+                                                                          .grupos!));
+                                                              Navigator.pop(
+                                                                  context);
                                                             },
                                                           ),
                                                         ],
@@ -329,10 +327,22 @@ class _PapeleraState extends State<Papelera> {
                                                             child: const Text(
                                                                 'Aceptar'),
                                                             onPressed: () {
-                                                              BlocProvider.of<NotaBloc>(context).add(ModificarEstadoNotaEvent(idNota: nota.id,estado:"GUARDADO"));
-                                                               navigationProvider.reloadCurrentScreen();
-                                                               BlocProvider.of<NotaBloc>(context).add(NotaCatchEvent(grupos: widget.grupos!));
-                                                               Navigator.pop(context);
+                                                              BlocProvider.of<
+                                                                          NotaBloc>(
+                                                                      context)
+                                                                  .add(ModificarEstadoNotaEvent(
+                                                                      idNota: nota
+                                                                          .id,
+                                                                      estado:
+                                                                          "GUARDADO"));
+                                                              BlocProvider.of<
+                                                                          NotaBloc>(
+                                                                      context)
+                                                                  .add(NotaCatchEvent(
+                                                                      grupos: widget
+                                                                          .grupos!));
+                                                              Navigator.pop(
+                                                                  context);
                                                             },
                                                           ),
                                                         ],

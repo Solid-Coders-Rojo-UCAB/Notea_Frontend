@@ -8,12 +8,12 @@ class NavigationProvider with ChangeNotifier {
   final Usuario usuario;
   Widget _currentScreen;
 
-  int _reloadCounter = 0;
+
 
   NavigationProvider({required this.usuario}) : _currentScreen = MessagesScreen(usuario: usuario);
 
   Widget get currentScreen => _currentScreen;
-  int get reloadCounter => _reloadCounter;
+
 
   set currentScreen(Widget screen) {
     _currentScreen = screen;
@@ -30,9 +30,5 @@ class NavigationProvider with ChangeNotifier {
     notifyListeners();
   }
 
-  void reloadCurrentScreen() {
-    _reloadCounter++;
-    print('Reloading screen, counter: $_reloadCounter'); 
-    notifyListeners();
-  }
+
 }
