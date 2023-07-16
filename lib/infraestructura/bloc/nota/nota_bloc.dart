@@ -26,77 +26,73 @@ class NotaBloc extends Bloc<NotaEvent, NotaState> {
 
     on<NotaCatchEvent>((event, emit) async {
       emit(const NotaInitialState());
-      final repositorio = RepositorioNotaImpl(remoteDataSource: RemoteDataNotaImp(client: http.Client()));
+      final repositorio = RepositorioNotaImpl(
+          remoteDataSource: RemoteDataNotaImp(client: http.Client()));
       final notas = await repositorio.buscarNotasGrupos(event.grupos);
-      if(notas.isLeft()){             //Ver que les parece esta manera de devolver
-        if (notas.left!.isEmpty){
-          emit(const CeroNotasFailureState());
-        }else{
-          emit(NotasCatchSuccessState(notas: notas.left!));
-        }
-      }else{
+      if (notas.isLeft()) {
+        //Ver que les parece esta manera de devolver
+        emit(NotasCatchSuccessState(notas: notas.left!));
+      } else {
         emit(const NotasFailureState());
       }
     });
-    
+
     on<ModificarEstadoNotaEvent>((event, emit) async {
       emit(const NotaInitialState());
       final repositorio = RepositorioNotaImpl(
           remoteDataSource: RemoteDataNotaImp(client: http.Client()));
 
-  
       final nota =
           await repositorio.modificarEstadoNota(event.idNota, event.estado);
 
-
-      if(nota.isLeft()){
-           final notas = await repositorio.buscarNotasGrupos(event.grupos);
-            if(notas.isLeft()){             //Ver que les parece esta manera de devolver
-              if (notas.left!.isEmpty){
-                emit(const CeroNotasFailureState());
-              }else{
-                emit(NotasCatchSuccessState(notas: notas.left!));
-              }
-            }else{
-              emit(const NotasFailureState());
-            }
-      }
-      else{
+      if (nota.isLeft()) {
+        final notas = await repositorio.buscarNotasGrupos(event.grupos);
+        if (notas.isLeft()) {
+          //Ver que les parece esta manera de devolver
+          if (notas.left!.isEmpty) {
+            emit(NotasCatchSuccessState(notas: notas.left!));
+          }
+        } else {
+          emit(const NotasFailureState());
+        }
+      } else {
         emit(const NotasFailureState());
       }
-         
     });
 
-    on<DeleteNoteEvent>(
-      (event, emit) async {
+    on<DeleteNoteEvent>((event, emit) async {
+      emit(const NotaInitialState());
         final repositorio = RepositorioNotaImpl(
             remoteDataSource: RemoteDataNotaImp(client: http.Client()));
         final eliminado = await repositorio.borrarNota(event.idNota);
 
         await Future.delayed(const Duration(seconds: 1));
 
-       if (eliminado.isLeft()){
-            final notas = await repositorio.buscarNotasGrupos(event.grupos);
-            if(notas.isLeft()){             //Ver que les parece esta manera de devolver
-              if (notas.left!.isEmpty){
-                emit(const CeroNotasFailureState());
-              }else{
-                emit(NotasCatchSuccessState(notas: notas.left!));
-              }
-            }else{
-              emit(const NotasFailureState());
-           }
-      }
-      else{
+        if (eliminado.isLeft()) {
+          final notas = await repositorio.buscarNotasGrupos(event.grupos);
+          if (notas.isLeft()) {
+            //Ver que les parece esta manera de devolver
+            if (notas.left!.isEmpty) {
+              emit(NotasCatchSuccessState(notas: notas.left!));
+            }
+          } else {
+            emit(const NotasFailureState());
+          }
+        } else {
           emit(const NotasFailureState());
-      }
+        }
       },
     );
 
     on<CreateNotaEvent>((event, emit) async {
       emit(const NotaInitialState());
-      final repositorio = RepositorioNotaImpl(remoteDataSource: RemoteDataNotaImp(client: http.Client()));
-      final nota = await repositorio.crearNota(event.tituloNota, await mapContenido(event.listInfo), etiqeutasListId(event.etiquetas), event.grupo);
+      final repositorio = RepositorioNotaImpl(
+          remoteDataSource: RemoteDataNotaImp(client: http.Client()));
+      final nota = await repositorio.crearNota(
+          event.tituloNota,
+          await mapContenido(event.listInfo),
+          etiqeutasListId(event.etiquetas),
+          event.grupo);
 
       await Future.delayed(const Duration(milliseconds: 300));
       nota!.isLeft()
@@ -192,7 +188,7 @@ Future<Map<String, dynamic>> mapContenido(List<dynamic> listInfo) async {
         },
         'orden': cant,
       });
-    } else if (element is ImageBlock){
+    } else if (element is ImageBlock) {
       contenidoList.add({
         'imagen': {
           'buffer': element.controller.getBase64(),
@@ -205,10 +201,9 @@ Future<Map<String, dynamic>> mapContenido(List<dynamic> listInfo) async {
   }
   Map<String, dynamic> contenido = {'contenido': contenidoList};
 
-  print('Contenido oooooooooooooooooooooooooooooooooooooooo');
+  //print('Contenido oooooooooooooooooooooooooooooooooooooooo');
 
-  print(contenido);
-
+  //print(contenido);
 
   return contenido;
 }

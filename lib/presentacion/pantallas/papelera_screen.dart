@@ -22,7 +22,11 @@ class Papelera extends StatefulWidget {
   final Usuario usuario;
   final List<Etiqueta>? etiquetas;
 
-  Papelera({super.key, required this.grupos, required this.usuario, required this.etiquetas});
+  Papelera(
+      {super.key,
+      required this.grupos,
+      required this.usuario,
+      required this.etiquetas});
 
   @override
   // ignore: library_private_types_in_public_api
@@ -98,7 +102,7 @@ class _PapeleraState extends State<Papelera> {
       notaBloc.add(NotaCatchEvent(grupos: widget.grupos!));
     });
 
-    Future.delayed(const Duration(milliseconds: 2500), () {
+    Future.delayed(const Duration(milliseconds: 1), () {
       if (mounted) {
         // Comprobar si el widget sigue montado antes de llamar a setState
         setState(() {
@@ -113,20 +117,18 @@ class _PapeleraState extends State<Papelera> {
   Widget build(BuildContext context) {
     return BlocBuilder<NotaBloc, NotaState>(builder: (context, state) {
       print(state);
-      if (state is NotaDeleteSuccessState) {
-        BlocProvider.of<NotaBloc>(context)
-            .add(NotaCatchEvent(grupos: widget.grupos!));
-      } else if (state is CeroNotasFailureState) {
-        BlocProvider.of<NotaBloc>(context)
-            .add(NotaCatchEvent(grupos: widget.grupos!));
-      } else if (state is NotasFailureState) {
+
+      if (state is NotaInitialState) {
+        BlocProvider.of< NotaBloc>(context).add(NotaCatchEvent(grupos: widget.grupos!)); 
+
+      }else if (state is NotasFailureState) {
         return const Center(child: Text('Error al cargar las notas'));
       } else if (state is NotasCatchSuccessState) {
         notas = state.notas;
         int? suma = 0;
         int? sumaGrupos = 0;
         List<Grupo> gruposPapelera = [];
-
+  
         for (int i = 0; i < widget.grupos!.length; i++) {
           final grupo = widget.grupos![i];
           final cant = notas
@@ -143,7 +145,7 @@ class _PapeleraState extends State<Papelera> {
 
         cantidadGrupos = sumaGrupos.toString();
         cantidadNotas = suma.toString();
-      
+
         return Scaffold(
             appBar: AppBar(
               title: const Text('Papelera'),
@@ -195,8 +197,6 @@ class _PapeleraState extends State<Papelera> {
                       ),
                     ],
                   ),
-
-      
                   suma == 0 //Si no hay ninguna nota en la papelera, pues vulve a la pantalla anterior
                       ? Center(
                           child: Column(
@@ -259,7 +259,9 @@ class _PapeleraState extends State<Papelera> {
                                             titulo: nota.titulo.tituloNota,
                                             contenidoTotal1:
                                                 jsonDecode(nota.getContenido()),
-                                            tags: listaEtiquetasTomadas(widget.etiquetas, nota.getEtiquetas()),
+                                            tags: listaEtiquetasTomadas(
+                                                widget.etiquetas,
+                                                nota.getEtiquetas()),
                                             accion: 'Pepelera',
                                             onDeletePressed: () {
                                               showDialog(
@@ -290,7 +292,9 @@ class _PapeleraState extends State<Papelera> {
                                                               .add(DeleteNoteEvent(
                                                                   idNota:
                                                                       nota.id,
-                                                                  grupos: widget.grupos!));
+                                                                  grupos: widget
+                                                                      .grupos!));
+                                                                      
 
                                                           Navigator.pop(
                                                               context);
@@ -333,7 +337,8 @@ class _PapeleraState extends State<Papelera> {
                                                                       nota.id,
                                                                   estado:
                                                                       "GUARDADO",
-                                                                      grupos: widget.grupos!));
+                                                                  grupos: widget
+                                                                      .grupos!));
 
                                                           Navigator.pop(
                                                               context);
@@ -365,7 +370,8 @@ class _PapeleraState extends State<Papelera> {
   }
 }
 
-List<Etiqueta> listaEtiquetasTomadas(List<Etiqueta>? listaEtiquetasGeneral, List<dynamic> listaEtiquetasId){
+List<Etiqueta> listaEtiquetasTomadas(
+    List<Etiqueta>? listaEtiquetasGeneral, List<dynamic> listaEtiquetasId) {
   List<Etiqueta> etiquetasCoincidentes = [];
 
   for (Etiqueta etiqueta in listaEtiquetasGeneral!) {
