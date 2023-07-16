@@ -71,6 +71,7 @@ class CartaWidget extends StatelessWidget {
                 )),
             );
           }else{
+            //DEBERIA MOSTRAR UN MENSAJE INDICANDO QUE NO PUEDE EDITAR MIENTRAS SE ENCUENTRA EN LA LISTA DE PAPELERA LA NOTA
             // Fluttertoast.showToast(
             //       msg: 'Toast Message',
             //       toastLength: Toast.LENGTH_SHORT,
@@ -184,16 +185,17 @@ class CartaWidget extends StatelessWidget {
                                     color: Color.fromARGB(255, 20, 18, 18),
                                   ),
                                 ),
-                                onPressed: () {
-                                  // Fluttertoast.showToast(
-                                  //   msg: "THE toast message",
-                                  //   toastLength: Toast.LENGTH_SHORT,       Probando los Toast
-                                  //   timeInSecForIosWeb: 1,
-                                  //   backgroundColor: Colors.black,
-                                  //   textColor: Colors.white,
-                                  //   fontSize: 16.0,
-                                  // );
-                                },
+                                onPressed: onDeletePressed,
+                                // onPressed: () {
+                                //   // Fluttertoast.showToast(
+                                //   //   msg: "THE toast message",
+                                //   //   toastLength: Toast.LENGTH_SHORT,       Probando los Toast
+                                //   //   timeInSecForIosWeb: 1,
+                                //   //   backgroundColor: Colors.black,
+                                //   //   textColor: Colors.white,
+                                //   //   fontSize: 16.0,
+                                //   // );
+                                // },
                               ),
                               Visibility(
                                 visible: habilitado,
