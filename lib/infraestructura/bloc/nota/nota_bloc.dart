@@ -45,13 +45,25 @@ class NotaBloc extends Bloc<NotaEvent, NotaState> {
           remoteDataSource: RemoteDataNotaImp(client: http.Client()));
 
   
-      final notas =
+      final nota =
           await repositorio.modificarEstadoNota(event.idNota, event.estado);
 
 
-      notas.isLeft()
-          ? emit(const CeroNotasFailureState())
-          : emit(const NotasFailureState());
+      if(nota.isLeft()){
+           final notas = await repositorio.buscarNotasGrupos(event.grupos);
+            if(notas.isLeft()){             //Ver que les parece esta manera de devolver
+              if (notas.left!.isEmpty){
+                emit(const CeroNotasFailureState());
+              }else{
+                emit(NotasCatchSuccessState(notas: notas.left!));
+              }
+            }else{
+              emit(const NotasFailureState());
+            }
+      }
+      else{
+        emit(const NotasFailureState());
+      }
          
     });
 
@@ -63,9 +75,21 @@ class NotaBloc extends Bloc<NotaEvent, NotaState> {
 
         await Future.delayed(const Duration(seconds: 1));
 
-        eliminado.isLeft()
-            ? emit(NotaDeleteSuccessState(status: eliminado.isLeft()))
-            : emit(const NotasFailureState());
+       if (eliminado.isLeft()){
+            final notas = await repositorio.buscarNotasGrupos(event.grupos);
+            if(notas.isLeft()){             //Ver que les parece esta manera de devolver
+              if (notas.left!.isEmpty){
+                emit(const CeroNotasFailureState());
+              }else{
+                emit(NotasCatchSuccessState(notas: notas.left!));
+              }
+            }else{
+              emit(const NotasFailureState());
+           }
+      }
+      else{
+          emit(const NotasFailureState());
+      }
       },
     );
 

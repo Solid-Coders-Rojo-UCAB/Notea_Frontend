@@ -60,7 +60,7 @@ class _MyDropdownState extends State<MyDropdown> {
   }
 void handleDelete(Nota nota) {
     BlocProvider.of<NotaBloc>(context)
-     .add(ModificarEstadoNotaEvent(idNota: nota.id, estado: "PAPELERA"));
+     .add(ModificarEstadoNotaEvent(idNota: nota.id, estado: "PAPELERA", grupos: widget.grupos!));
 
     // Espera un poco para darle tiempo a la nota para ser eliminada
 
