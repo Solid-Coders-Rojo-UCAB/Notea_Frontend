@@ -171,7 +171,7 @@ Future<Map<String, dynamic>> mapContenido(List<dynamic> listInfo) async {
     } else if (element is ImageBlock){
       contenidoList.add({
         'imagen': {
-          'buffer': '8838728738278732878237',
+          'buffer': element.controller.getBase64(),
           'nombre': element.controller.getImageName()
         },
         'orden': cant,
