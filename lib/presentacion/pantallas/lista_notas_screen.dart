@@ -243,22 +243,9 @@ void handleDelete(Nota nota) {
                                                   TextButton(
                                                     child: const Text('Aceptar'),
                                                     onPressed: () {
-                                                      BlocProvider.of<NotaBloc>(
-                                                              context)
-                                                          .add(
-                                                              ModificarEstadoNotaEvent(
-                                                                  idNota: nota.id,
-                                                                  estado:
-                                                                      "PAPELERA"));
-
-                                                Navigator.pop(context);
-                                                Navigator.pop(
-                                                    context); // Cierra el cuadro de diálogo
-
-                                                // Navega a la pantalla de mensajes utilizando el NavigationProvider
-                                                context
-                                                    .read<NavigationProvider>()
-                                                    .toMessagesScreen();
+                                                    handleDelete(nota);
+                                                    Navigator.pop(
+                                                          context); 
                                               },
                                             ),
                                           ],
