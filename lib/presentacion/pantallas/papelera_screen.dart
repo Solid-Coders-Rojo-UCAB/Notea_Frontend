@@ -6,6 +6,7 @@ import 'package:animated_text_kit/animated_text_kit.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_zoom_drawer/flutter_zoom_drawer.dart';
+import 'package:notea_frontend/dominio/agregados/etiqueta.dart';
 import 'package:notea_frontend/dominio/agregados/grupo.dart';
 import 'package:notea_frontend/dominio/agregados/nota.dart';
 import 'package:notea_frontend/infraestructura/bloc/Grupo/grupo_bloc.dart';
@@ -25,8 +26,9 @@ import 'navigation_provider.dart';
 class Papelera extends StatefulWidget {
   List<Grupo>? grupos;
   final Usuario usuario;
+  final List<Etiqueta>? etiquetas;
 
-  Papelera({super.key, required this.grupos, required this.usuario});
+  Papelera({super.key, required this.grupos, required this.usuario, required this.etiquetas});
 
   @override
   // ignore: library_private_types_in_public_api
@@ -262,15 +264,12 @@ class _PapeleraState extends State<Papelera> {
                                                     notasDeGrupo.map((nota) {
                                               return SizedBox(
                                                   child: CartaWidget(
+                                                accion: 'Papelera',
                                                 habilitado: true,
                                                 fecha: nota.getFechaCreacion(),
                                                 titulo: nota.titulo.tituloNota,
                                                 contenidoTotal1: jsonDecode(nota.getContenido()),
-                                                tags: const [
-                                                  'Tag1',
-                                                  'Tag2',
-                                                  'Tag3sssssss'
-                                                ],
+                                                tags: listaEtiquetasTomadas(widget.etiquetas, nota.getEtiquetas()),
                                                 onDeletePressed: () {
                                                   showDialog(
                                                     context: context,
@@ -330,9 +329,9 @@ class _PapeleraState extends State<Papelera> {
                                                                 'Aceptar'),
                                                             onPressed: () {
                                                               BlocProvider.of<NotaBloc>(context).add(ModificarEstadoNotaEvent(idNota: nota.id,estado:"GUARDADO"));
-                                                               navigationProvider.reloadCurrentScreen();
-                                                               BlocProvider.of<NotaBloc>(context).add(NotaCatchEvent(grupos: widget.grupos!));
-                                                               Navigator.pop(context);
+                                                              navigationProvider.reloadCurrentScreen();
+                                                              BlocProvider.of<NotaBloc>(context).add(NotaCatchEvent(grupos: widget.grupos!));
+                                                              Navigator.pop(context);
                                                             },
                                                           ),
                                                         ],
@@ -359,4 +358,15 @@ class _PapeleraState extends State<Papelera> {
           return const Center(child: CircularProgressIndicator());
         }));
   }
+}
+
+List<Etiqueta> listaEtiquetasTomadas(List<Etiqueta>? listaEtiquetasGeneral, List<dynamic> listaEtiquetasId){
+  List<Etiqueta> etiquetasCoincidentes = [];
+
+  for (Etiqueta etiqueta in listaEtiquetasGeneral!) {
+    if (listaEtiquetasId.contains(etiqueta.idEtiqueta)) {
+      etiquetasCoincidentes.add(etiqueta);
+    }
+  }
+  return etiquetasCoincidentes;
 }

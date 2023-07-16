@@ -208,9 +208,9 @@ void handleDelete(Nota nota) {
                                     // print('CONTENIDO DE LA NOTA-------------------------');
                                     // print(nota.getContenido());
 
-                                    print('------------------------ETIQUETAS----------------------------');
-                                    grupoTomado(widget.grupos, nota.getIdGrupoNota());
-                                    print('------------------------ETIQUETAS----------------------------');
+                                    // print('------------------------ETIQUETAS----------------------------');
+                                    // grupoTomado(widget.grupos, nota.getIdGrupoNota());
+                                    // print('------------------------ETIQUETAS----------------------------');
 
                                 return SizedBox(
                                     child: CartaWidget(
@@ -219,7 +219,7 @@ void handleDelete(Nota nota) {
                                         fecha: nota.getFechaCreacion(),
                                         titulo: nota.titulo.getTituloNota(),
                                         contenidoTotal1:  jsonDecode(nota.getContenido()),
-                                        tags: const ['Tag1', 'Tag2', 'Tag3sssssss'],
+                                        tags: listaEtiquetasTomadas(widget.etiquetas, nota.getEtiquetas()),
                                         gruposGeneral: widget.grupos,       //GRUPOS GENERALES
                                         grupoNota: grupoTomado(widget.grupos, nota.getIdGrupoNota()),
                                         etiqeutasGeneral: widget.etiquetas, //ETIQUETAS GENERALES
@@ -292,5 +292,4 @@ Grupo? grupoTomado(List<Grupo>? listaGrupoGeneral, String idGrupo){
   }
   return null;
 }
-
 
