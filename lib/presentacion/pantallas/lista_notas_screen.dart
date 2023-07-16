@@ -1,4 +1,4 @@
-// ignore_for_file: unrelated_type_equality_checks, unnecessary_null_comparison
+// ignore_for_file: unrelated_type_equality_checks, unnecessary_null_comparison, iterable_contains_unrelated_type
 
 import 'dart:convert';
 
@@ -44,13 +44,16 @@ class _MyDropdownState extends State<MyDropdown> {
   String cantNotas = '';
 
   Map<String, dynamic> convertStringToMap(String jsonString) {
+    print('-----------------------------------------------------------dddddddddddd');
+    print(jsonDecode(jsonString));
+    print('-----------------------------------------------------------dddddddddddd');
     return jsonDecode(jsonString);
   }
 
   @override
   void initState() {
     super.initState();
-    WidgetsBinding.instance.addPostFrameCallback((_) {
+    WidgetsBinding.instance.addPostFrameCallback((_) async{
       final notaBloc = BlocProvider.of<NotaBloc>(context);
       notaBloc.add(NotaCatchEvent(grupos: widget.grupos!));
     });
@@ -137,6 +140,7 @@ void handleDelete(Nota nota) {
       if (state is NotasCatchSuccessState) {
         List<Grupo> gruposPapelera = [];
         int cantNotasTotal = 0;
+        // print('Entra - > For1');
         for (int i = 0; i < widget.grupos!.length; i++) {
           final grupo = widget.grupos![i]; //Tenemos el grupo que se renderizará
           final cant = notas
@@ -182,6 +186,7 @@ void handleDelete(Nota nota) {
             : ListView.builder(
                 itemCount: gruposPapelera.length,
                 itemBuilder: (context, index) {
+                  // print('Entro a la lista de view');
                   final grupo = gruposPapelera[
                       index]; //Tenemos el grupo que se renderizará
                   final notasDeGrupo = notas
@@ -200,43 +205,60 @@ void handleDelete(Nota nota) {
                               titulo: grupo.nombre.nombre,
                               contenido: Column(
                                   children: notasDeGrupo.map((nota) {
+                                    // print('CONTENIDO DE LA NOTA-------------------------');
+                                    // print(nota.getContenido());
+
+                                    print('------------------------ETIQUETAS----------------------------');
+                                    grupoTomado(widget.grupos, nota.getIdGrupoNota());
+                                    print('------------------------ETIQUETAS----------------------------');
+
                                 return SizedBox(
                                     child: CartaWidget(
-                                  idNota: nota.id,
-                                  habilitado: false,
-                                  fecha: nota.getFechaCreacion(),
-                                  titulo: nota.titulo.tituloNota,
-                                  // contenidoTotal1: cont,
-                                  contenidoTotal1: convertStringToMap(nota
-                                      .getContenido()), //Esto hace que se me muera toda la aplicacion
-                                  tags: const ['Tag1', 'Tag2', 'Tag3sssssss'],
-                                  etiquetas: widget
-                                      .etiquetas, //Aca llenamos con las etiquetas que trae la nota
-                                  grupos: widget.grupos,
-                                  onDeletePressed: () {
-                            
-                                    showDialog(
-                                      context: context,
-                                      builder: (BuildContext context) {
-                                        return AlertDialog(
-                                          title: const Text('Confirmación'),
-                                          content: const Text(
-                                              '¿Estás seguro de que deseas mover a la papelera?'),
-                                          actions: [
-                                            TextButton(
-                                              child: const Text('Cancelar'),
-                                              onPressed: () {
-                                 
-                                                Navigator.pop(
-                                                    context); // Cerrar el cuadro de diálogo
-                                              },
-                                            ),
-                                            TextButton(
-                                              child: const Text('Aceptar'),
-                                              onPressed: () {
-                                                handleDelete(nota);
+                                        idNota: nota.id,
+                                        habilitado: false,
+                                        fecha: nota.getFechaCreacion(),
+                                        titulo: nota.titulo.getTituloNota(),
+                                        contenidoTotal1:  jsonDecode(nota.getContenido()),
+                                        tags: const ['Tag1', 'Tag2', 'Tag3sssssss'],
+                                        gruposGeneral: widget.grupos,       //GRUPOS GENERALES
+                                        grupoNota: grupoTomado(widget.grupos, nota.getIdGrupoNota()),
+                                        etiqeutasGeneral: widget.etiquetas, //ETIQUETAS GENERALES
+                                        etiquetasNota: listaEtiquetasTomadas(widget.etiquetas, nota.getEtiquetas()),
+                                        onDeletePressed: () {
+                                          showDialog(
+                                            context: context,
+                                            builder: (BuildContext context) {
+                                              return AlertDialog(
+                                                title: const Text('Confirmación'),
+                                                content: const Text(
+                                                    '¿Estás seguro de que deseas mover a la papelera?'),
+                                                actions: [
+                                                  TextButton(
+                                                    child: const Text('Cancelar'),
+                                                    onPressed: () {
+                                                      Navigator.pop(
+                                                          context); // Cerrar el cuadro de diálogo
+                                                    },
+                                                  ),
+                                                  TextButton(
+                                                    child: const Text('Aceptar'),
+                                                    onPressed: () {
+                                                      BlocProvider.of<NotaBloc>(
+                                                              context)
+                                                          .add(
+                                                              ModificarEstadoNotaEvent(
+                                                                  idNota: nota.id,
+                                                                  estado:
+                                                                      "PAPELERA"));
 
                                                 Navigator.pop(context);
+                                                Navigator.pop(
+                                                    context); // Cierra el cuadro de diálogo
+
+                                                // Navega a la pantalla de mensajes utilizando el NavigationProvider
+                                                context
+                                                    .read<NavigationProvider>()
+                                                    .toMessagesScreen();
                                               },
                                             ),
                                           ],
@@ -264,3 +286,24 @@ void handleDelete(Nota nota) {
     });
   }
 }
+List<Etiqueta> listaEtiquetasTomadas(List<Etiqueta>? listaEtiquetasGeneral, List<dynamic> listaEtiquetasId){
+  List<Etiqueta> etiquetasCoincidentes = [];
+
+  for (Etiqueta etiqueta in listaEtiquetasGeneral!) {
+    if (listaEtiquetasId.contains(etiqueta.idEtiqueta)) {
+      etiquetasCoincidentes.add(etiqueta);
+    }
+  }
+  return etiquetasCoincidentes;
+}
+
+Grupo? grupoTomado(List<Grupo>? listaGrupoGeneral, String idGrupo){
+  for (Grupo grupo in listaGrupoGeneral!) {
+    if (grupo.idGrupo == idGrupo) {
+      return grupo;
+    }
+  }
+  return null;
+}
+
+

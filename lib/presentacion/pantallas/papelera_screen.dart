@@ -265,9 +265,7 @@ class _PapeleraState extends State<Papelera> {
                                                 habilitado: true,
                                                 fecha: nota.getFechaCreacion(),
                                                 titulo: nota.titulo.tituloNota,
-                                                contenidoTotal1:
-                                                    convertStringToMap(
-                                                        nota.getContenido()),
+                                                contenidoTotal1: jsonDecode(nota.getContenido()),
                                                 tags: const [
                                                   'Tag1',
                                                   'Tag2',

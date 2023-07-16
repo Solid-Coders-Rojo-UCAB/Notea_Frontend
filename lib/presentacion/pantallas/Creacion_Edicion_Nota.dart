@@ -22,15 +22,17 @@ import 'package:notea_frontend/presentacion/widgets/TextBlock.dart';
 
 class AccionesConNota extends StatefulWidget {
   final String accion;
-  final List<Grupo>? grupos;
-  final List<Etiqueta>? etiquetas;
+  final List<Grupo>? gruposGeneral;
+  final Grupo? grupoNota;
+  final List<Etiqueta>? etiquetasGeneral;
+  final List<Etiqueta>? etiquetasNota;
 
   final String? titulo;
   final String? idNota;
-  // final List<String>? contenidosTotal;
-  final  Map<String, dynamic>? contenidoTotal1;
+  final  List<dynamic>? contenidoTotal1;
 
-  const AccionesConNota({Key? key, required this.accion, required this.grupos,this.idNota, this.titulo, this.contenidoTotal1, this.etiquetas}) : super(key: key);
+
+  const AccionesConNota({Key? key, required this.accion, required this.gruposGeneral,this.idNota, this.titulo, this.contenidoTotal1, this.etiquetasGeneral, this.grupoNota, this.etiquetasNota}) : super(key: key);
 
   @override
   _AccionesConNotaState createState() => _AccionesConNotaState();
@@ -89,9 +91,6 @@ class _AccionesConNotaState extends State<AccionesConNota> {
   //Traemos de la lista de grupos el grupo seleccionado
   void handleDataGrupo(Grupo dataGrupo) {
     receivedDataGrupo = dataGrupo;
-    print('--------Grupo-------');
-    print(receivedDataGrupo!.getNombre());
-    print('---------------------------------');
     hayGrupo = true;
     setState(() {
       receivedDataGrupo = receivedDataGrupo;
@@ -226,16 +225,30 @@ class _AccionesConNotaState extends State<AccionesConNota> {
                     ],
                   ),
                   const SizedBox(height: 16.0),
+                  widget.accion == 'Creando Nota' ?
                   AnimatedButton(
                     onDataReceivedGrupo: handleDataGrupo,
                     onDataReceivedEtiqueta: handleDataEtiquetas,
-                    grupos: widget.grupos,
                     puedeCrear: hayGrupo && hayEtiquetas ? true : false,
-                    etiquetas: widget.etiquetas,
                     grupo: receivedDataGrupo,
                     listInfo: recivedDataList,
                     tituloNota:_tituloController.text,
-                  ),
+                    gruposGeneral: widget.gruposGeneral,
+                    etiquetasGeneral: widget.etiquetasGeneral
+                  )
+                  :
+                    AnimatedButton(
+                      onDataReceivedGrupo: handleDataGrupo,
+                      onDataReceivedEtiqueta: handleDataEtiquetas,
+                      puedeCrear: hayGrupo && hayEtiquetas ? true : false,
+                      grupo: receivedDataGrupo,
+                      listInfo: recivedDataList,
+                      tituloNota:_tituloController.text,
+                      gruposGeneral: widget.gruposGeneral,
+                      etiquetasGeneral: widget.etiquetasGeneral,
+                      etiquetasNota: widget.etiquetasNota,
+                      grupoNota: widget.grupoNota,
+                    ),
 
                   if (hayEtiquetas && hayGrupo && recivedDataList.isNotEmpty && _tituloController.text.isNotEmpty)
                     Container(
@@ -244,11 +257,6 @@ class _AccionesConNotaState extends State<AccionesConNota> {
                         alignment: Alignment.bottomRight,
                         child: FloatingActionButton(
                           onPressed: () {
-                            // pintaLista();
-                            // print(_tituloController.text);
-                            // print(recivedDataList.length);
-                            // print(receivedDataGrupo!.getNombre());
-                            // print(recivedDataEitquetas.length);
 
                             if (widget.accion == 'Creando Nota') {
                               BlocProvider.of<NotaBloc>(context).add(
@@ -270,11 +278,6 @@ class _AccionesConNotaState extends State<AccionesConNota> {
                                 ),
                               );
                             }
-
-                            hol11(recivedDataList);
-
-
-
                             _regresar();
                           },
                           backgroundColor: Colors.blue,
@@ -305,44 +308,6 @@ String obtenerPrimerasDosLetrasMayusculas(String texto) {
   } else {
     return texto.toUpperCase();
   }
-}
-
-
-void hol11(List<dynamic> listInfo) async {
-  List<Map<String, dynamic>> contenidoList = [];
-
-  for (var element in listInfo) {
-    if (element is TextBlocPrueba3) {
-      final textBlock = element;
-      String? html = await textBlock.editorKey.getText();
-
-      if (html != null) {
-        contenidoList.add({
-          'texto': {'cuerpo': html},
-        });
-      }
-    } else if (element is TareaBlock) {
-      final tareaBlock = element;
-      List<Task> tasks = tareaBlock.controller1.listaTareas;
-
-      List<Map<String, dynamic>> tareaValue = [];
-      for (var task in tasks) {
-        tareaValue.add({
-          'titulo': task.description,
-          'check': task.completed,
-        });
-      }
-      contenidoList.add({
-        'tarea': {
-          'value': tareaValue,
-        },
-      });
-    }
-  }
-
-  Map<String, dynamic> contenido = {'contenido': contenidoList};
-
-  print(contenido);
 }
 
 Color getColorTag(String color) {

@@ -24,7 +24,6 @@ class Tag {
 
 
 class AnimatedButton extends StatefulWidget {
-  final List<Grupo>? grupos;
   final Function(Grupo) onDataReceivedGrupo;
   final Function(List<Etiqueta>) onDataReceivedEtiqueta;
   final bool puedeCrear;
@@ -32,9 +31,12 @@ class AnimatedButton extends StatefulWidget {
   final String tituloNota;
   final List<dynamic> listInfo;
   final Grupo? grupo;
-  final List<Etiqueta>? etiquetas;
+  final List<Grupo>? gruposGeneral;
+  final Grupo? grupoNota;
+  final List<Etiqueta>? etiquetasGeneral;
+  final List<Etiqueta>? etiquetasNota;
 
-  const AnimatedButton({Key? key, required this.onDataReceivedGrupo, required this.onDataReceivedEtiqueta, required this.grupos, required this.puedeCrear, required this.tituloNota, required this.listInfo, required this.grupo, required this.etiquetas}) : super(key: key);
+  const AnimatedButton({Key? key, required this.onDataReceivedGrupo, required this.onDataReceivedEtiqueta, required this.gruposGeneral, required this.puedeCrear, required this.tituloNota, required this.listInfo, required this.grupo, required this.etiquetasGeneral, this.grupoNota, this.etiquetasNota}) : super(key: key);
 
 
   @override
@@ -50,7 +52,7 @@ class _AnimatedButtonState extends State<AnimatedButton>
   bool _isExpanded = false;
 
   @override
-  void initState() {
+  void initState(){
     super.initState();
 
     _animationController = AnimationController(
@@ -71,7 +73,13 @@ class _AnimatedButtonState extends State<AnimatedButton>
         curve: const Interval(0.5, 1),
       ),
     );
+
+    if(widget.grupoNota != null && widget.etiquetasNota != null){
+      selectedGrupo = widget.grupoNota;
+      selectedTags = widget.etiquetasNota!;
+    }
   }
+
 
   //Boton de las Etiquetas--------------------------------
   List<Etiqueta> selectedTags = [];
@@ -109,9 +117,9 @@ class _AnimatedButtonState extends State<AnimatedButton>
                   const SizedBox(height: 16.0),
                   Expanded(
                     child: ListView.builder(
-                      itemCount: widget.etiquetas!.length,
+                      itemCount: widget.etiquetasGeneral!.length,
                       itemBuilder: (context, index) {
-                        final tag = widget.etiquetas![index];
+                        final tag = widget.etiquetasGeneral![index];
                         final isSelected = selectedTags.contains(tag);
                         return Card(
                           child: ListTile(
@@ -185,9 +193,9 @@ class _AnimatedButtonState extends State<AnimatedButton>
                   SizedBox(
                     height: 200,
                     child: ListView.builder(
-                      itemCount: widget.grupos?.length,
+                      itemCount: widget.gruposGeneral?.length,
                       itemBuilder: (context, index) {
-                        final grupo =  widget.grupos?[index];
+                        final grupo =  widget.gruposGeneral?[index];
                         return Card(
                           child: RadioListTile<Grupo>(
                             title: Text(grupo!.getNombre()),
@@ -305,9 +313,11 @@ class _AnimatedButtonState extends State<AnimatedButton>
 
   @override
   Widget build(BuildContext context) {
-        print(widget.etiquetas!.length);
-        print('000000000000000000');
 
+    WidgetsBinding.instance?.addPostFrameCallback((_) {       //LUego de renderizar cualquier widget, pues se hacer
+      sendDataToWrapperWidgetEtiqueta();                      //el llamado a las funciones
+      sendDataToWrapperWidgetGrupo();
+    });
     return Stack(
       alignment: Alignment.center,
       children: [

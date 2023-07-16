@@ -1,6 +1,8 @@
 // ignore_for_file: unrelated_type_equality_checks
 
 import 'dart:convert';
+import 'dart:typed_data';
+import 'dart:io';
 
 import 'package:http/http.dart' as http;
 import 'package:flutter/material.dart';
@@ -24,24 +26,26 @@ class NotaBloc extends Bloc<NotaEvent, NotaState> {
 
     on<NotaCatchEvent>((event, emit) async {
       emit(const NotaInitialState());
-      final repositorio = RepositorioNotaImpl(
-          remoteDataSource: RemoteDataNotaImp(client: http.Client()));
+      final repositorio = RepositorioNotaImpl(remoteDataSource: RemoteDataNotaImp(client: http.Client()));
+      print('Entro => Nota Bloc');
       final notas = await repositorio.buscarNotasGrupos(event.grupos);
-
-   
-
-      if (notas.isLeft()) {
-        //Ver que les parece esta manera de devolver
-        if (notas.left!.isEmpty) {
+      print('Salio => Nota Bloc');
+      if(notas.isLeft()){             //Ver que les parece esta manera de devolver
+        if (notas.left!.isEmpty){
+          print('cero notas');
           emit(const CeroNotasFailureState());
-        } else {
+        }else{
+          print('mas notas');
+
           emit(NotasCatchSuccessState(notas: notas.left!));
         }
-      } else {
+      }else{
+          print('Error');
+
         emit(const NotasFailureState());
       }
     });
-
+    
     on<ModificarEstadoNotaEvent>((event, emit) async {
       emit(const NotaInitialState());
       final repositorio = RepositorioNotaImpl(
@@ -74,11 +78,8 @@ class NotaBloc extends Bloc<NotaEvent, NotaState> {
 
     on<CreateNotaEvent>((event, emit) async {
       emit(const NotaInitialState());
-
-      final repositorio = RepositorioNotaImpl(
-          remoteDataSource: RemoteDataNotaImp(client: http.Client()));
-      final nota = await repositorio.crearNota(event.tituloNota,
-          await mapContenido(event.listInfo), event.etiquetas, event.grupo);
+      final repositorio = RepositorioNotaImpl(remoteDataSource: RemoteDataNotaImp(client: http.Client()));
+      final nota = await repositorio.crearNota(event.tituloNota, await mapContenido(event.listInfo), etiqeutasListId(event.etiquetas), event.grupo);
 
       await Future.delayed(const Duration(milliseconds: 300));
       nota!.isLeft()
@@ -171,13 +172,24 @@ Future<Map<String, dynamic>> mapContenido(List<dynamic> listInfo) async {
       contenidoList.add({
         'tarea': {
           'value': tareaValue,
-          'orden': cant,
         },
+        'orden': cant,
       });
-    } else if (element is ImageBlock) {
-      print('Es imagen');
+    } else if (element is ImageBlock){
+      contenidoList.add({
+        'imagen': {
+          'buffer': element.controller.getBase64(),
+          'nombre': element.controller.getImageName()
+        },
+        'orden': cant,
+      });
+      // Resto del código...
     }
   }
   Map<String, dynamic> contenido = {'contenido': contenidoList};
   return contenido;
+}
+
+List<String> etiqeutasListId(List<Etiqueta>? etiquetas) {
+  return etiquetas!.map((etiqueta) => etiqueta.idEtiqueta).toList();
 }

@@ -12,11 +12,13 @@ class CartaWidget extends StatelessWidget {
   final String titulo;
   final List<String> tags;
   final VoidCallback? onDeletePressed;
-  final List<Grupo>? grupos;
-  final List<Etiqueta>? etiquetas;
-  final List<Etiqueta>? etiquetasTomadas;
+  final List<Grupo>? gruposGeneral;
+  final Grupo? grupoNota;
+  final List<Etiqueta>? etiqeutasGeneral;
+  final List<Etiqueta>? etiquetasNota;
 
-  final  Map<String, dynamic> contenidoTotal1;
+  // final  Map<String, dynamic> contenidoTotal1;
+  final  List<dynamic> contenidoTotal1;
   final String? idNota;
 
   final VoidCallback? onChangePressed;
@@ -29,9 +31,10 @@ class CartaWidget extends StatelessWidget {
     required this.titulo,
     required this.contenidoTotal1,
     required this.tags,
-    this.grupos,
-    this.etiquetas,
-    this.etiquetasTomadas,
+    this.gruposGeneral,
+    this.grupoNota,
+    this.etiqeutasGeneral,
+    this.etiquetasNota,
     this.onDeletePressed,
     this.onChangePressed,
     required this.habilitado,
@@ -39,6 +42,11 @@ class CartaWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    // print('CARD => grupo nota');
+    // print(gruposNota!.getNombre());
+    // print('CARD => etiqeutas nota');
+    // print(etiquetasNota![0].getNombre());
+
     String formattedDate = fecha.month < 9 ? '0${fecha.month} - ${fecha.day}' : '${fecha.month} - ${fecha.day}'; // Formateo de la fecha
     return Center(
       child: GestureDetector(
@@ -51,10 +59,12 @@ class CartaWidget extends StatelessWidget {
               builder: (context) => AccionesConNota(
                 idNota: idNota,
                 accion: 'Editar Nota',
-                grupos: grupos,
                 titulo: titulo,
-                etiquetas: etiquetas,
                 contenidoTotal1: contenidoTotal1,
+                etiquetasGeneral: etiqeutasGeneral,
+                etiquetasNota: etiquetasNota,
+                gruposGeneral: gruposGeneral,
+                grupoNota: grupoNota,
               )),
           );
         },
@@ -126,7 +136,7 @@ class CartaWidget extends StatelessWidget {
                                     300, // Establece el ancho máximo para el contenedor
                               ),
                               child: Text(
-                                convertHtmlToText(contenidoTotal1['contenido'][0]['texto']['cuerpo'].toString()),           //Cambiar por el primer contenido por lo mneos
+                                convertHtmlToText(contenidoTotal1[0]['texto']['cuerpo'].toString()),           //Cambiar por el primer contenido por lo mneos
                                 style: const TextStyle(
                                   fontWeight: FontWeight.bold,
                                   fontSize: 14.0,
