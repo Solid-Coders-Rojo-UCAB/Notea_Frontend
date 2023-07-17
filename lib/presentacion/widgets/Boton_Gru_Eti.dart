@@ -27,6 +27,7 @@ class AnimatedButton extends StatefulWidget {
   final Function(Grupo) onDataReceivedGrupo;
   final Function(List<Etiqueta>) onDataReceivedEtiqueta;
   final bool puedeCrear;
+  final String accion;
 
   final String tituloNota;
   final List<dynamic> listInfo;
@@ -36,7 +37,7 @@ class AnimatedButton extends StatefulWidget {
   final List<Etiqueta>? etiquetasGeneral;
   final List<Etiqueta>? etiquetasNota;
 
-  const AnimatedButton({Key? key, required this.onDataReceivedGrupo, required this.onDataReceivedEtiqueta, required this.gruposGeneral, required this.puedeCrear, required this.tituloNota, required this.listInfo, required this.grupo, required this.etiquetasGeneral, this.grupoNota, this.etiquetasNota}) : super(key: key);
+  const AnimatedButton({Key? key, required this.onDataReceivedGrupo, required this.onDataReceivedEtiqueta, required this.gruposGeneral, required this.puedeCrear, required this.tituloNota, required this.listInfo, required this.grupo, required this.etiquetasGeneral, this.grupoNota, this.etiquetasNota,required this.accion}) : super(key: key);
 
 
   @override
@@ -73,10 +74,11 @@ class _AnimatedButtonState extends State<AnimatedButton>
         curve: const Interval(0.5, 1),
       ),
     );
-
-    if(widget.grupoNota != null && widget.etiquetasNota != null){
-      selectedGrupo = widget.grupoNota;
-      selectedTags = widget.etiquetasNota!;
+    if(widget.accion != 'Creando Nota'){
+      if(widget.grupoNota != null && widget.etiquetasNota != null){
+        selectedGrupo = widget.grupoNota;
+        selectedTags = widget.etiquetasNota!;
+      }
     }
   }
 
@@ -314,10 +316,13 @@ class _AnimatedButtonState extends State<AnimatedButton>
   @override
   Widget build(BuildContext context) {
 
-    WidgetsBinding.instance?.addPostFrameCallback((_) {       //LUego de renderizar cualquier widget, pues se hacer
-      sendDataToWrapperWidgetEtiqueta();                      //el llamado a las funciones
-      sendDataToWrapperWidgetGrupo();
-    });
+    if(widget.accion != 'Creando Nota'){
+      WidgetsBinding.instance.addPostFrameCallback((_) {       //LUego de renderizar cualquier widget, pues se hacer
+        sendDataToWrapperWidgetEtiqueta();                      //el llamado a las funciones
+        sendDataToWrapperWidgetGrupo();
+      });
+    }
+
     return Stack(
       alignment: Alignment.center,
       children: [

@@ -1,30 +1,28 @@
 // ignore_for_file: unrelated_type_equality_checks
 
 import 'dart:convert';
-
 import 'package:animated_text_kit/animated_text_kit.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_zoom_drawer/flutter_zoom_drawer.dart';
+import 'package:notea_frontend/dominio/agregados/etiqueta.dart';
 import 'package:notea_frontend/dominio/agregados/grupo.dart';
 import 'package:notea_frontend/dominio/agregados/nota.dart';
-import 'package:notea_frontend/infraestructura/bloc/Grupo/grupo_bloc.dart';
 import 'package:notea_frontend/infraestructura/bloc/nota/nota_bloc.dart';
-import 'package:notea_frontend/presentacion/pantallas/home_screen.dart';
-import 'package:notea_frontend/presentacion/widgets/BottomBar.dart';
 import 'package:notea_frontend/presentacion/widgets/card.dart';
 import 'package:notea_frontend/presentacion/widgets/desplegable.dart';
+import 'package:provider/provider.dart';
 import '../../dominio/agregados/usuario.dart';
 import '../../infraestructura/bloc/usuario/usuario_bloc.dart';
-import '../widgets/MenuDesplegable.dart';
-import 'angel/pruebaNota.dart';
+import 'navigation_provider.dart';
 
 // ignore: must_be_immutable
 class Papelera extends StatefulWidget {
   List<Grupo>? grupos;
   final Usuario usuario;
+  final List<Etiqueta>? etiquetas;
 
-  Papelera({super.key, required this.grupos, required this.usuario});
+  Papelera({super.key, required this.grupos, required this.usuario, required this.etiquetas});
 
   @override
   // ignore: library_private_types_in_public_api
@@ -38,55 +36,6 @@ class _PapeleraState extends State<Papelera> {
   bool stopScaleAnimtion = false;
   String? cantidadGrupos;
   final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
-
-  Map<String, dynamic> contenido = {
-    "contenido": [
-      {
-        "texto": {"cuerpo": "Este es un texto con estilo 1"}
-      },
-      {
-        "texto": {"cuerpo": "Este es un texto con estilo 2"}
-      },
-      {
-        "tarea": {
-          "value": [
-            {
-              "id": {"id": "c75b914c-4e14-4a92-8462-28ea357b5b3e"},
-              "titulo": "Contenido Tarea 1 de 1",
-              "check": false
-            },
-            {
-              "id": {"id": "c1151004-e0b9-4177-a222-4b90d402f38e"},
-              "titulo": "Contenido Tarea 1 de 2",
-              "check": false
-            }
-          ],
-          "assigned": true
-        }
-      },
-      {
-        "texto": {"cuerpo": "Este es un texto con estilo 2"}
-      },
-      {
-        "tarea": {
-          "value": [
-            {
-              "id": {"id": "ae01c6b6-b69b-4011-a1b0-8eb9602b4378"},
-              "titulo": "Contenido Tarea 2 de 1",
-              "check": false
-            },
-            {
-              "id": {"id": "a471a6b1-5b06-4c0c-afeb-aeec7dc4e37b"},
-              "titulo": "Contenido Tarea 2 de 2",
-              "check": false
-            }
-          ],
-          "assigned": true
-        }
-      }
-    ],
-    "assigned": true
-  };
 
   Map<String, dynamic> convertStringToMap(String jsonString) {
     return jsonDecode(jsonString);
@@ -114,18 +63,22 @@ class _PapeleraState extends State<Papelera> {
   @override
   Widget build(BuildContext context) {
     return BlocBuilder<NotaBloc, NotaState>(builder: (context, state) {
-      if (state is NotasFailureState) {
+      if (state is NotaDeleteSuccessState) {
+        BlocProvider.of<NotaBloc>(context)
+            .add(NotaCatchEvent(grupos: widget.grupos!));
+      } else if (state is CeroNotasFailureState) {
+        BlocProvider.of<NotaBloc>(context)
+            .add(NotaCatchEvent(grupos: widget.grupos!));
+      } else if (state is NotasFailureState) {
         return const Center(child: Text('Error al cargar las notas'));
-      }
-
-      if (state is NotasCatchSuccessState) {
+      } else if (state is NotasCatchSuccessState) {
         notas = state.notas;
         int? suma = 0;
         int? sumaGrupos = 0;
         List<Grupo> gruposPapelera = [];
 
         for (int i = 0; i < widget.grupos!.length; i++) {
-          final grupo = widget.grupos![i]; //Tenemos el grupo que se renderizará
+          final grupo = widget.grupos![i];
           final cant = notas
               ?.where((nota) =>
                   nota.idGrupo.getIdGrupoNota() == grupo.idGrupo &&
@@ -140,12 +93,11 @@ class _PapeleraState extends State<Papelera> {
 
         cantidadGrupos = sumaGrupos.toString();
         cantidadNotas = suma.toString();
-
+      
         return Scaffold(
             appBar: AppBar(
               title: const Text('Papelera'),
-              backgroundColor: const Color.fromARGB(
-                  255, 23, 100, 202), // Cambia el color de la AppBar a rojo.
+              backgroundColor: const Color.fromARGB(255, 23, 100, 202),
               leading: IconButton(
                 icon: const Icon(Icons.menu),
                 onPressed: () {
@@ -193,6 +145,8 @@ class _PapeleraState extends State<Papelera> {
                       ),
                     ],
                   ),
+
+      
                   suma == 0 //Si no hay ninguna nota en la papelera, pues vulve a la pantalla anterior
                       ? Center(
                           child: Column(
@@ -219,33 +173,12 @@ class _PapeleraState extends State<Papelera> {
                                   onTap: () {
                                     //
                                   }),
-                              ElevatedButton(
-                                style: ElevatedButton.styleFrom(
-                                  foregroundColor: Colors.white,
-                                  backgroundColor:
-                                      Colors.blue, // Color del texto del botón
-                                  shape: RoundedRectangleBorder(
-                                    borderRadius: BorderRadius.circular(
-                                        10.0), // Bordes redondeados del botón
-                                  ),
-                                  padding: const EdgeInsets.symmetric(
-                                      horizontal: 20.0,
-                                      vertical:
-                                          10.0), // Espaciado interno del botón
-                                ),
-                                onPressed: () {
-                                  Navigator.pop(
-                                      context); // Vuelve a la pantalla anterior
-                                },
-                                child: const Text('Volver'),
-                              ),
                             ],
                           ),
                         )
                       : //Si hay alguna nota en la papelera, pues muetrala en pantalla
                       const SizedBox(height: 20),
                   Expanded(
-                      
                       child: ListView.builder(
                           itemCount: gruposPapelera.length,
                           itemBuilder: (context, index) {
@@ -272,14 +205,13 @@ class _PapeleraState extends State<Papelera> {
                                           return SizedBox(
                                               child: CartaWidget(
                                             habilitado: true,
+                                            usuario: widget.usuario,
                                             fecha: nota.getFechaCreacion(),
                                             titulo: nota.titulo.tituloNota,
-                                            contenidoTotal1: jsonDecode(nota.getContenido()),
-                                            tags: const [
-                                              'Tag1',
-                                              'Tag2',
-                                              'Tag3sssssss'
-                                            ],
+                                            contenidoTotal1:
+                                                jsonDecode(nota.getContenido()),
+                                            tags: listaEtiquetasTomadas(widget.etiquetas, nota.getEtiquetas()),
+                                            accion: 'Pepelera',
                                             onDeletePressed: () {
                                               showDialog(
                                                 context: context,
@@ -306,36 +238,12 @@ class _PapeleraState extends State<Papelera> {
                                                           BlocProvider.of<
                                                                       NotaBloc>(
                                                                   context)
-                                                              .add(
-                                                                  DeleteNoteEvent(
-                                                            idNota: nota.id,
-                                                          ));
+                                                              .add(DeleteNoteEvent(
+                                                                  idNota:
+                                                                      nota.id));
 
-                                                          Navigator.push(
-                                                            context,
-                                                            MaterialPageRoute(
-                                                                builder:
-                                                                    (context) =>
-                                                                        MessagesScreen(
-                                                                          usuario: context
-                                                                              .read<UsuarioBloc>()
-                                                                              .state
-                                                                              .usuario!,
-                                                                        )),
-                                                          );
-                                                          /* Navigator.push(
-                                                                    context,
-                                                                    MaterialPageRoute(
-                                                                        builder:
-                                                                            (context) =>
-                                                                                Papelera(
-                                                                                  grupos:
-                                                                                      widget.grupos,
-                                                                                  usuario:
-                                                                                      widget.usuario,
-                                                                                )));*/
-
-                                                          // mover a la papelera
+                                                          Navigator.pop(
+                                                              context);
                                                         },
                                                       ),
                                                     ],
@@ -376,30 +284,8 @@ class _PapeleraState extends State<Papelera> {
                                                                   estado:
                                                                       "GUARDADO"));
 
-                                                          Navigator.push(
-                                                            context,
-                                                            MaterialPageRoute(
-                                                                builder:
-                                                                    (context) =>
-                                                                        MessagesScreen(
-                                                                          usuario:
-                                                                              widget.usuario,
-                                                                        )),
-                                                          );
-
-                                                          /*
-                                                              Navigator.push(
-                                                                  context,
-                                                                  MaterialPageRoute(
-                                                                      builder: (context) =>
-                                                                          Papelera(
-                                                                            grupos:
-                                                                                widget.grupos,
-                                                                            usuario:
-                                                                                widget.usuario,
-                                                                          )));*/
-
-                                                          // mover a la papelera
+                                                          Navigator.pop(
+                                                              context);
                                                         },
                                                       ),
                                                     ],
@@ -426,4 +312,15 @@ class _PapeleraState extends State<Papelera> {
       return const Center(child: CircularProgressIndicator());
     });
   }
+}
+
+List<Etiqueta> listaEtiquetasTomadas(List<Etiqueta>? listaEtiquetasGeneral, List<dynamic> listaEtiquetasId){
+  List<Etiqueta> etiquetasCoincidentes = [];
+
+  for (Etiqueta etiqueta in listaEtiquetasGeneral!) {
+    if (listaEtiquetasId.contains(etiqueta.idEtiqueta)) {
+      etiquetasCoincidentes.add(etiqueta);
+    }
+  }
+  return etiquetasCoincidentes;
 }

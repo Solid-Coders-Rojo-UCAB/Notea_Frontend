@@ -95,73 +95,22 @@ class RepositorioNotaImpl implements INotaRepository {
       Grupo grupo) async {
 
     Map<String, dynamic> notaDTO = {
-      "idNota": idNota,
+      "id": idNota,
       "titulo": titulo,
       "contenido": listInfoContenido,
       "grupo": grupo.idGrupo,
     };
+
+    // print('Nota dto---------------');
+    // print(notaDTO);
+
     var result = await remoteDataSource.editarNotaApi(notaDTO);
     return result;
   }
 
 }
 
-String obtenerContenidoDelContenidoBlock(List<dynamic> lista) {
-  String contenido = '';
 
-  for (dynamic elemento in lista) {
-    if (elemento is TextBlocPrueba3) {
-      final textBlock = elemento; // Crea una instancia del widget TextBlock
-      final texto =
-          textBlock.editorKey.getText(); // Obtiene el texto del controlador
-      contenido += '$texto\n';
-    }
-  }
-  return contenido;
-}
-
-List<Map<String, dynamic>> crearEstructuraTareasJson(List<dynamic> listInfoContenido) {
-  List<Map<String, dynamic>> tareas = [];
-
-  for (dynamic elemento in listInfoContenido) {
-    if (elemento is TareaBlock) {
-      final tareaElement = elemento; // Crea una instancia del widget TextBlock
-      for (var element in tareaElement.controller1.listaTareas) {
-        Map<String, dynamic> tareaJson = {
-          'titulo': element.description,
-          'check': element.completed,
-        };
-        tareas.add(tareaJson);
-      }
-    }
-  }
-  return tareas;
-}
-
-Future<List<Map<String, dynamic>>?> crearEstructuraImagenesJson(
-    List<dynamic> listInfoContenido) async {
-  List<Map<String, dynamic>> imagenes = [];
-  for (dynamic elemento in listInfoContenido) {
-    if (elemento is ImageBlock) {
-      NetworkImage networkImage =
-          elemento.controller.getSelectedImage()!.image as NetworkImage;
-      String imageUrl = networkImage.url;
-      Uint8List? imageBuffer = await downloadImage(imageUrl);
-      if (imageBuffer != null) {
-        String base64Image = base64Encode(imageBuffer);
-        Map<String, dynamic> imagen = {
-          "name": elemento.controller.getImageName(),
-          "url": base64Image,
-        };
-        imagenes.add(imagen);
-      }
-    }
-  }
-  if (imagenes.isNotEmpty) {
-    return imagenes;
-  }
-  return null;
-}
 
 Future<Uint8List?> downloadImage(String imageUrl) async {
   try {
@@ -174,25 +123,5 @@ Future<Uint8List?> downloadImage(String imageUrl) async {
   } catch (e) {
     return null;
   }
-}
-
-Future<List<File>> imageToFile(List<dynamic> listInfoContenido) async {
-  List<File> imagenesFile = [];
-  for (dynamic elemento in listInfoContenido) {
-    if (elemento is ImageBlock) {
-      NetworkImage networkImage =
-          elemento.controller.getSelectedImage()!.image as NetworkImage;
-      String imageUrl = networkImage.url;
-      Uint8List? imageBuffer = await downloadImage(imageUrl);
-
-      // final tempDir = await getTemporaryDirectory();
-      File file = await File('desktop/image.png').create();
-      file.writeAsBytesSync(imageBuffer!);
-
-      imagenesFile.add(file);
-    }
-  }
-
-  return imagenesFile;
 }
 

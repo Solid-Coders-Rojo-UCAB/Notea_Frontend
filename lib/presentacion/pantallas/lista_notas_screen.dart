@@ -22,18 +22,20 @@ import 'navigation_provider.dart';
 
 // ignore: must_be_immutable
 class MyDropdown extends StatefulWidget {
-  List<Grupo>? grupos;
-  List<Etiqueta>? etiquetas;
+  final List<Grupo>? grupos;
+  final List<Etiqueta>? etiquetas;
   final Usuario usuario;
 
+
   MyDropdown(
-      {super.key,
-      required this.grupos,
+      {Key? key,
+      this.grupos,
       required this.usuario,
-      required this.etiquetas});
+      this.etiquetas,
+      }) // Añade esto
+      : super(key: key);
 
   @override
-  // ignore: library_private_types_in_public_api
   _MyDropdownState createState() => _MyDropdownState();
 }
 
@@ -56,6 +58,17 @@ class _MyDropdownState extends State<MyDropdown> {
       notaBloc.add(NotaCatchEvent(grupos: widget.grupos!));
     });
   }
+void handleDelete(Nota nota) {
+    BlocProvider.of<NotaBloc>(context)
+     .add(ModificarEstadoNotaEvent(idNota: nota.id, estado: "PAPELERA"));
+
+    // Espera un poco para darle tiempo a la nota para ser eliminada
+
+     
+        BlocProvider.of<NotaBloc>(context)
+            .add(NotaCatchEvent(grupos:widget.grupos!));
+ 
+}
 
   @override
   Widget build(BuildContext context) {
@@ -194,18 +207,19 @@ class _MyDropdownState extends State<MyDropdown> {
                                     // print('CONTENIDO DE LA NOTA-------------------------');
                                     // print(nota.getContenido());
 
-                                    print('------------------------ETIQUETAS----------------------------');
-                                    grupoTomado(widget.grupos, nota.getIdGrupoNota());
-                                    print('------------------------ETIQUETAS----------------------------');
+                                    // print('------------------------ETIQUETAS----------------------------');
+                                    // grupoTomado(widget.grupos, nota.getIdGrupoNota());
+                                    // print('------------------------ETIQUETAS----------------------------');
 
                                 return SizedBox(
                                     child: CartaWidget(
                                         idNota: nota.id,
                                         habilitado: false,
+                                        usuario: widget.usuario,
                                         fecha: nota.getFechaCreacion(),
                                         titulo: nota.titulo.getTituloNota(),
                                         contenidoTotal1:  jsonDecode(nota.getContenido()),
-                                        tags: const ['Tag1', 'Tag2', 'Tag3sssssss'],
+                                        tags: listaEtiquetasTomadas(widget.etiquetas, nota.getEtiquetas()),
                                         gruposGeneral: widget.grupos,       //GRUPOS GENERALES
                                         grupoNota: grupoTomado(widget.grupos, nota.getIdGrupoNota()),
                                         etiqeutasGeneral: widget.etiquetas, //ETIQUETAS GENERALES
@@ -229,30 +243,17 @@ class _MyDropdownState extends State<MyDropdown> {
                                                   TextButton(
                                                     child: const Text('Aceptar'),
                                                     onPressed: () {
-                                                      BlocProvider.of<NotaBloc>(
-                                                              context)
-                                                          .add(
-                                                              ModificarEstadoNotaEvent(
-                                                                  idNota: nota.id,
-                                                                  estado:
-                                                                      "PAPELERA"));
-
-                                                      Navigator.pop(context);
-                                                      Navigator.pop(
-                                                          context); // Cierra el cuadro de diálogo
-
-                                                      // Navega a la pantalla de mensajes utilizando el NavigationProvider
-                                                      context
-                                                          .read<NavigationProvider>()
-                                                          .toMessagesScreen();
-                                                    },
-                                                  ),
-                                                ],
-                                              );
-                                            },
-                                          );
-                                          // Lógica para eliminar la nota
-                                        },
+                                                    handleDelete(nota);
+                                                    Navigator.pop(
+                                                          context); 
+                                              },
+                                            ),
+                                          ],
+                                        );
+                                      },
+                                    );
+                                    // Lógica para eliminar la nota
+                                  },
                                   onChangePressed: null,
                                 ));
                               }).toList()),
@@ -291,5 +292,4 @@ Grupo? grupoTomado(List<Grupo>? listaGrupoGeneral, String idGrupo){
   }
   return null;
 }
-
 

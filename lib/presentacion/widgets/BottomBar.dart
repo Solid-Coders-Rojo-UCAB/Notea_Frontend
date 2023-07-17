@@ -50,6 +50,7 @@ class BottomBar extends StatelessWidget {
                       builder: (context) => Papelera(
                             grupos: context.read<GrupoBloc>().state.grupos,
                             usuario: usuario,
+                            etiquetas: [],
                           )),
                 );
               },

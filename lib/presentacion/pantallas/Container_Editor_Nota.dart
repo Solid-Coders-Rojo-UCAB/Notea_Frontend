@@ -39,26 +39,28 @@ class _ContainerEditorNotaState extends State<ContainerEditorNota> {
   @override
   void initState() {
     super.initState();
-
+    print('Antes del != contenido');
     if (widget.contenidoTotal1 != null) {
+    print('Despues del != contenido');
       List<dynamic> contenidoList = widget.contenidoTotal1!;
+    print('Despues del != contenido LISTAAAAAAA');
       for (var item in contenidoList) {
+        var id = item['id'];
         if (item.containsKey('texto')) {
           var cuerpo = item['texto']['cuerpo'];
           _children.add(
-            TextBlocPrueba3(cuerpo: cuerpo),           //Aca se agrega el texblock que indica el contenido
+            TextBlocPrueba3(cuerpo: cuerpo, id: id,),           //Aca se agrega el texblock que indica el contenido
           );
         } else if (item.containsKey('imagen')) {
           var imagen = item['imagen'];
           // Realizar acción para imagen
-          print('entro en IMGENNNNNNNNNNNNNNNNNNNN');
-          print('Imagen: $imagen');
-
+          _children.add(
+            ImageBlock(nombre: imagen['nombre'],base64: imagen['buffer'], id: id,),           //Aca se agrega el texblock que indica el contenido
+          );
         } else if (item.containsKey('tareas')) {
           var tareas = item['tareas'];
           // Realizar acción para tarea
-          print(tareas);
-          _children.add(TareaBlock(tareas: tareas));      //Aca se agrega la tarea que indica el contenido
+          _children.add(TareaBlock(tareas: tareas, id: id,));      //Aca se agrega la tarea que indica el contenido
         }
       }
 
@@ -81,7 +83,7 @@ class _ContainerEditorNotaState extends State<ContainerEditorNota> {
   }
 
   void reload() async{
-    await Future.delayed(const Duration(milliseconds: 100), () {});
+    
     setState(() {
       
     });

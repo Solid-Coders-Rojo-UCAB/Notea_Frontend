@@ -10,6 +10,7 @@ class ApiConfig {
     } else {
       if (Platform.isAndroid) {
         return 'http://10.0.2.2:3000';
+        //return 'http://192.168.1.2:3000'; para usar la compu como server
       } else {
         return 'http://localhost:3000'; // fallback para otros sistemas operativos
       }

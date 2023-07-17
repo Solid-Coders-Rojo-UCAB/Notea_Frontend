@@ -57,8 +57,8 @@ class RemoteDataNotaImp implements RemoteDataNota {
         },
       ); //Creo que esto no es lo mejor, porque treemos todas las notas
 
-      print('RESPONSE BODY______________----------------------');
-      print(response.body);
+      // print('RESPONSE BODY______________----------------------');
+      // print(response.body);
       if (response.statusCode == 200) {
         
         return Either.left(parseNota(response.body));
@@ -193,16 +193,14 @@ class RemoteDataNotaImp implements RemoteDataNota {
 
   //Hay que verificar con lo que esta haciendo italo para saber como lo tiene que recibir esto aun no funciona
   Future<Either<int, Exception>> editarNotaApi(Map<String, dynamic> jsonString) async {
-
-    String idNota = jsonString['idNota'];
     if (await const ConectivityCheck().checkConectivity()) {
-      final request = http.MultipartRequest(
-          'PATCH', Uri.parse('${ApiConfig.apiBaseUrl}/nota/$idNota'))
-        ..fields['titulo'] = jsonString['titulo']
-        ..fields['contenido'] = jsonString['contenido'];
-
-      final response = await request.send();
-
+      final response = await client.patch(
+        Uri.parse('${ApiConfig.apiBaseUrl}/nota'),
+        body: jsonEncode(jsonString),
+        headers: <String, String>{
+          'Content-Type': 'application/json; charset=UTF-8',
+        },
+      );
       if (response.statusCode == 200) {
         return Either.left(response.statusCode);
       } else {

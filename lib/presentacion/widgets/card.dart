@@ -3,19 +3,21 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:notea_frontend/dominio/agregados/etiqueta.dart';
 import 'package:notea_frontend/dominio/agregados/grupo.dart';
 import 'package:html/parser.dart';
+import 'package:notea_frontend/dominio/agregados/usuario.dart';
 
 import '../../infraestructura/bloc/Grupo/grupo_bloc.dart';
 import '../pantallas/Creacion_Edicion_Nota.dart';
-
 class CartaWidget extends StatelessWidget {
   final DateTime fecha;
   final String titulo;
-  final List<String> tags;
+  final List<Etiqueta> tags;
   final VoidCallback? onDeletePressed;
   final List<Grupo>? gruposGeneral;
   final Grupo? grupoNota;
   final List<Etiqueta>? etiqeutasGeneral;
   final List<Etiqueta>? etiquetasNota;
+  final String? accion;
+  final Usuario usuario;
 
   // final  Map<String, dynamic> contenidoTotal1;
   final  List<dynamic> contenidoTotal1;
@@ -38,6 +40,8 @@ class CartaWidget extends StatelessWidget {
     this.onDeletePressed,
     this.onChangePressed,
     required this.habilitado,
+    this.accion,
+    required this.usuario,
   });
 
   @override
@@ -53,21 +57,34 @@ class CartaWidget extends StatelessWidget {
         onTap: () {
           final grupoBloc = BlocProvider.of<GrupoBloc>(context);
           grupoBloc.add(GrupoReload());
-          Navigator.push(
-            context,
-            MaterialPageRoute(
-              builder: (context) => AccionesConNota(
-                idNota: idNota,
-                accion: 'Editar Nota',
-                titulo: titulo,
-                contenidoTotal1: contenidoTotal1,
-                etiquetasGeneral: etiqeutasGeneral,
-                etiquetasNota: etiquetasNota,
-                gruposGeneral: gruposGeneral,
-                grupoNota: grupoNota,
-              )),
-          );
-        },
+          if(accion == null){
+            Navigator.push(
+              context,
+              MaterialPageRoute(
+                builder: (context) => AccionesConNota(
+                  idNota: idNota,
+                  accion: 'Editar Nota',
+                  titulo: titulo,
+                  contenidoTotal1: contenidoTotal1,
+                  etiquetasGeneral: etiqeutasGeneral,
+                  etiquetasNota: etiquetasNota,
+                  gruposGeneral: gruposGeneral,
+                  grupoNota: grupoNota,
+                  usuario: usuario,
+                )),
+            );
+          }else{
+            //DEBERIA MOSTRAR UN MENSAJE INDICANDO QUE NO PUEDE EDITAR MIENTRAS SE ENCUENTRA EN LA LISTA DE PAPELERA LA NOTA
+            // Fluttertoast.showToast(
+            //       msg: 'Toast Message',
+            //       toastLength: Toast.LENGTH_SHORT,
+            //       gravity: ToastGravity.SNACKBAR,            Probando los toast
+            //       backgroundColor: Colors.blueGrey,
+            //       textColor: Colors.white,
+            //       fontSize: 16.0,
+            // );
+          }
+          },
         child: FractionallySizedBox(
           widthFactor: 0.95, // Establece
           child: Card(
@@ -136,7 +153,7 @@ class CartaWidget extends StatelessWidget {
                                     300, // Establece el ancho máximo para el contenedor
                               ),
                               child: Text(
-                                convertHtmlToText(contenidoTotal1[0]['texto']['cuerpo'].toString()),           //Cambiar por el primer contenido por lo mneos
+                                convertHtmlToText(primerTexto(contenidoTotal1)),           //Cambiar por el primer contenido por lo mneos
                                 style: const TextStyle(
                                   fontWeight: FontWeight.bold,
                                   fontSize: 14.0,
@@ -172,6 +189,16 @@ class CartaWidget extends StatelessWidget {
                                   ),
                                 ),
                                 onPressed: onDeletePressed,
+                                // onPressed: () {
+                                //   // Fluttertoast.showToast(
+                                //   //   msg: "THE toast message",
+                                //   //   toastLength: Toast.LENGTH_SHORT,       Probando los Toast
+                                //   //   timeInSecForIosWeb: 1,
+                                //   //   backgroundColor: Colors.black,
+                                //   //   textColor: Colors.white,
+                                //   //   fontSize: 16.0,
+                                //   // );
+                                // },
                               ),
                               Visibility(
                                 visible: habilitado,
@@ -203,7 +230,7 @@ class CartaWidget extends StatelessWidget {
 }
 
 class TagWidget extends StatelessWidget {
-  final String tag;
+  final Etiqueta tag;
   TagWidget({required this.tag});
 
   @override
@@ -216,10 +243,10 @@ class TagWidget extends StatelessWidget {
       padding: const EdgeInsets.symmetric(horizontal: 8.0, vertical: 4.0),
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(4.0),
-        color: const Color(0xFF21579C),
+        color: getColorTag(tag.getColorEtiqueta()),
       ),
       child: Text(
-        tag,
+        tag.nombre.getNombreEtiqueta(),
         style: const TextStyle(
             fontSize: 12.0, fontWeight: FontWeight.w300, color: Colors.white),
         overflow: TextOverflow.ellipsis,
@@ -232,4 +259,32 @@ String convertHtmlToText(String htmlString) {
   final document = parse(htmlString);
   final plainText = parse(document.body!.text).documentElement!.text;
   return plainText.trim().replaceAll(RegExp(r'\s+'), ' ');
+}
+
+Color getColorTag(String color) {
+  switch (color) {
+    case 'AMBER':
+      return Colors.amber;
+    case 'BLUE':
+      return Colors.blue;
+    case 'RED':
+      return Colors.red;
+    case 'PURPLE':
+      return Colors.purple;
+    case 'GREEN':
+      return Colors.green;
+    case 'INDIGO':
+      return Colors.indigo;
+    case 'BLACK':
+      return Colors.black;
+    case 'ORANGE':
+      return Colors.orange;
+    default:
+      return Colors.grey; // Color predeterminado si no se encuentra el nombre de color
+  }
+}
+
+String primerTexto(List<dynamic> contenido) {
+  String primerTextoString = contenido.firstWhere((element) => element.containsKey('texto'), orElse: () => {})['texto']['cuerpo'];
+  return primerTextoString;
 }

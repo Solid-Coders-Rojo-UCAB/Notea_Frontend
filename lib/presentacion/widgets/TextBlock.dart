@@ -11,7 +11,8 @@ import 'package:notea_frontend/aplicacion/ImagenATexto.dart';
 
 class TextBlocPrueba3 extends StatefulWidget {
   String? cuerpo;
-  TextBlocPrueba3({Key? key, this.cuerpo});
+  String? id;
+  TextBlocPrueba3({Key? key, this.cuerpo, this.id});
   @override
   State<TextBlocPrueba3> createState() => _TextBlocPrueba3();
   final QuillEditorController _editorKey = QuillEditorController();

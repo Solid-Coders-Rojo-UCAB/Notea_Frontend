@@ -12,10 +12,14 @@ import 'package:notea_frontend/infraestructura/Repositorio/repositorioNotaImpl.d
 
 class ImageBlock extends StatefulWidget {
 
+  String? nombre;
+  String? base64;
+  String? id;
+
   final ImageBlockController controller = ImageBlockController();
   final ImageBlockController controller1 = ImageBlockController();
   
-  ImageBlock({Key? key}) : super(key: key);
+  ImageBlock({Key? key, this.base64, this.nombre, this.id}) : super(key: key);
   Image? selectedImage;
   Image? selectedImage1;
 
@@ -26,9 +30,6 @@ class ImageBlock extends StatefulWidget {
 
 class _ImageBlockState extends State<ImageBlock> {
   final ImagePicker _imagePicker = ImagePicker();
-  
-
-
   Future<void> _pickImageFromGallery() async {
     final pickedImage = await _imagePicker.pickImage(source: ImageSource.gallery);
     if (pickedImage != null) {
@@ -45,10 +46,9 @@ class _ImageBlockState extends State<ImageBlock> {
         );
       });
       final base64Image = await convertir(File(pickedImage.path));
-      widget.controller.setImage(widget.selectedImage, pickedImage.name, pickedImage.path, base64Image);
-      widget.controller1.setImage(widget.selectedImage1, pickedImage.name, pickedImage.path, base64Image);
+      widget.controller.setImage(widget.selectedImage, pickedImage.name, base64Image, null);
+      widget.controller1.setImage(widget.selectedImage1, pickedImage.name, base64Image, null);
     }
-
   }
 
   void _removeImage() {
@@ -56,6 +56,27 @@ class _ImageBlockState extends State<ImageBlock> {
       widget.selectedImage = null;
     });
   }
+
+  @override
+  void initState() {
+    super.initState();
+    if(widget.nombre != null && widget.base64 != null) {
+      // print('nombre -> '+ widget.nombre!);
+      // print('base64 -> '+ widget.base64!);
+
+      // widget.selectedImage = imageFromBase64String(widget.hola);
+      widget.selectedImage = imageFromBase64String(widget.base64!);
+      widget.controller.setImage(widget.selectedImage, widget.nombre, widget.base64!, null);
+    }
+  }
+
+  Image imageFromBase64String(String base64String) {
+    return Image.memory(
+      base64Decode(base64String),
+      height: 380,
+    );
+  }
+
 
   @override
   Widget build(BuildContext context) {
@@ -126,10 +147,10 @@ class _ImageBlockState extends State<ImageBlock> {
 class ImageBlockController {
   Image? _selectedImage;
   String? _imageName;
-  late String _selectedImagePath;
+  late String? _selectedImagePath;
   late String _base64;
 
-  void setImage(Image? image, String? imageName, String imagePath, String base64) {
+  void setImage(Image? image, String? imageName, String base64, String? imagePath) {
     _selectedImage = image;
     _imageName = imageName;
     _selectedImagePath = imagePath;
@@ -144,7 +165,7 @@ class ImageBlockController {
     return _imageName;
   }
 
-  String getImagePath() {
+  String? getImagePath() {
     return _selectedImagePath;
   }
 
