@@ -84,7 +84,7 @@ class _PapeleraState extends State<Papelera> {
                   nota.idGrupo.getIdGrupoNota() == grupo.idGrupo &&
                   (nota.getEstado() == "PAPELERA"))
               .toList();
-          if (cant!.length > 0) {
+          if (cant!.isNotEmpty) {
             sumaGrupos = (sumaGrupos! + 1);
             gruposPapelera.add(widget.grupos![i]);
           }
