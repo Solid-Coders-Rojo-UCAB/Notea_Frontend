@@ -58,9 +58,9 @@ class RepositorioNotaImpl implements INotaRepository {
 
   @override
   Future<Either<List<Nota>, Exception>> buscarNotasGrupos(
-      List<Grupo> grupos) async {
+      List<Grupo>? grupos) async {
     
-    List<String> idsGrupos = grupos.map((grupo) => grupo.idGrupo).toList();
+    List<String> idsGrupos = grupos!.map((grupo) => grupo.idGrupo).toList();
     final result = await remoteDataSource.buscarNotasByGruposApi(idsGrupos);
 
     return result;

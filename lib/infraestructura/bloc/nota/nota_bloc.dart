@@ -84,11 +84,12 @@ class NotaBloc extends Bloc<NotaEvent, NotaState> {
       emit(const NotaInitialState());
       final repositorio = RepositorioNotaImpl(remoteDataSource: RemoteDataNotaImp(client: http.Client()));
       final nota = await repositorio.editarNota(event.idNota, event.tituloNota, await mapContenidoEditando(event.listInfo), etiqeutasListId(event.etiquetas), event.grupo);
-
       await Future.delayed(const Duration(milliseconds: 300));
-      nota!.isLeft()
-          ? emit(const NotasCreateSuccessState())
-          : emit(const NotasFailureState()); //emit(const NotasCreateSuccessState()): emit(const NotasFailureState());//emitimos el estado de error
+      if (nota!.isLeft()){
+        emit(const NotasCreateSuccessState());
+      }else {
+        emit(const NotasFailureState());
+      }
     });
   }
 }

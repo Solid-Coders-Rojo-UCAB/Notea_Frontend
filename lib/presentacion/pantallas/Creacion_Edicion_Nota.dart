@@ -130,7 +130,7 @@ class _AccionesConNotaState extends State<AccionesConNota> {
     Navigator.push(
       context,
       MaterialPageRoute(
-          builder: (context) => MessagesScreen(usuario: widget.usuario,)),
+          builder: (context) => HomeScreenWithDrawer(usuario : widget.usuario)),
     );
   }
 
@@ -302,6 +302,7 @@ class _AccionesConNotaState extends State<AccionesConNota> {
                                 listInfo: recivedDataList,
                                 grupo: receivedDataGrupo,
                                 etiquetas: recivedDataEitquetas,
+                                grupoGeneral: widget.gruposGeneral,
                               ),
                             );
                           }
