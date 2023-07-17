@@ -15,11 +15,13 @@ class CreateNotaEvent extends NotaEvent {
   final List<dynamic> listInfo;
   final dynamic grupo;
   final List<Etiqueta>? etiquetas;
+  // final List<Grupo>? grupoGeneral;
   CreateNotaEvent({
     required this.tituloNota,
     required this.listInfo,
     required this.grupo,
-    required this.etiquetas
+    required this.etiquetas,
+    // required this.grupoGeneral
   });
 }
 
@@ -44,11 +46,13 @@ class EditarNotaEvent extends NotaEvent {
   final List<dynamic> listInfo;
   final dynamic grupo;
   final List<Etiqueta>? etiquetas;
+  final List<Grupo>? grupoGeneral;
   EditarNotaEvent({
     required this.idNota,
     required this.tituloNota,
     required this.listInfo,
     required this.grupo,
-    required this.etiquetas
+    required this.etiquetas,
+    required this.grupoGeneral,
   });
 }

@@ -12,12 +12,14 @@ import 'package:notea_frontend/dominio/agregados/grupo.dart';
 import 'package:notea_frontend/infraestructura/bloc/nota/nota_bloc.dart';
 import 'package:notea_frontend/infraestructura/bloc/usuario/usuario_bloc.dart';
 import 'package:notea_frontend/presentacion/pantallas/Container_Editor_Nota.dart';
+import 'package:notea_frontend/presentacion/pantallas/HomeScreenWithDrawer.dart';
 import 'package:notea_frontend/presentacion/pantallas/home_screen.dart';
 import 'package:notea_frontend/presentacion/pantallas/navigation_provider.dart';
 import 'package:notea_frontend/presentacion/widgets/Boton_Gru_Eti.dart';
 import 'package:notea_frontend/presentacion/widgets/ImageBlock.dart';
 import 'package:notea_frontend/presentacion/widgets/TareaBlock.dart';
 import 'package:notea_frontend/presentacion/widgets/TextBlock.dart';
+import '../../dominio/agregados/usuario.dart';
 
 class AccionesConNota extends StatefulWidget {
   final String accion;
@@ -29,6 +31,7 @@ class AccionesConNota extends StatefulWidget {
   final String? titulo;
   final String? idNota;
   final List<dynamic>? contenidoTotal1;
+  final Usuario usuario;
 
   const AccionesConNota(
       {Key? key,
@@ -39,7 +42,9 @@ class AccionesConNota extends StatefulWidget {
       this.contenidoTotal1,
       this.etiquetasGeneral,
       this.grupoNota,
-      this.etiquetasNota})
+      this.etiquetasNota,
+      required this.usuario,
+      })
       : super(key: key);
 
   @override
@@ -121,7 +126,11 @@ class _AccionesConNotaState extends State<AccionesConNota> {
 
   // Evento de regresar
   void _regresar() {
-    Navigator.pop(context);
+    Navigator.push(
+      context,
+      MaterialPageRoute(
+          builder: (context) => HomeScreenWithDrawer(usuario : widget.usuario)),
+    );
   }
 
   @override
@@ -292,6 +301,7 @@ class _AccionesConNotaState extends State<AccionesConNota> {
                                 listInfo: recivedDataList,
                                 grupo: receivedDataGrupo,
                                 etiquetas: recivedDataEitquetas,
+                                grupoGeneral: widget.gruposGeneral,
                               ),
                             );
                           }

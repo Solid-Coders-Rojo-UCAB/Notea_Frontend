@@ -6,14 +6,14 @@ import 'package:notea_frontend/infraestructura/bloc/nota/nota_bloc.dart';
 import 'package:notea_frontend/infraestructura/bloc/usuario/usuario_bloc.dart';
 import 'package:notea_frontend/presentacion/pantallas/login_screen.dart';
 import 'package:provider/provider.dart';
-import 'aplicacion/Notifications.dart';
+// import 'aplicacion/Notifications.dart';
 import 'presentacion/pantallas/HomeScreenWithDrawer.dart';
 import 'presentacion/pantallas/navigation_provider.dart';
 
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
-  await InitNotifications();
+  // await InitNotifications();
   runApp(const MyApp());
 }
 

@@ -5,12 +5,14 @@ import 'package:flutter/material.dart';
 class TareaBlock extends StatefulWidget {
 
   final Map<String, dynamic>? tareas;
+  String? id;
 
   List<TextEditingController> controllers = []; // Controladores de texto
   final TareaBlockController controller1 =TareaBlockController(); // Controladores de texto
+  final TareaBlockController controllerEditar =TareaBlockController(); // Controladores de texto
   int cantTareas = 0;
 
-  TareaBlock({Key? key, this.tareas}) : super(key: key);
+  TareaBlock({Key? key, this.tareas, this.id}) : super(key: key);
 
   @override
   _TareaBlockState createState() => _TareaBlockState();
@@ -33,8 +35,12 @@ class _TareaBlockState extends State<TareaBlock> {
     if (widget.tareas != null) {
       List<dynamic> valueList = widget.tareas!['value'];
       tasks = valueList.map((taskJson) => parseTask(taskJson)).toList();
+      
       widget.cantTareas = tasks.length;
+      
     }
+  widget.controllerEditar.listaTareas = tasks;
+
   }
 
   @override
@@ -81,6 +87,7 @@ class _TareaBlockState extends State<TareaBlock> {
                       onChanged: (value) {
                         setState(() {
                           task.description = value;
+                          widget.controllerEditar.listaTareas = tasks;
                         });
                       },
                       decoration: const InputDecoration(
@@ -107,6 +114,7 @@ class _TareaBlockState extends State<TareaBlock> {
                         tasks.removeAt(index);
                         widget.controllers.removeAt(index); // Eliminar el controlador correspondiente
                       });
+                      widget.controllerEditar.listaTareas = tasks;
                       widget.cantTareas -= 1;
                     },
                     icon: const Icon(Icons.close),
@@ -135,19 +143,21 @@ class _TareaBlockState extends State<TareaBlock> {
                     actions: [
                       TextButton(
                         onPressed: () {
+                          final newTask = Task(
+                            description: descriptionController.text,
+                            completed: false,
+                          );
                           setState(() {
-                            final newTask = Task(
-                              description: descriptionController.text,
-                              completed: false,
-                            );
                             tasks.add(newTask);
-                            widget.controller1.agregarTarea(newTask);           //TArea agregada
+                            widget.controller1.agregarTarea(newTask);//TArea agregada
                             widget.controllers.add(TextEditingController(
                               text: newTask.description,
                             ));
                             Navigator.pop(context);
                             widget.cantTareas += 1;
-                          });
+                            widget.controllerEditar.listaTareas = tasks;
+                          },
+                          );
                         },
                         child: const Text('Agregar'),
                       ),
@@ -171,12 +181,14 @@ class _TareaBlockState extends State<TareaBlock> {
 }
 
 class Task {
+  String? id;
   String description;
   bool completed;
 
   Task({
     required this.description,
     required this.completed,
+    this.id,
   });
 }
 
