@@ -9,6 +9,7 @@ import 'package:notea_frontend/dominio/agregados/etiqueta.dart';
 import 'package:notea_frontend/dominio/agregados/grupo.dart';
 import 'package:notea_frontend/dominio/agregados/nota.dart';
 import 'package:notea_frontend/infraestructura/bloc/nota/nota_bloc.dart';
+import 'package:notea_frontend/presentacion/pantallas/HomeScreenWithDrawer.dart';
 import 'package:notea_frontend/presentacion/pantallas/home_screen.dart';
 import 'package:notea_frontend/presentacion/widgets/card.dart';
 import 'package:notea_frontend/presentacion/widgets/desplegable.dart';
@@ -59,8 +60,7 @@ class _MyDropdownState extends State<MyDropdown> {
     });
   }
 void handleDelete(Nota nota) {
-    BlocProvider.of<NotaBloc>(context)
-     .add(ModificarEstadoNotaEvent(idNota: nota.id, estado: "PAPELERA"));
+    BlocProvider.of<NotaBloc>(context).add(ModificarEstadoNotaEvent(idNota: nota.id, estado: "PAPELERA"));
 
     // Espera un poco para darle tiempo a la nota para ser eliminada
 
@@ -244,8 +244,13 @@ void handleDelete(Nota nota) {
                                                     child: const Text('Aceptar'),
                                                     onPressed: () {
                                                     handleDelete(nota);
-                                                    Navigator.pop(
-                                                          context); 
+                                                    Navigator.pop(context);
+
+                                                    Navigator.push(
+                                                      context,
+                                                      MaterialPageRoute(
+                                                          builder: (context) => HomeScreenWithDrawer(usuario : widget.usuario)),
+                                                    );
                                               },
                                             ),
                                           ],
