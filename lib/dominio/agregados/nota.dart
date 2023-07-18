@@ -1,3 +1,4 @@
+import 'package:notea_frontend/dominio/agregados/VONota/VOListaEtiquetas.dart';
 import 'package:notea_frontend/dominio/agregados/VONota/VOidGrupo.dart';
 
 import 'VONota/EstadoEnum.dart';
@@ -8,12 +9,13 @@ import 'VONota/VOUbicacionNota.dart';
 class Nota {
   String id;
   late VOTituloNota titulo;
-  late VOContenidoNota contenido;
+  late VOContenidoNota contenido;     //Se supone que esto es una lista de cosas(CONTENIDOS, IMAGENES, TAREAS)
   late DateTime fechaCreacion;
   late VOUbicacionNota ubicacion;
   late EstadoEnum estado;
   //late List<Tarea> tareas;
   late VOIdGrupoNota idGrupo;
+  late VOIdEtiquetas etiquetas;
 
   Nota({
     required this.titulo,
@@ -24,6 +26,7 @@ class Nota {
     required this.id,
     /*required this.tareas*/
     required this.idGrupo,
+    required this.etiquetas,
   });
 
   factory Nota.fromJson(Map<String, dynamic> json) {
@@ -38,11 +41,12 @@ class Nota {
       id: json['id']['id'],
       //tareas: json['tareas'],
       idGrupo: VOIdGrupoNota.crearIdGrupoNota(json['idGrupo']['idGrupo']),
+      etiquetas: VOIdEtiquetas.crearListaIdEtiquetas(json['etiquetas'])
     );
   }
 
   static Nota crearNota(String titulo, String contenido, DateTime fechaCreacion,
-      EstadoEnum estado, int latitud, int longitud, String id, String idGrupo) {
+      EstadoEnum estado, int latitud, int longitud, String id, String idGrupo, List<String> etiquetas) {
     return Nota(
       titulo: VOTituloNota.crearTituloNota(titulo),
       contenido: VOContenidoNota.crearContenidoNota(contenido),
@@ -52,6 +56,7 @@ class Nota {
       id: id,
       //tareas: [],
       idGrupo: VOIdGrupoNota.crearIdGrupoNota(idGrupo),
+      etiquetas: VOIdEtiquetas.crearListaIdEtiquetas(etiquetas)
     );
   }
 
@@ -88,6 +93,10 @@ class Nota {
 
   int getLongitud() {
     return ubicacion.getLongitud();
+  }
+
+  List<dynamic> getEtiquetas(){
+    return etiquetas.getEtiquetas();
   }
 
   void setEstado(EstadoEnum estado) {

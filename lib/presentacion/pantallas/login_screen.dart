@@ -1,6 +1,6 @@
 // ignore_for_file: use_build_context_synchronously, sort_child_properties_last
 import 'dart:convert';
-
+import 'HomeScreenWithDrawer.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:notea_frontend/dominio/agregados/usuario.dart';
@@ -33,8 +33,8 @@ class _LoginScreenState extends State<LoginScreen> {
   void initState() {
     emailController = TextEditingController();
     passwordController = TextEditingController();
-    emailController.text = 'angel@gmail.com';
-    passwordController.text = '1234';
+    emailController.text = 'qwer@gmail.com';
+    passwordController.text = '12345678';
     super.initState();
   }
 
@@ -53,21 +53,6 @@ class _LoginScreenState extends State<LoginScreen> {
   Widget build(BuildContext context) {
     return BlocBuilder<UsuarioBloc, UsuarioState>( //siempre va el Bloc y el State
       builder: (context, state) {
-
-        // #############################################
-        // #############################################
-        // COMENTAR ESTO SI QUIERES PASAR DE UNA AL GOME
-        // final usuariofinal = Usuario.crearUsuario('Angel', 'Hernandez','angel@gmail.com', '1234', true, 'dcb52ea6-fd0c-4ce6-9873-ce487cb39787');
-        // if(true){
-        //   return Scaffold(
-        //     resizeToAvoidBottomInset: true,
-        //     body: Center(child: MessagesScreen(usuario : usuariofinal)),
-        //   );
-        // }
-        // #############################################
-        // #############################################
-
-        //se muestra una pantalla diferente dependiendo del estado del bloc
         if (state is UsuarioLoadingState) {
           return const Center(child: CircularProgressIndicator());
         }
@@ -80,7 +65,7 @@ class _LoginScreenState extends State<LoginScreen> {
         if (state is UsuarioSuccessState) {
           return Scaffold(
             resizeToAvoidBottomInset: true,
-            body: Center(child: MessagesScreen(usuario : state.usuario)),
+            body: Center(child: HomeScreenWithDrawer(usuario : state.usuario)),
           ); //pagina principal
         }
         if (state is UsuarioInitialState) {
@@ -92,11 +77,11 @@ class _LoginScreenState extends State<LoginScreen> {
                               padding: const EdgeInsets.symmetric(horizontal: 50.0),
                               child: SingleChildScrollView(
                                 child: Padding(
-                                  padding: const EdgeInsets.only(top: 120.0),
+                                  padding: const EdgeInsets.only(top: 30.0),
                                   child: Column(
                                     crossAxisAlignment: CrossAxisAlignment.start,
                                     children: [
-                                      const SizedBox(height: 50),
+                                      const SizedBox(height: 40),
                                       TweenAnimationBuilder<double>(
                                         duration: const Duration(milliseconds: 300),
                                         tween: Tween(begin: 1, end: _elementsOpacity),
@@ -120,7 +105,7 @@ class _LoginScreenState extends State<LoginScreen> {
                                                   ),
                                                 ],
                                               ),
-                                              const SizedBox(height: 30),
+                                              const SizedBox(height: 50),
                                               const Text(
                                                 "Bienvenido,",
                                                 style: TextStyle(
@@ -136,7 +121,7 @@ class _LoginScreenState extends State<LoginScreen> {
                                           ),
                                         ),
                                       ),
-                                      const SizedBox(height: 25),
+                                      const SizedBox(height: 35),
                                 
                                       //Formulario para validación
                                       Form(

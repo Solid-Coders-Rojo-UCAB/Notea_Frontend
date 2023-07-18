@@ -71,8 +71,8 @@ class _DesplegableState extends State<Desplegable> with SingleTickerProviderStat
                 ),
                 RotationTransition(
                   turns: _animation,
-                  child: const Icon(
-                    Icons.expand_less,
+                  child: Icon(
+                    _mostrarContenido ?  Icons.expand_less_rounded : Icons.expand_more_rounded,
                     size: 30.0,
                   ),
                 ),

@@ -25,6 +25,10 @@ class NotasFailureState extends NotaState {
   const NotasFailureState() : super(existeNota: false, notas: null);
 }
 
+class CeroNotasFailureState extends NotaState {
+  const CeroNotasFailureState() : super(existeNota: false, notas: null);
+}
+
 class NotasCreateSuccessState extends NotaState {
   @override
   const NotasCreateSuccessState() : super(existeNota: true);

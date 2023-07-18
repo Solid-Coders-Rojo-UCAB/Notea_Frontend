@@ -1,13 +1,27 @@
 // ignore_for_file: library_private_types_in_public_api, file_names
 
+import 'dart:convert';
+import 'dart:io';
+import 'dart:typed_data';
+import 'package:flutter_image_compress/flutter_image_compress.dart';
+
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:notea_frontend/infraestructura/Repositorio/repositorioNotaImpl.dart';
 
 class ImageBlock extends StatefulWidget {
 
+  String? nombre;
+  String? base64;
+  String? id;
+
   final ImageBlockController controller = ImageBlockController();
+  final ImageBlockController controller1 = ImageBlockController();
   
-  ImageBlock({Key? key}) : super(key: key);
+  ImageBlock({Key? key, this.base64, this.nombre, this.id}) : super(key: key);
+  Image? selectedImage;
+  Image? selectedImage1;
 
   @override
   _ImageBlockState createState() => _ImageBlockState();
@@ -16,34 +30,59 @@ class ImageBlock extends StatefulWidget {
 
 class _ImageBlockState extends State<ImageBlock> {
   final ImagePicker _imagePicker = ImagePicker();
-  Image? _selectedImage;
-  
-
-
   Future<void> _pickImageFromGallery() async {
     final pickedImage = await _imagePicker.pickImage(source: ImageSource.gallery);
     if (pickedImage != null) {
       setState(() {
-        _selectedImage = Image.network(
+        widget.selectedImage = Image.file(
+          File(pickedImage.path),
+          fit: BoxFit.cover,
+          height: 380,
+        );
+
+        widget.selectedImage1 = Image.network(
           pickedImage.path,
           fit: BoxFit.cover,
         );
       });
-        widget.controller.setImage(_selectedImage, pickedImage.name);
+      final base64Image = await convertir(File(pickedImage.path));
+      widget.controller.setImage(widget.selectedImage, pickedImage.name, base64Image, null);
+      widget.controller1.setImage(widget.selectedImage1, pickedImage.name, base64Image, null);
     }
   }
 
   void _removeImage() {
     setState(() {
-      _selectedImage = null;
+      widget.selectedImage = null;
     });
   }
+
+  @override
+  void initState() {
+    super.initState();
+    if(widget.nombre != null && widget.base64 != null) {
+      // print('nombre -> '+ widget.nombre!);
+      // print('base64 -> '+ widget.base64!);
+
+      // widget.selectedImage = imageFromBase64String(widget.hola);
+      widget.selectedImage = imageFromBase64String(widget.base64!);
+      widget.controller.setImage(widget.selectedImage, widget.nombre, widget.base64!, null);
+    }
+  }
+
+  Image imageFromBase64String(String base64String) {
+    return Image.memory(
+      base64Decode(base64String),
+      height: 380,
+    );
+  }
+
 
   @override
   Widget build(BuildContext context) {
     return Column(
       children: [
-        if (_selectedImage != null)
+        if (widget.selectedImage != null)
           Container(
             margin: const EdgeInsets.only(bottom: 20),
             decoration: BoxDecoration(
@@ -61,7 +100,7 @@ class _ImageBlockState extends State<ImageBlock> {
               children: [
                 ClipRRect(
                   borderRadius: BorderRadius.circular(10),
-                  child: _selectedImage,
+                  child: widget.selectedImage,
                 ),
                 Positioned(
                   top: 5,
@@ -108,10 +147,14 @@ class _ImageBlockState extends State<ImageBlock> {
 class ImageBlockController {
   Image? _selectedImage;
   String? _imageName;
+  late String? _selectedImagePath;
+  late String _base64;
 
-  void setImage(Image? image, String? imageName) {
+  void setImage(Image? image, String? imageName, String base64, String? imagePath) {
     _selectedImage = image;
     _imageName = imageName;
+    _selectedImagePath = imagePath;
+    _base64 = base64;
   }
 
   Image? getSelectedImage() {
@@ -121,4 +164,35 @@ class ImageBlockController {
   String? getImageName() {
     return _imageName;
   }
+
+  String? getImagePath() {
+    return _selectedImagePath;
+  }
+
+  String getBase64() {
+    return _base64;
+  }
 }
+
+
+
+Future<String> convertir(File imagen) async {
+
+      var result = await FlutterImageCompress.compressAndGetFile(
+        imagen.absolute.path,
+        "${imagen.absolute.path}compressed.jpg",
+        quality: 50,
+      );
+
+    var res = File("${imagen.absolute.path}compressed.jpg"); //hay que volver a pasasr de xfile a file
+    // print("despues de Comprimir");
+    // print(res.lengthSync());
+
+    Uint8List imageBytes = await res.readAsBytes();
+    String base64Image = base64.encode(imageBytes);
+
+    // print("base64");
+    // print(base64Image.length);
+
+    return base64Image;
+  }

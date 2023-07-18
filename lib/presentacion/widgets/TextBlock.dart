@@ -1,482 +1,204 @@
-// ignore_for_file: file_names, library_private_types_in_public_api
+// ignore_for_file: use_key_in_widget_constructors, must_be_immutable
 
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
+import 'dart:convert';
+import 'package:quill_html_editor/quill_html_editor.dart';
+import 'package:html/parser.dart' as htmlParser;
 import 'package:image_picker/image_picker.dart';
+
+import 'package:notea_frontend/presentacion/pantallas/Speech_to_Text_Screen.dart';
 import 'package:notea_frontend/aplicacion/ImagenATexto.dart';
 
-const h1 = TextStyle(
-  fontSize: 37,
-  fontWeight: FontWeight.bold,
-  color: Colors.black,
-);
-
-const h2 = TextStyle(
-  fontSize: 28,
-  fontWeight: FontWeight.bold,
-  color: Colors.black,
-);
-
-const h3 = TextStyle(
-  fontSize: 22,
-  fontWeight: FontWeight.bold,
-  color: Colors.black,
-);
-
-const text = TextStyle(
-  fontSize: 16,
-  height: 1.5,
-  fontWeight: FontWeight.normal,
-  color: Color.fromARGB(155, 0, 0, 0),
-);
-
-const negritaTipo = TextStyle(
-  fontSize: 16,
-  height: 1.5,
-  fontWeight: FontWeight.bold,
-  color: Color.fromARGB(155, 0, 0, 0),
-);
-const negrita = TextStyle(
-  fontSize: 16,
-  height: 1.5,
-  fontWeight: FontWeight.bold,
-);
-
-const cursiva = TextStyle(
-  fontSize: 16,
-  height: 1.5,
-  fontStyle: FontStyle.italic,
-  color: Color.fromARGB(155, 0, 0, 0),
-);
-
-const tachado = TextStyle(
-  fontSize: 16,
-  height: 1.5,
-  decoration: TextDecoration.lineThrough,
-  color: Color.fromARGB(155, 0, 0, 0),
-);
-
-const sobrescrito = TextStyle(
-  fontSize: 16,
-  height: 1.5,
-  textBaseline: TextBaseline.alphabetic,
-  color: Color.fromARGB(155, 0, 0, 0),
-);
-
-const subrayado = TextStyle(
-  fontSize: 16,
-  height: 1.5,
-  decoration: TextDecoration.underline,
-  color: Color.fromARGB(155, 0, 0, 0),
-);
-
-class TextBlock extends StatefulWidget {
-  TextBlock({Key? key}) : super(key: key);
-
-  final TextEditingController controller = TextEditingController();
-  final TextBlockController controller1 = TextBlockController();
-  final FocusNode focus = FocusNode();
-  final FocusNode rawKeyboardFocus = FocusNode();
-
+class TextBlocPrueba3 extends StatefulWidget {
+  String? cuerpo;
+  String? id;
+  TextBlocPrueba3({Key? key, this.cuerpo, this.id});
   @override
-  _TextBlockState createState() => _TextBlockState();
+  State<TextBlocPrueba3> createState() => _TextBlocPrueba3();
+  final QuillEditorController _editorKey = QuillEditorController();
+  QuillEditorController get editorKey => _editorKey;
 }
 
-class _TextBlockState extends State<TextBlock> {
-  String dropdownValue = 'One';
-  Color backgroundColor = Colors.transparent;
-  double opacity = 0;
-  bool renderBlockChange =
-      false; //Esta es la variable que se encarga de mostrar o no el  menu desplegable de NEGRITAS, IMAGENES
-  TextStyle activeStyle = text;
-
-  List<FocusNode> styleNodes = [
-    FocusNode(),
-    FocusNode(),
-    FocusNode(),
-    FocusNode(),
-  ];
-
+class _TextBlocPrueba3 extends State<TextBlocPrueba3> {
   @override
   void initState() {
     super.initState();
-    widget.focus.addListener(() {
-      if (!widget.focus.hasFocus &&
-          !styleNodes[0].hasFocus &&
-          !styleNodes[1].hasFocus &&
-          !styleNodes[2].hasFocus &&
-          !styleNodes[3].hasFocus) {
-        setState(() {
-          renderBlockChange = false;
-          backgroundColor = Colors.transparent;
-          opacity = 0;
-        });
-      }
-    });
-    widget.controller1.setTexBlock('', false, false, false, false);
   }
 
-  @override
-  void dispose() {
-    // Clean up the controller when the widget is removed from the widget tree.
-    // This also removes the _printLatestValue listener.
-    // print('disposed');
-    // widget.focus.dispose();
-    // widget.RawKeyboardFocus.dispose();
-    // widget.controller.dispose();
-    super.dispose();
+  Future<String?>? getEditorValue() async {
+    String? htmlText = await widget._editorKey.getText();
+    return htmlText;
   }
 
-  _onEnter(e) {
-    setState(() {
-      backgroundColor = Colors
-          .black12; //Cuando se le pasa el mouse por encima cambia de color (es un HOVER de csss)
-      opacity = 1;
-    });
-  }
-
-  _onExit(e) {
-    setState(() {
-      if (!renderBlockChange) {
-        backgroundColor = Colors
-            .transparent; //Cuando se le pasa el mouse por encima cambia de color (es un HOVER de csss)
-        opacity = 0;
-      }
-    });
-  }
-
-  handleKey(key) {
-    if (key.runtimeType == RawKeyDownEvent) {
-      if (key.data.keyLabel == 'Escape' ||
-          key.logicalKey.keyLabel == 'Escape') {
-        setState(() {
-          renderBlockChange =
-              !renderBlockChange; //Setea al valor contrario al que estaba
-          if (renderBlockChange) {
-            //Si es true, pone el fondo con negro
-            backgroundColor = Colors.black12;
-            opacity = 1;
-          } else {
-            backgroundColor =
-                Colors.transparent; //Si es false, pone el fondo trasnparente
-            opacity = 0;
-            widget.focus.requestFocus();
+  void customAction(String action) {
+    if (action == 'action1') {
+      getEditorValue()!.then((textoNota) {
+        String text = htmlParser.parse(textoNota).documentElement!.text;
+        Navigator.push(
+          context,
+          MaterialPageRoute(
+            builder: (context) => SpeechToTextScreen(textoNota: text),
+          ),
+        ).then((value) {
+          if (value != null) {
+            setState(() {
+              // Lógica para actualizar el estado con el valor devuelto de SpeechToTextScreen
+              widget._editorKey.setText(value);
+            });
           }
         });
-      }
+      });
+    } else if (action == 'action2') {
+      setState(() async {
+        Future<String> future = imagenATexto().EscanearTexto(
+            await ImagePicker().pickImage(source: ImageSource.gallery));
+        String textoEscaneado = await future;
+        widget._editorKey.setText(textoEscaneado);
+      });
+    } else if (action == 'action3') {
+      setState(() async {
+        Future<String> future = imagenATexto().EscanearTexto(
+            await ImagePicker().pickImage(source: ImageSource.camera));
+        String textoEscaneado = await future;
+        widget._editorKey.setText(textoEscaneado);
+      });
     }
   }
 
-  TextStyle? activarEstilo(String estilo) {
-    //Este if es mejorable, pero es por la pruba y rapidez
-    if (estilo == 'negrita') {
-      widget.controller1
-          .setTexBlock(widget.controller.text, true, false, false, false);
-    } else if (estilo == 'cursiva') {
-      widget.controller1
-          .setTexBlock(widget.controller.text, false, true, false, false);
-    } else if (estilo == 'tachado') {
-      widget.controller1
-          .setTexBlock(widget.controller.text, false, false, true, false);
-    } else if (estilo == 'subrayado') {
-      widget.controller1
-          .setTexBlock(widget.controller.text, false, false, false, true);
-    }
-    final Map<String, TextStyle> estilos = {
-      'negrita': negrita,
-      'cursiva': cursiva,
-      'tachado': tachado,
-      'subrayado': subrayado,
-    };
-    renderBlockChange = renderBlockChange;
-    return estilos[estilo];
-  }
+  final customToolBarList = [
+    ToolBarStyle.bold,
+    ToolBarStyle.italic,
+    ToolBarStyle.underline,
+    ToolBarStyle.strike,
+    ToolBarStyle.size,
+    ToolBarStyle.blockQuote,
+    ToolBarStyle.align,
+    ToolBarStyle.listBullet,
+    ToolBarStyle.listOrdered,
+    ToolBarStyle.color,
+    ToolBarStyle.background,
+    ToolBarStyle.link,
+    ToolBarStyle.clean,
+    ToolBarStyle.headerOne,
+    ToolBarStyle.headerTwo,
+    ToolBarStyle.undo,
+    ToolBarStyle.redo,
+  ];
 
   @override
   Widget build(BuildContext context) {
-    return RawKeyboardListener(
-      focusNode: widget.rawKeyboardFocus,
-      onKey: (RawKeyEvent key) => handleKey(key),
-      child: MouseRegion(
-        onEnter: (e) => _onEnter(e), //HOVER
-        onExit: (e) => _onExit(e), //HOVER
-        child: AnimatedContainer(
-          margin: const EdgeInsets.only(bottom: 20),
-          height: renderBlockChange ? 180 : 105,
-          // height: renderBlockChange ? 190 : 120,
-          // height: renderBlockChange ? 170 : 100,
-          duration: const Duration(milliseconds: 200),
-          decoration: BoxDecoration(
-              color: backgroundColor, borderRadius: BorderRadius.circular(20)),
-          padding: const EdgeInsets.all(20),
-
-          child: Column(
-            children: [
-              Row(
-                children: [
-                  AnimatedOpacity(
-                      opacity: opacity,
-                      duration: const Duration(milliseconds: 200),
-                      child: Container(
-                          margin: const EdgeInsets.only(right: 20),
-                          child: Column(
-                            children: [
-                              IconButton(
-                                  icon: const Icon(Icons.menu,
-                                      color: Colors.black38),
-                                  onPressed: () {
-                                    //Aca el boton del menu desplegable
-                                    setState(() {
-                                      renderBlockChange =
-                                          !renderBlockChange; //Esto cambia el valor true o false
-                                    });
-                                  }),
-                            ],
-                          ))),
-                  Flexible(
-                    child: TextField(
-                      cursorColor: Colors.black12,
-                      style: activeStyle,
-                      inputFormatters: <TextInputFormatter>[
-                        FilteringTextInputFormatter.deny('\n'),
-                      ],
-                      decoration: const InputDecoration(
-                        labelText: 'Texto',
-                        labelStyle: TextStyle(color: Colors.grey),
-                        enabledBorder: UnderlineInputBorder(
-                          borderSide: BorderSide(color: Colors.grey),
-                        ),
-                        focusedBorder: UnderlineInputBorder(
-                          borderSide: BorderSide(color: Colors.grey),
-                        ),
-                      ),
-                      controller: widget.controller,
-                      focusNode: widget.focus,
-                      autofocus: false,
-                      maxLines: null,
-                      // maxLines: null,
-                    ),
+    return Expanded(
+      child: Container(
+        margin: const EdgeInsets.only(bottom: 20),
+        child: Scaffold(
+          body: LayoutBuilder(
+            builder: (BuildContext context, BoxConstraints constraints) {
+              return Container(
+                height: 320,
+                width: constraints.maxWidth *
+                    1, // Establece el ancho al 90% del padre
+                decoration: BoxDecoration(
+                  border: Border.all(
+                    color: Color.fromARGB(255, 158, 158, 158),
+                    width: 1.0,
                   ),
-                ],
-              ),
-              Expanded(
-                child: AnimatedContainer(
-                  margin: const EdgeInsets.only(top: 12, left: 60),
-                  duration: const Duration(milliseconds: 200),
-                  height: renderBlockChange ? 70 : 0,
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.start,
-                    crossAxisAlignment: CrossAxisAlignment.end,
-                    children: [
-                      //Fila con los primeros botones
-                      Expanded(
-                        child: Row(
-                          children: [
-                            Expanded(
-                              child: ListView(
-                                children: [
-                                  TextButton(
-                                    focusNode: styleNodes[0],
-                                    child: Container(
-                                      padding: const EdgeInsets.all(5),
-                                      child: const Text(
-                                        'Negrita',
-                                        style: negritaTipo,
-                                      ),
-                                    ),
-                                    onPressed: () {
-                                      setState(() {
-                                        activeStyle = activarEstilo('negrita')!;
-                                        renderBlockChange = true;
-                                        opacity = 0;
-                                        backgroundColor = Colors.transparent;
-                                        widget.focus.requestFocus();
-                                      });
-                                    },
-                                  ),
-                                  TextButton(
-                                    focusNode: styleNodes[1],
-                                    child: Container(
-                                      padding: const EdgeInsets.all(5),
-                                      child: const Text(
-                                        'Cursiva',
-                                        style: cursiva,
-                                      ),
-                                    ),
-                                    onPressed: () {
-                                      setState(() {
-                                        activeStyle = activarEstilo('cursiva')!;
-                                        renderBlockChange = true;
-                                        opacity = 0;
-                                        backgroundColor = Colors.transparent;
-                                        widget.focus.requestFocus();
-                                      });
-                                    },
-                                  ),
-                                ],
-                              ),
-                            ),
-                          ],
-                        ),
-                      ),
-                      //Fila con los segundos botones
-                      Expanded(
-                        child: Row(
-                          children: [
-                            Expanded(
-                              child: ListView(
-                                children: [
-                                  TextButton(
-                                    focusNode: styleNodes[0],
-                                    child: Container(
-                                      padding: const EdgeInsets.all(5),
-                                      child: const Text(
-                                        'Tachado',
-                                        style: tachado,
-                                      ),
-                                    ),
-                                    onPressed: () {
-                                      setState(() {
-                                        activeStyle = activarEstilo('tachado')!;
-                                        renderBlockChange = true;
-                                        opacity = 0;
-                                        backgroundColor = Colors.transparent;
-                                        widget.focus.requestFocus();
-                                      });
-                                    },
-                                  ),
-                                  TextButton(
-                                    focusNode: styleNodes[1],
-                                    child: Container(
-                                      padding: const EdgeInsets.all(5),
-                                      child: const Text(
-                                        'Subrayado',
-                                        style: subrayado,
-                                      ),
-                                    ),
-                                    onPressed: () {
-                                      setState(() {
-                                        activeStyle =
-                                            activarEstilo('subrayado')!;
-                                        renderBlockChange = true;
-                                        opacity = 0;
-                                        backgroundColor = Colors.transparent;
-                                        widget.focus.requestFocus();
-                                      });
-                                    },
-                                  ),
-                                ],
-                              ),
-                            ),
-                          ],
-                        ),
-                      ),
-                      Expanded(
-                        child: Row(
-                          children: [
-                            Expanded(
-                              child: ListView(
-                                children: [
-                                  IconButton(
-                                      icon: const Icon(
-                                          Icons.image_search_rounded,
-                                          color:
-                                              Color.fromARGB(255, 206, 156, 5)),
-                                      onPressed: () {
-                                        //Aca el boton del menu desplegable
-                                        print(
-                                            'Aca se habre la funcionalidad de imagen a texto');
-                                        // setState(() {
-                                        //   renderBlockChange = !renderBlockChange;   //Esto cambia el valor true o false
-                                        // });
-                                      }),
-                                  IconButton(
-                                      icon: const Icon(Icons.mic,
-                                          color:
-                                              Color.fromARGB(255, 206, 156, 5)),
-                                      onPressed: () {
-                                        //Aca el boton del menu desplegable
-                                        print(
-                                            'Aca se habre la funcionalidad de audio a texto');
-                                        // setState(() {
-                                        //   renderBlockChange = !renderBlockChange;   //Esto cambia el valor true o false
-                                        // });
-                                      }),
-                                ],
-                              ),
-                            ),
-                          ],
-                        ),
-                      ),
-                      //Fila con el ultimo boton para salir del menu
-                      Expanded(
-                        child: Row(
-                          children: [
-                            Expanded(
-                              child: ListView(
-                                children: [
-                                  IconButton(
-                                      icon: const Icon(Icons.close,
-                                          color: Colors.red),
-                                      onPressed: () {
-                                        //Aca el boton del menu desplegable
-                                        setState(() {
-                                          renderBlockChange =
-                                              !renderBlockChange; //Esto cambia el valor true o false
-                                        });
-                                      }),
-                                ],
-                              ),
-                            ),
-                          ],
-                        ),
-                      ),
-                    ],
-                  ),
+                  borderRadius: BorderRadius.circular(8.0),
                 ),
-              )
-            ],
+                child: Column(
+                  children: [
+                    Row(
+                      children: [
+                        const Padding(
+                          padding: EdgeInsets.only(top: 38),
+                        ),
+                        PopupMenuButton<String>(
+                          icon: const Icon(Icons.blur_on),
+                          itemBuilder: (context) => [
+                            const PopupMenuItem<String>(
+                              value: 'action1',
+                              child: Text('Audio a texto'),
+                            ),
+                            const PopupMenuItem<String>(
+                              value: 'action2',
+                              child: Text('Escanear imagen'),
+                            ),
+                            const PopupMenuItem<String>(
+                              value: 'action3',
+                              child: Text('Escanear una foto'),
+                            ),
+                          ],
+                          onSelected: customAction,
+                        ),
+                        Expanded(
+                          child: Padding(
+                            padding: const EdgeInsets.all(8),
+                            child: Container(
+                              decoration: BoxDecoration(
+                                border: Border.all(
+                                  color:
+                                      const Color.fromARGB(64, 158, 158, 158),
+                                  width: 1.0,
+                                ),
+                                borderRadius: BorderRadius.circular(8.0),
+                              ),
+                              child: FractionallySizedBox(
+                                widthFactor:
+                                    0.9, // Establece el ancho al 90% del padre
+                                child: ConstrainedBox(
+                                  constraints:
+                                      const BoxConstraints(maxHeight: 255),
+                                  child: QuillHtmlEditor(
+                                    text: widget.cuerpo ?? '',
+                                    hintText:
+                                        'Ingrese el contenido de su nota...',
+                                    controller: widget._editorKey,
+                                    isEnabled: true,
+                                    minHeight: 255,
+                                    hintTextAlign: TextAlign.start,
+                                    padding: const EdgeInsets.all(2),
+                                    hintTextPadding: EdgeInsets.zero,
+                                    // onFocusChanged: (hasFocus) => debugPrint('has focus $hasFocus'),
+                                    // onTextChanged: (text) => debugPrint('widget text change $text'),
+                                    // onEditorCreated: () => debugPrint('Editor has been loaded'),
+                                    // onEditorResized: (height) =>
+                                    // debugPrint('Editor resized $height'),
+                                    // onSelectionChanged: (sel) =>
+                                    // debugPrint('${sel.index},${sel.length}')
+                                  ),
+                                ),
+                              ),
+                            ),
+                          ),
+                        ),
+                      ],
+                    ),
+                    SizedBox(
+                      height: 41,
+                      width: constraints.maxWidth,
+                      child: ListView(
+                        scrollDirection: Axis.horizontal,
+                        children: [
+                          SizedBox(
+                            width: constraints.maxWidth * 2.1,
+                            child: ToolBar(
+                              controller: widget._editorKey,
+                              toolBarConfig: customToolBarList,
+                              activeIconColor: Colors.blue,
+                              runSpacing: BorderSide.strokeAlignCenter,
+                              runAlignment: WrapAlignment.center,
+                              direction: Axis.horizontal,
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                  ],
+                ),
+              );
+            },
           ),
         ),
       ),
     );
   }
-}
-
-class TextBlockController {
-  late String contenido;
-  late Estilos estilos;
-
-  void setTexBlock(String contenido, bool negrita, bool cursiva, bool tachado,
-      bool subrayado) {
-    contenido = contenido;
-    estilos = Estilos(
-        negrita: negrita,
-        cursiva: cursiva,
-        tachado: tachado,
-        subrayado: subrayado);
-  }
-
-  String getContenido() {
-    return contenido;
-  }
-
-  String getEstilos() {
-    String est =
-        'Negrita -> ${estilos.negrita}, Cursiva -> ${estilos.cursiva}, Tachado -> ${estilos.tachado}, Subrayado -> ${estilos.subrayado}';
-    return est;
-  }
-}
-
-class Estilos {
-  late bool negrita;
-  late bool cursiva;
-  late bool tachado;
-  late bool subrayado;
-
-  Estilos(
-      {required this.negrita,
-      required this.cursiva,
-      required this.tachado,
-      required this.subrayado});
 }

@@ -16,7 +16,6 @@ abstract class RemoteDataUsuario {
   Future<Either<Usuario, Exception>> loginUsuarioApi(
       String email, String password);
   //Future<Either<int, Exception>> eliminarUsuarioApi(int id);
-
 }
 
 class RemoteDataUsuarioImp implements RemoteDataUsuario {
@@ -62,7 +61,8 @@ class RemoteDataUsuarioImp implements RemoteDataUsuario {
       if (response.statusCode == 200) {
         return Either.left(jsonDecode(response.body));
       } else {
-        return Either.right(Exception("Error al crear el usuario en el servidor"));
+        return Either.right(
+            Exception("Error al crear el usuario en el servidor"));
       }
     } else {
       return Either.right(Exception(
@@ -92,10 +92,35 @@ class RemoteDataUsuarioImp implements RemoteDataUsuario {
         return Either.right(Exception("Error al loguear el usuario"));
       }
     } else {
-      return Either.right(Exception("No hay conexion a internet")); //guardado en la base de datos local
+      return Either.right(Exception(
+          "No hay conexion a internet")); //guardado en la base de datos local
     }
   }
 
+  @override
+  Future<Either<String, Exception>> SuscribeUsuarioApi(
+    String IdUsuario,
+  ) async {
+    final body1 = {"suscripcion": true};
+    if (await const ConectivityCheck().checkConectivity()) {
+      final response = await client.put(
+        Uri.parse('${ApiConfig.apiBaseUrl}/usuario/${IdUsuario}'),
+        body: jsonEncode(body1),
+        headers: <String, String>{
+          'Content-Type': 'application/json; charset=UTF-8',
+        },
+      );
+      if (response.statusCode == 200) {
+        return Either.left('Suscripcion autorizada');
+      } else {
+        return Either.right(
+            Exception("Error, no es posible realizar la suscripcion"));
+      }
+    } else {
+      return Either.right(Exception(
+          "No hay conexion a internet")); //guardado en la base de datos local
+    }
+  }
 
   // @override
   // Future<Either<int, Exception>> eliminarUsuarioApi(int id) {}
@@ -108,10 +133,9 @@ class RemoteDataUsuarioImp implements RemoteDataUsuario {
     List<dynamic> valueList = jsonMap['value'];
 
     // iteramos por cada valor de la lista y creamos un objeto Nota para cada valor.
-    List<Usuario> usuarios = valueList.map((value) => Usuario.fromJson(value)).toList();
+    List<Usuario> usuarios =
+        valueList.map((value) => Usuario.fromJson(value)).toList();
 
     return usuarios;
   }
-
-
-} 
+}

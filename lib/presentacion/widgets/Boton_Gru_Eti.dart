@@ -2,11 +2,11 @@
 
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:notea_frontend/dominio/agregados/etiqueta.dart';
 import 'package:notea_frontend/dominio/agregados/grupo.dart';
 import 'package:notea_frontend/infraestructura/bloc/nota/nota_bloc.dart';
 import 'package:notea_frontend/infraestructura/bloc/usuario/usuario_bloc.dart';
 import 'package:notea_frontend/presentacion/pantallas/home_screen.dart';
-import 'package:notea_frontend/presentacion/widgets/TextBlock.dart';
 
 class Tag {
   final int id;
@@ -24,17 +24,20 @@ class Tag {
 
 
 class AnimatedButton extends StatefulWidget {
-  final List<Grupo>? grupos;
   final Function(Grupo) onDataReceivedGrupo;
-  final Function(List<dynamic>) onDataReceivedEtiqueta;
+  final Function(List<Etiqueta>) onDataReceivedEtiqueta;
   final bool puedeCrear;
+  final String accion;
 
   final String tituloNota;
   final List<dynamic> listInfo;
   final Grupo? grupo;
-  final List<dynamic> etiquetas;
+  final List<Grupo>? gruposGeneral;
+  final Grupo? grupoNota;
+  final List<Etiqueta>? etiquetasGeneral;
+  final List<Etiqueta>? etiquetasNota;
 
-  const AnimatedButton({Key? key, required this.onDataReceivedGrupo, required this.onDataReceivedEtiqueta, required this.grupos, required this.puedeCrear, required this.tituloNota, required this.listInfo, required this.grupo, required this.etiquetas}) : super(key: key);
+  const AnimatedButton({Key? key, required this.onDataReceivedGrupo, required this.onDataReceivedEtiqueta, required this.gruposGeneral, required this.puedeCrear, required this.tituloNota, required this.listInfo, required this.grupo, required this.etiquetasGeneral, this.grupoNota, this.etiquetasNota,required this.accion}) : super(key: key);
 
 
   @override
@@ -50,7 +53,7 @@ class _AnimatedButtonState extends State<AnimatedButton>
   bool _isExpanded = false;
 
   @override
-  void initState() {
+  void initState(){
     super.initState();
 
     _animationController = AnimationController(
@@ -71,10 +74,17 @@ class _AnimatedButtonState extends State<AnimatedButton>
         curve: const Interval(0.5, 1),
       ),
     );
+    if(widget.accion != 'Creando Nota'){
+      if(widget.grupoNota != null && widget.etiquetasNota != null){
+        selectedGrupo = widget.grupoNota;
+        selectedTags = widget.etiquetasNota!;
+      }
+    }
   }
 
+
   //Boton de las Etiquetas--------------------------------
-  List<Tag> selectedTags = [];
+  List<Etiqueta> selectedTags = [];
   void sendDataToWrapperWidgetEtiqueta() {
     widget.onDataReceivedEtiqueta(selectedTags);
   }
@@ -109,13 +119,13 @@ class _AnimatedButtonState extends State<AnimatedButton>
                   const SizedBox(height: 16.0),
                   Expanded(
                     child: ListView.builder(
-                      itemCount: tags.length,
+                      itemCount: widget.etiquetasGeneral!.length,
                       itemBuilder: (context, index) {
-                        final tag = tags[index];
+                        final tag = widget.etiquetasGeneral![index];
                         final isSelected = selectedTags.contains(tag);
                         return Card(
                           child: ListTile(
-                            title: Text(tag.nombre),
+                            title: Text(tag.getNombre()),
                             trailing: Checkbox(
                               value: isSelected,
                               onChanged: (value) {
@@ -150,7 +160,7 @@ class _AnimatedButtonState extends State<AnimatedButton>
     ).then((value) {
       if (value != null) {
         setState(() {
-          selectedTags = List<Tag>.from(value);
+          selectedTags = List<Etiqueta>.from(value);
         });
       }
     });
@@ -185,9 +195,9 @@ class _AnimatedButtonState extends State<AnimatedButton>
                   SizedBox(
                     height: 200,
                     child: ListView.builder(
-                      itemCount: widget.grupos?.length,
+                      itemCount: widget.gruposGeneral?.length,
                       itemBuilder: (context, index) {
-                        final grupo =  widget.grupos?[index];
+                        final grupo =  widget.gruposGeneral?[index];
                         return Card(
                           child: RadioListTile<Grupo>(
                             title: Text(grupo!.getNombre()),
@@ -252,28 +262,7 @@ class _AnimatedButtonState extends State<AnimatedButton>
       child: Row(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
-          FadeTransition(
-            opacity: _opacityAnimation,
-            child: ScaleTransition(
-              scale: _scaleAnimation,
-              child: ElevatedButton(
-                onPressed: () {
-                  openBottomSheetGrupo(context);
-                  setState(() {});
-                  _toggleExpanded();
-                },
-                style: ElevatedButton.styleFrom(
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(10.0),
-                  ),
-                  padding: const EdgeInsets.all(10.0),
-                  minimumSize: const Size(120, 60),
-                ),
-                child: const Text('Grupo'),
-              ),
-            ),
-          ),
-          const SizedBox(width: 16.0), // Espacio entre los botones
+
           FadeTransition(
             opacity: _opacityAnimation,
             child: ScaleTransition(
@@ -295,6 +284,28 @@ class _AnimatedButtonState extends State<AnimatedButton>
               ),
             ),
           ),
+          const SizedBox(width: 16.0), // Espacio entre los botones
+          FadeTransition(
+            opacity: _opacityAnimation,
+            child: ScaleTransition(
+              scale: _scaleAnimation,
+              child: ElevatedButton(
+                onPressed: () {
+                  openBottomSheetGrupo(context);
+                  setState(() {});
+                  _toggleExpanded();
+                },
+                style: ElevatedButton.styleFrom(
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(10.0),
+                  ),
+                  padding: const EdgeInsets.all(10.0),
+                  minimumSize: const Size(120, 60),
+                ),
+                child: const Text('Grupo'),
+              ),
+            ),
+          ),
         ],
       ),
     );
@@ -304,6 +315,14 @@ class _AnimatedButtonState extends State<AnimatedButton>
 
   @override
   Widget build(BuildContext context) {
+
+    if(widget.accion != 'Creando Nota'){
+      WidgetsBinding.instance.addPostFrameCallback((_) {       //LUego de renderizar cualquier widget, pues se hacer
+        sendDataToWrapperWidgetEtiqueta();                      //el llamado a las funciones
+        sendDataToWrapperWidgetGrupo();
+      });
+    }
+
     return Stack(
       alignment: Alignment.center,
       children: [
