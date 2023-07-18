@@ -16,7 +16,7 @@ import 'package:progress_state_button/progress_button.dart';
 
 class LoginScreen extends StatefulWidget {
   const LoginScreen({super.key});
-
+  static const route = '/login_screen';
   @override
   State<LoginScreen> createState() => _LoginScreenState();
 }
@@ -25,7 +25,7 @@ class _LoginScreenState extends State<LoginScreen> {
   late TextEditingController emailController;
   late TextEditingController passwordController;
   final double _elementsOpacity = 1;
-  final _formKey =GlobalKey<FormState>(); //Para validar el formulario
+  final _formKey = GlobalKey<FormState>(); //Para validar el formulario
   ButtonState buttonState = ButtonState.idle;
   String userStrJSON = '';
 
@@ -45,149 +45,155 @@ class _LoginScreenState extends State<LoginScreen> {
       buttonState = ButtonState.success;
     });
     await Future.delayed(const Duration(seconds: 2), () {});
-    setState(() {
-    });
+    setState(() {});
   }
 
   @override
   Widget build(BuildContext context) {
-    return BlocBuilder<UsuarioBloc, UsuarioState>( //siempre va el Bloc y el State
-      builder: (context, state) {
-        if (state is UsuarioLoadingState) {
-          return const Center(child: CircularProgressIndicator());
-        }
-        if (state is UsuarioFailureState) {
-          return const Scaffold(
-            resizeToAvoidBottomInset: true,
-            body: Center(child: Text('Error al iniciar sesión')),
-          );
-        }
-        if (state is UsuarioSuccessState) {
-          return Scaffold(
-            resizeToAvoidBottomInset: true,
-            body: Center(child: HomeScreenWithDrawer(usuario : state.usuario)),
-          ); //pagina principal
-        }
-        if (state is UsuarioInitialState) {
-          return Scaffold(
-                    resizeToAvoidBottomInset: true,
-                    body: SafeArea(
-                      bottom: false,
-                      child:  Padding(
-                              padding: const EdgeInsets.symmetric(horizontal: 50.0),
-                              child: SingleChildScrollView(
-                                child: Padding(
-                                  padding: const EdgeInsets.only(top: 30.0),
-                                  child: Column(
-                                    crossAxisAlignment: CrossAxisAlignment.start,
-                                    children: [
-                                      const SizedBox(height: 40),
-                                      TweenAnimationBuilder<double>(
-                                        duration: const Duration(milliseconds: 300),
-                                        tween: Tween(begin: 1, end: _elementsOpacity),
-                                        builder: (_, value, __) => Opacity(
-                                          opacity: value,
-                                          child: Column(
-                                            crossAxisAlignment: CrossAxisAlignment.start,
-                                            children: [
-                                              Row(
-                                                mainAxisAlignment: MainAxisAlignment.start,
-                                                children: const [
-                                                  Icon(
-                                                    Icons.flutter_dash_sharp,
-                                                    size: 60,
-                                                    color: Color(0xff21579C),
-                                                  ),
-                                                  Text(
-                                                    "Notea",
-                                                    style: TextStyle(
-                                                        color: Colors.black, fontSize: 35),
-                                                  ),
-                                                ],
-                                              ),
-                                              const SizedBox(height: 50),
-                                              const Text(
-                                                "Bienvenido,",
-                                                style: TextStyle(
-                                                    color: Colors.black, fontSize: 30),
-                                              ),
-                                              Text(
-                                                "Identificate",
-                                                style: TextStyle(
-                                                    color: Colors.black.withOpacity(0.7),
-                                                    fontSize: 30),
-                                              ),
-                                            ],
-                                          ),
-                                        ),
-                                      ),
-                                      const SizedBox(height: 35),
-                                
-                                      //Formulario para validación
-                                      Form(
-                                        key: _formKey,
-                                        child: Column(
-                                          crossAxisAlignment: CrossAxisAlignment.center,
-                                          children: [
-                                            EmailField(fadeEmail: _elementsOpacity == 0,emailController: emailController),
-                                            const SizedBox(height: 30),
-                                            PasswordField(fadePassword: _elementsOpacity == 0, passwordController: passwordController),
-                                            const SizedBox(height: 32),
-                                            MaterialButton(
-                                              child: Text('Iniciar Sesión', 
-                                                        style: TextStyle(fontSize: 16, 
-                                                                        color: Colors.grey[200]
-                                                      ),),
-                                              shape: RoundedRectangleBorder(
-                                                borderRadius: BorderRadius.circular(6),
-                                              ),
-                                              padding: const EdgeInsets.all(14),
-                                              color : Theme.of(context).primaryColor,
-                                              onPressed: () {
-                                                BlocProvider.of<UsuarioBloc>(context).add(
-                                                  LoginEvent(
-                                                  email: emailController.text,
-                                                  password: passwordController.text,
-                                                ));
-                                              },
-                                            ),
-                                            const SizedBox(height: 15),
-                                              Text(
-                                              "¿No tienes una cuenta?",
-                                              style: TextStyle(
-                                                  color: Colors.black.withOpacity(0.7),
-                                                  fontSize: 15),
-                                            ),
-                                            const SizedBox(height: 7),
-                                            GestureDetector(
-                                              onTap: () {
-                                                Navigator.push(
-                                                  context,
-                                                  MaterialPageRoute(
-                                                      builder: (context) => const RegisterScreen()),
-                                                );
-                                              },
-                                              child: const Text(
-                                                "Registrate",
-                                                style: TextStyle(
-                                                    color: Color(0xff21579C),
-                                                    fontSize: 15,
-                                                    fontWeight: FontWeight.bold),
-                                              ),
-                                            ),
-                                          ],
-                                        ),
-                                      ),
-                                    ],
+    return BlocBuilder<UsuarioBloc, UsuarioState>(
+        //siempre va el Bloc y el State
+        builder: (context, state) {
+      if (state is UsuarioLoadingState) {
+        return const Center(child: CircularProgressIndicator());
+      }
+      if (state is UsuarioFailureState) {
+        return const Scaffold(
+          resizeToAvoidBottomInset: true,
+          body: Center(child: Text('Error al iniciar sesión')),
+        );
+      }
+      if (state is UsuarioSuccessState) {
+        return Scaffold(
+          resizeToAvoidBottomInset: true,
+          body: Center(child: HomeScreenWithDrawer(usuario: state.usuario)),
+        ); //pagina principal
+      }
+      if (state is UsuarioInitialState) {
+        return Scaffold(
+          resizeToAvoidBottomInset: true,
+          body: SafeArea(
+            bottom: false,
+            child: Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 50.0),
+              child: SingleChildScrollView(
+                child: Padding(
+                  padding: const EdgeInsets.only(top: 30.0),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      const SizedBox(height: 40),
+                      TweenAnimationBuilder<double>(
+                        duration: const Duration(milliseconds: 300),
+                        tween: Tween(begin: 1, end: _elementsOpacity),
+                        builder: (_, value, __) => Opacity(
+                          opacity: value,
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Row(
+                                mainAxisAlignment: MainAxisAlignment.start,
+                                children: const [
+                                  Icon(
+                                    Icons.flutter_dash_sharp,
+                                    size: 60,
+                                    color: Color(0xff21579C),
                                   ),
-                                ),
+                                  Text(
+                                    "Notea",
+                                    style: TextStyle(
+                                        color: Colors.black, fontSize: 35),
+                                  ),
+                                ],
+                              ),
+                              const SizedBox(height: 50),
+                              const Text(
+                                "Bienvenido,",
+                                style: TextStyle(
+                                    color: Colors.black, fontSize: 30),
+                              ),
+                              Text(
+                                "Identificate",
+                                style: TextStyle(
+                                    color: Colors.black.withOpacity(0.7),
+                                    fontSize: 30),
+                              ),
+                            ],
+                          ),
+                        ),
+                      ),
+                      const SizedBox(height: 35),
+
+                      //Formulario para validación
+                      Form(
+                        key: _formKey,
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.center,
+                          children: [
+                            EmailField(
+                                fadeEmail: _elementsOpacity == 0,
+                                emailController: emailController),
+                            const SizedBox(height: 30),
+                            PasswordField(
+                                fadePassword: _elementsOpacity == 0,
+                                passwordController: passwordController),
+                            const SizedBox(height: 32),
+                            MaterialButton(
+                              child: Text(
+                                'Iniciar Sesión',
+                                style: TextStyle(
+                                    fontSize: 16, color: Colors.grey[200]),
+                              ),
+                              shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(6),
+                              ),
+                              padding: const EdgeInsets.all(14),
+                              color: Theme.of(context).primaryColor,
+                              onPressed: () {
+                                BlocProvider.of<UsuarioBloc>(context)
+                                    .add(LoginEvent(
+                                  email: emailController.text,
+                                  password: passwordController.text,
+                                ));
+                              },
+                            ),
+                            const SizedBox(height: 15),
+                            Text(
+                              "¿No tienes una cuenta?",
+                              style: TextStyle(
+                                  color: Colors.black.withOpacity(0.7),
+                                  fontSize: 15),
+                            ),
+                            const SizedBox(height: 7),
+                            GestureDetector(
+                              onTap: () {
+                                Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                      builder: (context) =>
+                                          const RegisterScreen()),
+                                );
+                              },
+                              child: const Text(
+                                "Registrate",
+                                style: TextStyle(
+                                    color: Color(0xff21579C),
+                                    fontSize: 15,
+                                    fontWeight: FontWeight.bold),
                               ),
                             ),
-                    ),
-                );
-        }
-        return const Center(child: CircularProgressIndicator());
-      });
+                          ],
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+              ),
+            ),
+          ),
+        );
+      }
+      return const Center(child: CircularProgressIndicator());
+    });
   }
 }
 
