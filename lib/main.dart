@@ -19,6 +19,7 @@ final GlobalKey<NavigatorState> naviKey = GlobalKey();
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
+
   await Firebase.initializeApp();
 
   FirebaseMessaging.instance.getToken().then((value) {
