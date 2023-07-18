@@ -1,6 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:notea_frontend/dominio/agregados/VOUsuario/apellidoUsuario.dart';
+import 'package:notea_frontend/dominio/agregados/VOUsuario/claveUsuario.dart';
+import 'package:notea_frontend/dominio/agregados/VOUsuario/emailUsuario.dart';
+import 'package:notea_frontend/dominio/agregados/VOUsuario/nombreUsuario.dart';
+import 'package:notea_frontend/dominio/agregados/usuario.dart';
+import 'package:notea_frontend/dominio/repositorio/persistencia/repositorioPersistenciaUsuario.dart';
 import 'package:notea_frontend/infraestructura/bloc/usuario/usuario_bloc.dart';
+import 'package:notea_frontend/infraestructura/moor/moor_db.dart';
 import 'package:notea_frontend/presentacion/pantallas/home_screen.dart';
 import 'package:notea_frontend/presentacion/pantallas/login_screen.dart';
 import 'package:notea_frontend/presentacion/widgets/oldCode/email_field.dart';
@@ -9,6 +16,7 @@ import 'package:notea_frontend/presentacion/widgets/oldCode/email_field3.dart';
 import 'package:notea_frontend/presentacion/widgets/oldCode/get_started_button2.dart';
 import 'package:notea_frontend/presentacion/widgets/oldCode/password_field.dart';
 import 'package:notea_frontend/presentacion/widgets/oldCode/password_field2.dart';
+import 'package:provider/provider.dart';
 
 class RegisterScreen extends StatefulWidget {
   const RegisterScreen({super.key});
@@ -53,9 +61,6 @@ class _RegisterScreenState extends State<RegisterScreen> {
       if (state is UsuarioSuccessState) {
         return MessagesScreen(usuario: state.usuario);
       }
-      // if (state is UsuarioLoadingState) {
-      //   return const Center(child: CircularProgressIndicator());
-      // }
       return Scaffold(
         resizeToAvoidBottomInset: true,
         body: SafeArea(

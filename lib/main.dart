@@ -1,9 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:notea_frontend/dominio/repositorio/persistencia/repositorioPersistenciaNota.dart';
+import 'package:notea_frontend/dominio/repositorio/persistencia/repositorioPersistenciaUsuario.dart';
+import 'package:notea_frontend/infraestructura/Repositorio/persistencia/repositorioMoorNotaImpl.dart';
+import 'package:notea_frontend/infraestructura/Repositorio/persistencia/repositorioMoorUsuarioImpl.dart';
 import 'package:notea_frontend/infraestructura/bloc/Grupo/grupo_bloc.dart';
 import 'package:notea_frontend/infraestructura/bloc/etiqueta/etiqueta_bloc.dart';
 import 'package:notea_frontend/infraestructura/bloc/nota/nota_bloc.dart';
 import 'package:notea_frontend/infraestructura/bloc/usuario/usuario_bloc.dart';
+import 'package:notea_frontend/infraestructura/moor/moor_db.dart';
 import 'package:notea_frontend/presentacion/pantallas/login_screen.dart';
 import 'package:provider/provider.dart';
 // import 'aplicacion/Notifications.dart';
@@ -11,14 +16,22 @@ import 'presentacion/pantallas/HomeScreenWithDrawer.dart';
 import 'presentacion/pantallas/navigation_provider.dart';
 
 
-void main() async {
+Future<void> main() async {
+  final repositoryMoorNota = MoorRepositorioNotaImpl();
+  await repositoryMoorNota.init();
+
+  final repositoryMoorUsuario = MoorRepositorioUsuarioImpl();
+  await repositoryMoorUsuario.init();
+
   WidgetsFlutterBinding.ensureInitialized();
   // await InitNotifications();
-  runApp(const MyApp());
+  runApp(MyApp(repositoryMoorNota: repositoryMoorNota, repositoryMoorUsuario: repositoryMoorUsuario,));
 }
 
 class MyApp extends StatelessWidget {
-  const MyApp({super.key});
+  final RepositorioPersistenciaNota repositoryMoorNota;
+  final RepositorioPersistenciaUsuario repositoryMoorUsuario;
+  const MyApp({super.key, required this.repositoryMoorNota, required this.repositoryMoorUsuario});
 
   @override
   Widget build(BuildContext context) {
@@ -32,12 +45,29 @@ class MyApp extends StatelessWidget {
             create: (_) => NotaBloc()), //las instancias pasan al contexto
         BlocProvider(
             create: (_) => EtiquetaBloc()), //las instancias pasan al contexto
+
+        //Providers para el manejo de la persistencia
+        Provider<NoteaDataBase>(
+          create: (_) => NoteaDataBase(),
+        ),
+        Provider<RepositorioPersistenciaNota>(
+          lazy: false,                                                                                   //Se crea la instancia cuando se necesita inmediatamente
+          create: (_) => repositoryMoorNota,                                                             //Define como se crea la instancia
+          dispose: (_, RepositorioPersistenciaNota repositoryMoorNota) => repositoryMoorUsuario.close(), // Define como se cierra la instancia
+        ),
+
+        Provider<RepositorioPersistenciaUsuario>(
+          lazy: false,
+          create: (_) => repositoryMoorUsuario,
+          dispose: (_, RepositorioPersistenciaUsuario repositoryMoorUsuario) => repositoryMoorUsuario.close(),
+        ),
+
       ],
       child: MaterialApp(
         debugShowCheckedModeBanner: false,
         title: 'Notea App',
         routes: {
-          '/login': (context) => const MyApp(),
+          '/login': (context) => MyApp(repositoryMoorNota: repositoryMoorNota, repositoryMoorUsuario: repositoryMoorUsuario,),
         },
         theme: ThemeData(
           primaryColor: const Color(0XFF21579C),

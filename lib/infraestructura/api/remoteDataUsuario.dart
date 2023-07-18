@@ -3,6 +3,8 @@ import 'dart:convert';
 
 import 'package:http/http.dart' as http;
 import 'package:notea_frontend/dominio/agregados/nota.dart';
+import 'package:notea_frontend/infraestructura/moor/moor_db.dart';
+import 'package:provider/provider.dart';
 
 import '../../api_config.dart';
 import '../../dominio/agregados/usuario.dart';
@@ -65,6 +67,7 @@ class RemoteDataUsuarioImp implements RemoteDataUsuario {
             Exception("Error al crear el usuario en el servidor"));
       }
     } else {
+      
       return Either.right(Exception(
           "No hay conexion a internet")); //guardado en la base de datos local
     }

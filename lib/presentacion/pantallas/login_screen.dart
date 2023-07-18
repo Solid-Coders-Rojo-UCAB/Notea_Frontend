@@ -1,5 +1,9 @@
 // ignore_for_file: use_build_context_synchronously, sort_child_properties_last
 import 'dart:convert';
+import 'package:provider/provider.dart';
+
+import '../../dominio/repositorio/persistencia/repositorioPersistenciaUsuario.dart';
+import '../../infraestructura/moor/moor_db.dart';
 import 'HomeScreenWithDrawer.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -36,6 +40,7 @@ class _LoginScreenState extends State<LoginScreen> {
     emailController.text = 'qwer@gmail.com';
     passwordController.text = '12345678';
     super.initState();
+      // hola();
   }
 
   //Funcion que valida el formulario
@@ -48,6 +53,13 @@ class _LoginScreenState extends State<LoginScreen> {
     setState(() {
     });
   }
+
+  // void hola() async {
+  //       final repositoryUsuario = Provider.of<RepositorioPersistenciaUsuario>(context);
+  //       await Future.delayed(const Duration(seconds: 2), () {});
+  //       print('---------------------aksdckkasjdkcjaksdjkcjaksdkckasdkc-');
+  //       print(repositoryUsuario.buscarUsuarioPorId('1'));
+  // }
 
   @override
   Widget build(BuildContext context) {

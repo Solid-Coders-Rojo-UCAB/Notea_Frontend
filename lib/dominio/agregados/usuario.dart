@@ -10,6 +10,7 @@ class Usuario {
   EmailUsuario email;
   ClaveUsuario clave;
   bool suscripcion;
+  int? server;
 
   Usuario({
     required this.id,
@@ -18,6 +19,7 @@ class Usuario {
     required this.email,
     required this.clave,
     required this.suscripcion,
+    this.server,
   });
 
   static Usuario crearUsuario(

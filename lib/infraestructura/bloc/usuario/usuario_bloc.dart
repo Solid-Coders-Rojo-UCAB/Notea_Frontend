@@ -38,6 +38,10 @@ class UsuarioBloc extends  Bloc<UsuarioEvent, UsuarioState> {
         newUser.setId(response.left!);
         emit(UsuarioSuccessState(usuario: newUser));
       } else {
+        //       final repositoryUsuario = Provider.of<RepositorioPersistenciaUsuario>(context);
+        //       await Future.delayed(const Duration(seconds: 2), () {});
+        //       print('---------------------aksdckkasjdkcjaksdjkcjaksdkckasdkc-');
+        //       print(repositoryUsuario.buscarUsuarioPorId('1'));
         emit(const UsuarioFailureState());
         await Future.delayed(const Duration(milliseconds: 500));
         emit(const UsuarioInitialState());

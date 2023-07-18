@@ -16,6 +16,7 @@ class Nota {
   //late List<Tarea> tareas;
   late VOIdGrupoNota idGrupo;
   late VOIdEtiquetas etiquetas;
+  late int? server;
 
   Nota({
     required this.titulo,
