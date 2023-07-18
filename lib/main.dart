@@ -1,3 +1,4 @@
+import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:notea_frontend/infraestructura/bloc/Grupo/grupo_bloc.dart';
@@ -9,12 +10,50 @@ import 'package:provider/provider.dart';
 import 'aplicacion/Notifications.dart';
 import 'presentacion/pantallas/HomeScreenWithDrawer.dart';
 import 'presentacion/pantallas/navigation_provider.dart';
+import 'package:firebase_core/firebase_core.dart';
+import 'package:firebase_messaging/firebase_messaging.dart';
+//dsONZ8-5SzeEhmXgDkqK7g:APA91bHgnavDb0jY60bwVA8JypHRZwyMH7lcT_bE9RNOOZ5EGC5-4Ga4SJhsTix2su9TZQSiHqyzNAVcBBXJ7WNVkR-pPpSq2V9NV1GzAd3j6Z291bt0vtrLKFkj1-Tu7r8Ggm7H-q25
+//TOKEN DE MI TELEFONO NO ELIMINAR DE MOMENTO POR FAVOR :D
 
+final GlobalKey<NavigatorState> naviKey = GlobalKey();
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
+  await Firebase.initializeApp();
+
+  FirebaseMessaging.instance.getToken().then((value) {
+    print('token : ${value}');
+  });
+
+  // Si la app se encuentra en segundo plano
+  FirebaseMessaging.onMessageOpenedApp.listen((RemoteMessage message) async {
+    print("onMesaggeOpenedApp :${message}");
+    Navigator.pushNamed(naviKey.currentState!.context, '/login', arguments: {
+      "message",
+      json.encode(message.data),
+    });
+  });
+  // Si la app se encuentra cerrada
+  FirebaseMessaging.instance.getInitialMessage().then(
+    (RemoteMessage? message) {
+      if (message != null) {
+        Navigator.pushNamed(naviKey.currentState!.context, '/login',
+            arguments: {
+              "message",
+              json.encode(message.data),
+            });
+      }
+    },
+  );
+  FirebaseMessaging.onBackgroundMessage(_firebaseMessagingBackGroundHandler);
+//----------------------------------------------------------------------------//
   await InitNotifications();
   runApp(const MyApp());
+}
+
+Future<void> _firebaseMessagingBackGroundHandler(RemoteMessage message) async {
+  await Firebase.initializeApp();
+  print('_firebaseMessagingBackGroundHandler : ${message}');
 }
 
 class MyApp extends StatelessWidget {
@@ -36,6 +75,7 @@ class MyApp extends StatelessWidget {
       child: MaterialApp(
         debugShowCheckedModeBanner: false,
         title: 'Notea App',
+        navigatorKey: naviKey,
         routes: {
           '/login': (context) => const MyApp(),
         },

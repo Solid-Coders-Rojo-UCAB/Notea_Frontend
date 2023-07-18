@@ -316,13 +316,17 @@ class _DatosPagoState extends State<DatosPago> {
                                             255, 20, 100, 165))))),
                     onPressed: () async {
                       String IdUser = widget.idSuscriptor;
+                      String TipoSus =
+                          "PREMIUM"; // REALIZA OTRA LISTA CON INDEX PARA FREE Y PARA PREMIUM
+                      DateTime? fechaFinal =
+                          null; //OBTENER UNA FECHA DE FINALIZACION (OPCIONAL NO ME VOY A MATAR)
                       print(IdUser);
 
                       final repositorio = RepositorioUsuarioImpl(
                           remoteDataSource:
                               RemoteDataUsuarioImp(client: http.Client()));
-                      final usuario =
-                          await repositorio.suscriptionusuario(IdUser);
+                      final usuario = await repositorio.suscriptionusuario(
+                          IdUser, TipoSus, fechaFinal);
                       //BUSCAR AQUI
 
                       Navigator.of(context).push(

@@ -99,12 +99,24 @@ class RemoteDataUsuarioImp implements RemoteDataUsuario {
 
   @override
   Future<Either<String, Exception>> SuscribeUsuarioApi(
-    String IdUsuario,
-  ) async {
-    final body1 = {"suscripcion": true};
+      String IdUsuario, String Tipo, DateTime? fechaFin) async {
+    final body1 = {};
+
+    if (fechaFin != null && (Tipo == 'PREMIUM' || Tipo == "FREE")) {
+      final body1 = {
+        "fechaFin": fechaFin,
+        "idUsuario": IdUsuario,
+        "Tipo": Tipo,
+      };
+    } else if ((Tipo == 'PREMIUM' || Tipo == "FREE")) {
+      final body1 = {
+        "idUsuario": IdUsuario,
+        "Tipo": Tipo,
+      };
+    }
     if (await const ConectivityCheck().checkConectivity()) {
       final response = await client.put(
-        Uri.parse('${ApiConfig.apiBaseUrl}/usuario/${IdUsuario}'),
+        Uri.parse('${ApiConfig.apiBaseUrl}/suscripcion/cambiarTipo'),
         body: jsonEncode(body1),
         headers: <String, String>{
           'Content-Type': 'application/json; charset=UTF-8',
@@ -115,6 +127,32 @@ class RemoteDataUsuarioImp implements RemoteDataUsuario {
       } else {
         return Either.right(
             Exception("Error, no es posible realizar la suscripcion"));
+      }
+    } else {
+      return Either.right(Exception(
+          "No hay conexion a internet")); //guardado en la base de datos local
+    }
+  }
+
+  @override
+  Future<Either<String, Exception>> getSuscribeUsuarioApi(
+      String IdUsuario) async {
+    final body1 = {};
+    String responseSus = '';
+
+    if (await const ConectivityCheck().checkConectivity()) {
+      final response = await client.get(
+          Uri.parse('${ApiConfig.apiBaseUrl}/suscripcion/string/${IdUsuario}'),
+          headers: <String, String>{
+            'Content-Type': 'application/json; charset=UTF-8',
+          });
+
+      responseSus = jsonDecode(response as String);
+
+      if (response.statusCode == 200) {
+        return Either.left('Tipo de suscripcion: ${responseSus}');
+      } else {
+        return Either.right(Exception("Error, no se pudo obtener el tipo"));
       }
     } else {
       return Either.right(Exception(
