@@ -294,6 +294,9 @@ class _AccionesConNotaState extends State<AccionesConNota> {
                               ),
                             );
                           } else {
+                            print('recivedDataEitquetas-----------');
+                            print(recivedDataEitquetas);
+                            print('recivedDataEitquetas-----------');
                             BlocProvider.of<NotaBloc>(context).add(
                               EditarNotaEvent(
                                 idNota: widget.idNota,
