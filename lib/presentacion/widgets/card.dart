@@ -3,7 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:notea_frontend/dominio/agregados/etiqueta.dart';
 import 'package:notea_frontend/dominio/agregados/grupo.dart';
 import 'package:html/parser.dart';
-import 'package:fluttertoast/fluttertoast.dart';
+import 'package:notea_frontend/dominio/agregados/usuario.dart';
 
 import '../../infraestructura/bloc/Grupo/grupo_bloc.dart';
 import '../pantallas/Creacion_Edicion_Nota.dart';
@@ -17,6 +17,7 @@ class CartaWidget extends StatelessWidget {
   final List<Etiqueta>? etiqeutasGeneral;
   final List<Etiqueta>? etiquetasNota;
   final String? accion;
+  final Usuario usuario;
 
   // final  Map<String, dynamic> contenidoTotal1;
   final  List<dynamic> contenidoTotal1;
@@ -39,7 +40,8 @@ class CartaWidget extends StatelessWidget {
     this.onDeletePressed,
     this.onChangePressed,
     required this.habilitado,
-    this.accion
+    this.accion,
+    required this.usuario,
   });
 
   @override
@@ -68,6 +70,7 @@ class CartaWidget extends StatelessWidget {
                   etiquetasNota: etiquetasNota,
                   gruposGeneral: gruposGeneral,
                   grupoNota: grupoNota,
+                  usuario: usuario,
                 )),
             );
           }else{
@@ -150,7 +153,7 @@ class CartaWidget extends StatelessWidget {
                                     300, // Establece el ancho máximo para el contenedor
                               ),
                               child: Text(
-                                convertHtmlToText(contenidoTotal1[0]['texto']['cuerpo'].toString()),           //Cambiar por el primer contenido por lo mneos
+                                convertHtmlToText(primerTexto(contenidoTotal1)),           //Cambiar por el primer contenido por lo mneos
                                 style: const TextStyle(
                                   fontWeight: FontWeight.bold,
                                   fontSize: 14.0,
@@ -279,4 +282,9 @@ Color getColorTag(String color) {
     default:
       return Colors.grey; // Color predeterminado si no se encuentra el nombre de color
   }
+}
+
+String primerTexto(List<dynamic> contenido) {
+  String primerTextoString = contenido.firstWhere((element) => element.containsKey('texto'), orElse: () => {})['texto']['cuerpo'];
+  return primerTextoString;
 }

@@ -29,11 +29,11 @@ class NotaBloc extends Bloc<NotaEvent, NotaState> {
       final repositorio = RepositorioNotaImpl(remoteDataSource: RemoteDataNotaImp(client: http.Client()));
       final notas = await repositorio.buscarNotasGrupos(event.grupos);
       if(notas.isLeft()){             //Ver que les parece esta manera de devolver
-        if (notas.left!.isEmpty){
-          emit(const CeroNotasFailureState());
-        }else{
+       // if (notas.left!.isEmpty){
+       //   emit(const CeroNotasFailureState());
+       // }else{
           emit(NotasCatchSuccessState(notas: notas.left!));
-        }
+      //  }
       }else{
         emit(const NotasFailureState());
       }
@@ -45,13 +45,25 @@ class NotaBloc extends Bloc<NotaEvent, NotaState> {
           remoteDataSource: RemoteDataNotaImp(client: http.Client()));
 
   
-      final notas =
+      final nota =
           await repositorio.modificarEstadoNota(event.idNota, event.estado);
 
 
-      notas.isLeft()
-          ? emit(const CeroNotasFailureState())
-          : emit(const NotasFailureState());
+      if(nota.isLeft()){
+           final notas = await repositorio.buscarNotasGrupos(event.grupos);
+            if(notas.isLeft()){             //Ver que les parece esta manera de devolver
+              if (notas.left!.isEmpty){
+                emit(const CeroNotasFailureState());
+              }else{
+                emit(NotasCatchSuccessState(notas: notas.left!));
+              }
+            }else{
+              emit(const NotasFailureState());
+            }
+      }
+      else{
+        emit(const NotasFailureState());
+      }
          
     });
 
@@ -63,16 +75,28 @@ class NotaBloc extends Bloc<NotaEvent, NotaState> {
 
         await Future.delayed(const Duration(seconds: 1));
 
-        eliminado.isLeft()
-            ? emit(NotaDeleteSuccessState(status: eliminado.isLeft()))
-            : emit(const NotasFailureState());
+       if (eliminado.isLeft()){
+            final notas = await repositorio.buscarNotasGrupos(event.grupos);
+            if(notas.isLeft()){             //Ver que les parece esta manera de devolver
+              if (notas.left!.isEmpty){
+                emit(const CeroNotasFailureState());
+              }else{
+                emit(NotasCatchSuccessState(notas: notas.left!));
+              }
+            }else{
+              emit(const NotasFailureState());
+           }
+      }
+      else{
+          emit(const NotasFailureState());
+      }
       },
     );
 
     on<CreateNotaEvent>((event, emit) async {
       emit(const NotaInitialState());
       final repositorio = RepositorioNotaImpl(remoteDataSource: RemoteDataNotaImp(client: http.Client()));
-      final nota = await repositorio.crearNota(event.tituloNota, await mapContenido(event.listInfo), etiqeutasListId(event.etiquetas), event.grupo);
+      final nota = await repositorio.crearNota(event.tituloNota, await mapContenidoCreando(event.listInfo), etiqeutasListId(event.etiquetas), event.grupo);
 
       await Future.delayed(const Duration(milliseconds: 300));
       nota!.isLeft()
@@ -82,14 +106,14 @@ class NotaBloc extends Bloc<NotaEvent, NotaState> {
 
     on<EditarNotaEvent>((event, emit) async {
       emit(const NotaInitialState());
-
-      emit(const NotasCreateSuccessState());
-
-      // final repositorio = RepositorioNotaImpl(remoteDataSource: RemoteDataNotaImp(client: http.Client()));
-      // final nota = await repositorio.editarNota(event.idNota ,event.tituloNota, await mapContenido(event.listInfo), event.etiquetas, event.grupo);
-
-      // await Future.delayed(const Duration(milliseconds: 300));
-      // nota!.isLeft() ?  emit(const NotasCreateSuccessState()): emit(const NotasFailureState());//emitimos el estado de error
+      final repositorio = RepositorioNotaImpl(remoteDataSource: RemoteDataNotaImp(client: http.Client()));
+      final nota = await repositorio.editarNota(event.idNota, event.tituloNota, await mapContenidoEditando(event.listInfo), etiqeutasListId(event.etiquetas), event.grupo);
+      await Future.delayed(const Duration(milliseconds: 300));
+      if (nota!.isLeft()){
+        emit(const NotasCreateSuccessState());
+      }else {
+        emit(const NotasFailureState());
+      }
     });
   }
 }
@@ -138,7 +162,7 @@ class NotaBloc extends Bloc<NotaEvent, NotaState> {
 //     }
 //   }
 
-Future<Map<String, dynamic>> mapContenido(List<dynamic> listInfo) async {
+Future<Map<String, dynamic>> mapContenidoCreando(List<dynamic> listInfo) async {
   List<Map<String, dynamic>> contenidoList = [];
   int cant = 0;
   for (var element in listInfo) {
@@ -181,13 +205,70 @@ Future<Map<String, dynamic>> mapContenido(List<dynamic> listInfo) async {
   }
   Map<String, dynamic> contenido = {'contenido': contenidoList};
 
-  print('Contenido oooooooooooooooooooooooooooooooooooooooo');
-
-  print(contenido);
-
-
   return contenido;
 }
+
+
+Future<Map<String, dynamic>> mapContenidoEditando(List<dynamic> listInfo) async {
+  List<Map<String, dynamic>> contenidoList = [];
+  int cant = 0;
+  for (var element in listInfo) {
+    cant = cant + 1;
+    if (element is TextBlocPrueba3) {
+      final textBlock = element;
+      String? html = await textBlock.editorKey.getText();
+
+      contenidoList.add({
+        'texto': {'cuerpo': html},
+        'id': textBlock.id,
+        'orden': cant,
+      });
+    } else if (element is TareaBlock) {
+      final tareaBlock = element;
+      List<Task> tasks = tareaBlock.controllerEditar.listaTareas;
+
+      List<Map<String, dynamic>> tareaValue = [];
+      for (var task in tasks) {
+        tareaValue.add({
+          'titulo': task.description,
+          'check': task.completed,
+        });
+      }
+      contenidoList.add({
+        'tarea': {
+          'value': tareaValue,
+        },
+        'id':tareaBlock.id,
+        'orden': cant,
+      });
+    } else if (element is ImageBlock){
+      final imageBlock = element;
+      contenidoList.add({
+        'imagen': {
+          'buffer': imageBlock.controller.getBase64(),
+          'nombre': imageBlock.controller.getImageName()
+        },
+        'id': imageBlock.id,
+        'orden': cant,
+      });
+      // Resto del código...
+    }
+  }
+  Map<String, dynamic> contenido = {'contenido': contenidoList};
+
+
+  print(';0000000000000000000000000000000000000');
+  print(contenido);
+  // Map<String, dynamic> estucturaEditar = {
+  //   "titulo": tituloNota,
+  //   "grupo": grupo!.idGrupo,
+  //   "etiquetas": etiqeutasListId(etiquetas),
+  //   "contenido": contenido,
+  //   "id": idNota,
+  // };
+  return contenido;
+}
+
 
 List<String> etiqeutasListId(List<Etiqueta>? etiquetas) {
   return etiquetas!.map((etiqueta) => etiqueta.idEtiqueta).toList();
