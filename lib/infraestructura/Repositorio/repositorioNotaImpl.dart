@@ -99,6 +99,7 @@ class RepositorioNotaImpl implements INotaRepository {
       "titulo": titulo,
       "contenido": listInfoContenido,
       "grupo": grupo.idGrupo,
+      "etiquetas": etiquetas
     };
 
     // print('Nota dto---------------');
