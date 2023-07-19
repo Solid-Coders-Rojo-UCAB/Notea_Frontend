@@ -1,19 +1,29 @@
+import 'dart:async';
+import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:notea_frontend/aplicacion/PushNotifications.dart';
 import 'package:notea_frontend/infraestructura/bloc/Grupo/grupo_bloc.dart';
 import 'package:notea_frontend/infraestructura/bloc/etiqueta/etiqueta_bloc.dart';
 import 'package:notea_frontend/infraestructura/bloc/nota/nota_bloc.dart';
 import 'package:notea_frontend/infraestructura/bloc/usuario/usuario_bloc.dart';
 import 'package:notea_frontend/presentacion/pantallas/login_screen.dart';
 import 'package:provider/provider.dart';
-// import 'aplicacion/Notifications.dart';
+import 'aplicacion/Notifications.dart';
 import 'presentacion/pantallas/HomeScreenWithDrawer.dart';
 import 'presentacion/pantallas/navigation_provider.dart';
+import 'package:firebase_core/firebase_core.dart';
+import 'package:firebase_messaging/firebase_messaging.dart';
 
+final naviKey = GlobalKey<NavigatorState>();
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
-  // await InitNotifications();
+  await Firebase.initializeApp();
+  await FirebaseAPI().initFireNotifications();
+
+//----------------------------------------------------------------------------//
+  await InitNotifications();
   runApp(const MyApp());
 }
 
@@ -36,6 +46,7 @@ class MyApp extends StatelessWidget {
       child: MaterialApp(
         debugShowCheckedModeBanner: false,
         title: 'Notea App',
+        navigatorKey: naviKey,
         routes: {
           '/login': (context) => const MyApp(),
         },

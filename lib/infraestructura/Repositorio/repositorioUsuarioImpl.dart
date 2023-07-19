@@ -42,8 +42,17 @@ class RepositorioUsuarioImpl implements IUsuarioRepository {
   }
 
   @override
-  Future<Either<String, Exception>> suscriptionusuario(String IdUsuario) async {
-    final result = await remoteDataSource.SuscribeUsuarioApi(IdUsuario);
+  Future<Either<String, Exception>> suscriptionusuario(
+      String IdUsuario, String Tipo, DateTime? fechaFinal) async {
+    final result =
+        await remoteDataSource.SuscribeUsuarioApi(IdUsuario, Tipo, fechaFinal);
+    return result;
+  }
+
+  @override
+  Future<Either<String, Exception>> getSuscribeUsuarioApi(
+      String IdUsuario) async {
+    final result = await remoteDataSource.getSuscribeUsuarioApi(IdUsuario);
     return result;
   }
 

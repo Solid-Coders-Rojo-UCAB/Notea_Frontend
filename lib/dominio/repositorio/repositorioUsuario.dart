@@ -8,7 +8,8 @@ abstract class IUsuarioRepository {
   Future<Either<String, Exception>> crearUsuario(Usuario usuario);
   Future<Either<Usuario, Exception>> loginUsuario(
       String email, String password);
-  Future<Either<String, Exception>> suscriptionusuario(String IdUsuario);
-
+  Future<Either<String, Exception>> suscriptionusuario(
+      String IdUsuario, String Tipo, DateTime? fechaFinal);
+  Future<Either<String, Exception>> getSuscribeUsuarioApi(String IdUsuario);
   //Future<Either<int, Exception>> eliminarUsuario(int id);
 }

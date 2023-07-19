@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "304967141741",
+    "project_id": "push-notifications-e2a57",
+    "storage_bucket": "push-notifications-e2a57.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:304967141741:android:63fc49a19c367a0f143264",
+        "android_client_info": {
+          "package_name": "com.example.notea_frontend"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "304967141741-aoamv76hiic0fvobm6gler859tpm687t.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAMMnh2ELx_EuWEYhuOJHIRjvlhUE3S4tI"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "304967141741-aoamv76hiic0fvobm6gler859tpm687t.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
