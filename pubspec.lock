@@ -519,7 +519,7 @@ packages:
     source: hosted
     version: "0.0.1"
   flutter_state_notifier:
-    dependency: transitive
+    dependency: "direct main"
     description:
       name: flutter_state_notifier
       sha256: "4a1d282df8ab549d0c6aed0a2cdb486111c830778028f14048980c886bbb74fa"

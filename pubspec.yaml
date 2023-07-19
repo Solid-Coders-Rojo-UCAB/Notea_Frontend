@@ -46,6 +46,7 @@ dependencies:
   firebase_messaging: ^14.6.5
   flutter_painter: ^1.0.1
   scribble: ^0.9.1
+  flutter_state_notifier: ^0.7.3
   
     #universal_io: ^2.2.2
 
