@@ -17,9 +17,11 @@ class MENU_SCREEN extends StatefulWidget {
 class _MENU_SCREENState extends State<MENU_SCREEN> {
   int _selectedOption = 0;
 
-  final List<String> _options = ['Inicio', 'Papelera', 'Cuenta', 'Ajustes'];
+  final List<String> _options = ['Inicio','Etiquetas','Grupos','Papelera', 'Cuenta', 'Ajustes'];
   final List<IconData> _icons = [
     Icons.home,
+    Icons.auto_fix_high_sharp,
+    Icons.all_inbox,
     Icons.delete,
     Icons.account_circle,
     Icons.settings
@@ -35,10 +37,10 @@ class _MENU_SCREENState extends State<MENU_SCREEN> {
         child: Column(
           children: <Widget>[
             SizedBox(
-              height: 225,
+              height: 220,
               child: SingleChildScrollView(
                 child: Padding(
-                  padding: const EdgeInsets.only(top: 110),
+                  padding: const EdgeInsets.only(top: 100),
                   child: Center(
                     child: Column(
                       mainAxisAlignment: MainAxisAlignment.center,
@@ -75,9 +77,11 @@ class _MENU_SCREENState extends State<MENU_SCREEN> {
                   ),
                 ),
               ),
+               
             ),
+            const SizedBox(height: 10),
             SizedBox(
-              height: 300, // adjust this to fit your needs
+              height: 350, // adjust this to fit your needs
               child: ListView.builder(
                 itemCount: _options.length,
                 itemBuilder: (BuildContext context, int index) {
@@ -99,10 +103,13 @@ class _MENU_SCREENState extends State<MENU_SCREEN> {
                           if (index == 0) {
                        context.read<NavigationProvider>().toMessagesScreen();
                           }
-                          if (index == 1) {
+                          if (index == 3) {
                             List<Grupo>? grupos =
                                 context.read<GrupoBloc>().state.grupos;
                             navigationProvider.toPapelera(grupos!);
+                          }
+                            if (index == 1) {
+                            navigationProvider.toEtiquetasScreen();
                           }
                         },
                       ),
@@ -111,7 +118,7 @@ class _MENU_SCREENState extends State<MENU_SCREEN> {
                 },
               ),
             ),
-            const SizedBox(height: 10),
+            const SizedBox(height: 15),
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: 30.0),
               child: Material(

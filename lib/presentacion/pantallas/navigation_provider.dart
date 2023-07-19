@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:notea_frontend/dominio/agregados/VOEtiqueta/colorEtiqueta.dart';
 import 'package:notea_frontend/dominio/agregados/VOEtiqueta/nombreEtiqueta.dart';
 import 'package:notea_frontend/dominio/agregados/etiqueta.dart';
+import 'package:notea_frontend/presentacion/pantallas/etiquetas_screen.dart';
 import '../../dominio/agregados/grupo.dart';
 import 'papelera_screen.dart';
 import 'home_screen.dart';
@@ -30,6 +31,10 @@ class NavigationProvider with ChangeNotifier {
   
   void toPapelera(List<Grupo> grupos) {
     _currentScreen = Papelera(grupos: grupos, usuario: usuario, etiquetas: [Etiqueta(idEtiqueta: 'idEtiqueta', nombre: VONombreEtiqueta('Etiqueta'), color: VOColorEtiqueta('AMBER'), idUsuario: '2912iuuui')],);
+    notifyListeners();
+  }
+    void toEtiquetasScreen() {
+    _currentScreen = EtiquetasScreen();
     notifyListeners();
   }
 

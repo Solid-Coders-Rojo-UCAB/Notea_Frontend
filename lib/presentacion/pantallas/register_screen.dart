@@ -9,7 +9,7 @@ import 'package:notea_frontend/presentacion/widgets/oldCode/email_field3.dart';
 import 'package:notea_frontend/presentacion/widgets/oldCode/get_started_button2.dart';
 import 'package:notea_frontend/presentacion/widgets/oldCode/password_field.dart';
 import 'package:notea_frontend/presentacion/widgets/oldCode/password_field2.dart';
-
+import 'HomeScreenWithDrawer.dart';
 class RegisterScreen extends StatefulWidget {
   const RegisterScreen({super.key});
 
@@ -51,7 +51,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
   Widget build(BuildContext context) {
     return BlocBuilder<UsuarioBloc, UsuarioState>(builder: (context, state) {
       if (state is UsuarioSuccessState) {
-        return MessagesScreen(usuario: state.usuario);
+        return HomeScreenWithDrawer(usuario: state.usuario);
       }
       // if (state is UsuarioFailureState) {
       //    return const Scaffold(
