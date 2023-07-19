@@ -84,7 +84,7 @@ class _PapeleraState extends State<Papelera> {
                   nota.idGrupo.getIdGrupoNota() == grupo.idGrupo &&
                   (nota.getEstado() == "PAPELERA"))
               .toList();
-          if (cant!.length > 0) {
+          if (cant!.isNotEmpty) {
             sumaGrupos = (sumaGrupos! + 1);
             gruposPapelera.add(widget.grupos![i]);
           }
@@ -240,7 +240,8 @@ class _PapeleraState extends State<Papelera> {
                                                                   context)
                                                               .add(DeleteNoteEvent(
                                                                   idNota:
-                                                                      nota.id));
+                                                                      nota.id,
+                                                                  grupos: widget.grupos!));
 
                                                           Navigator.pop(
                                                               context);
@@ -282,7 +283,8 @@ class _PapeleraState extends State<Papelera> {
                                                                   idNota:
                                                                       nota.id,
                                                                   estado:
-                                                                      "GUARDADO"));
+                                                                      "GUARDADO",
+                                                                      grupos: widget.grupos!));
 
                                                           Navigator.pop(
                                                               context);
