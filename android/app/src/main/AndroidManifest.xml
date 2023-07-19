@@ -8,9 +8,9 @@
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
     <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
    <application
-        android:label="notea_frontend"
+        android:label="Notea"
         android:name="${applicationName}"
-        android:icon="@mipmap/ic_launcher">
+        android:icon="@mipmap/launcher_icon">
         <meta-data android:name="com.google.android.geo.API_KEY"
                    android:value="AIzaSyD9vbJ6KTgsLzL_Agwm7OiUuKsnuKNU-C0"/>
         <activity
