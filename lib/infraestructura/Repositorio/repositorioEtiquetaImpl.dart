@@ -11,17 +11,26 @@ class RepositorioEtiquetaImpl implements IEtiquetaRepository {
   RepositorioEtiquetaImpl({required this.remoteDataSource});
 
   @override
-  Future<Either<List<Etiqueta>, Exception>> buscarEtiquetas(String idUsuarioDueno) async {
+  Future<Either<List<Etiqueta>, Exception>> buscarEtiquetas(
+      String idUsuarioDueno) async {
     final result = await remoteDataSource.buscarEtiquetasApi(idUsuarioDueno);
     return result;
   }
 
   @override
-  Future<Either<int, Exception>> crearEtiqueta(Etiqueta grupo) {
-    // TODO: implement crearEtiqueta
-    throw UnimplementedError();
+  Future<Either<int, Exception>> crearEtiqueta(
+      Map<String, dynamic> etiquetaDTO) async {
+
+    var result = await remoteDataSource.crearEtiquetaApi(etiquetaDTO);
+    return result;
   }
 
+  @override
+  Future<Either<int, Exception>> deleteEtiqueta(String etiquetaId) async {
+    final result = await remoteDataSource.deleteEtiquetaApi(etiquetaId);
+    return result;
+  }
+}
   // @override
   // Future<Either<int, Exception>> crearEtiqueta(Grupo grupo) async {
   //   Map<String, dynamic> grupoDTO = {
@@ -31,5 +40,5 @@ class RepositorioEtiquetaImpl implements IEtiquetaRepository {
   //   var result = await remoteDataSource.crearEtiquetaApi(grupoDTO);
   //   return result;
   // }
-}
+
 
