@@ -3,7 +3,6 @@ import 'dart:convert';
 
 import 'package:http/http.dart' as http;
 import 'package:notea_frontend/dominio/agregados/nota.dart';
-import 'package:notea_frontend/infraestructura/moor/moor_db.dart';
 import 'package:provider/provider.dart';
 
 import '../../api_config.dart';

@@ -39,6 +39,9 @@ dependencies:
   flutter_image_compress: ^2.0.3
   #universal_io: ^2.2.2
   moor_flutter: ^4.1.0
+  sqflite: ^2.0.0+3
+  path: ^1.8.0
+
 
 dev_dependencies:
   flutter_test:

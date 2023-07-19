@@ -21,9 +21,14 @@ class UsuarioLoadingState extends UsuarioState {
 
 class UsuarioSuccessState extends UsuarioState {
   final Usuario usuario;
-  const UsuarioSuccessState({required this.usuario}) : super(existeUsuario: true, usuario: usuario);
+  final String? accion;
+  const UsuarioSuccessState({required this.usuario, this.accion}) : super(existeUsuario: true, usuario: usuario);
 }
 
 class UsuarioFailureState extends UsuarioState {
   const UsuarioFailureState() : super(existeUsuario: false, usuario: null);
+}
+
+class UsuarioEmailTakedState extends UsuarioState {
+  const UsuarioEmailTakedState() : super(existeUsuario: false, usuario: null);
 }

@@ -3,6 +3,18 @@ import 'VOUsuario/apellidoUsuario.dart';
 import 'VOUsuario/claveUsuario.dart';
 import 'VOUsuario/emailUsuario.dart';
 
+const String tableUsuarioName = 'usuario';
+
+class UsuarioColumnas {
+  static const String id = '_id';
+  static const String nombre = 'nombre';
+  static const String apellido = 'apellido';
+  static const String email = 'email';
+  static const String clave = 'clave';
+  static const String suscripcion = 'suscripcion';
+  static const String server = 'server';
+}
+
 class Usuario {
   String id;
   NombreUsuario nombre;
@@ -29,6 +41,7 @@ class Usuario {
     String clave,
     bool suscripcion,
     String id,
+    int? server,
   ) {
     return Usuario(
       nombre: NombreUsuario.crearNombreUsuario(nombre),
@@ -37,6 +50,7 @@ class Usuario {
       clave: ClaveUsuario.crearClaveUsuario(clave),
       suscripcion: suscripcion,
       id: id,
+      server: server            //0 local , 1 servidor
     );
   }
 
@@ -50,6 +64,28 @@ class Usuario {
       id: json['id']['id'],
     );
   }
+
+  factory Usuario.fromJsonOffLine(Map<String, dynamic> json) {
+    return Usuario(
+      nombre: NombreUsuario.crearNombreUsuario(json['nombre'].toString()),
+      apellido: ApellidoUsuario.crearApellidoUsuario(json['apellido'].toString()),
+      email: EmailUsuario.crearEmailUsuario(json['email'].toString()),
+      clave: ClaveUsuario.crearClaveUsuario(json['clave'].toString()),
+      suscripcion: json['suscripcion'] == '1' ? true : false,
+      id: json['_id'].toString(),
+      server: int.parse(json['server'].toString()),
+    );
+  }
+
+  Map<String, Object?> toJson() => {
+        UsuarioColumnas.id: id,
+        UsuarioColumnas.nombre: nombre.getValue().toString(),
+        UsuarioColumnas.apellido: apellido.getValue().toString(),
+        UsuarioColumnas.email: email.getValue().toString(),
+        UsuarioColumnas.clave: clave.getValue().toString(),
+        UsuarioColumnas.suscripcion: suscripcion ? 1 : 0,
+        UsuarioColumnas.server: server,
+  };
 
   String getId() {
     return id;
@@ -71,6 +107,8 @@ class Usuario {
     return suscripcion;
   }
 
+  
+
   String getClave() {
     return clave.getValue();
   }
@@ -78,6 +116,7 @@ class Usuario {
   void setId(String id) {
     this.id = id;
   }
+
 }
 
 

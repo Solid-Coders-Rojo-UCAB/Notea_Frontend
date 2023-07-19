@@ -5,8 +5,8 @@ class ApiConfig {
   static final String apiBaseUrl = _getBaseUrl();
 
   static String _getBaseUrl() {
-    if (const bool.fromEnvironment('dart.vm.product')) {
       return 'https://noteabackend-production.up.railway.app';
+    if (const bool.fromEnvironment('dart.vm.product')) {
     } else {
       if (Platform.isAndroid) {
         return 'http://10.0.2.2:3000';

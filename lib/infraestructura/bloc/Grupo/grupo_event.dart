@@ -12,3 +12,8 @@ class GrupoCatchEvent extends GrupoEvent {
 class GrupoReload extends GrupoEvent {
   GrupoReload();
 }
+
+class GrupoCreateLocal extends GrupoEvent {
+  final Usuario usuario;
+  GrupoCreateLocal({required this.usuario});
+}

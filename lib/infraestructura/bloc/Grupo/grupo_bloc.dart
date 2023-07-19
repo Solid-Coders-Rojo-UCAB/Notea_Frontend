@@ -2,8 +2,11 @@ import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:notea_frontend/dominio/agregados/grupo.dart';
+import 'package:notea_frontend/dominio/agregados/usuario.dart';
 import 'package:notea_frontend/infraestructura/Repositorio/repositorioGrupoImpl.dart';
 import 'package:notea_frontend/infraestructura/api/remoteDataGrupo.dart';
+import 'package:notea_frontend/infraestructura/db/databaseHandler.dart';
 import '../../../dominio/agregados/grupo.dart';
 part 'grupo_event.dart';
 part 'grupo_state.dart';
@@ -23,6 +26,11 @@ class GrupoBloc extends  Bloc<GrupoEvent, GrupoState> {
       final grupos = await repositorio.buscarGrupos(event.idUsuarioDueno);
       await Future.delayed(const Duration(milliseconds: 300));
       grupos.isLeft() ?  emit(GruposSuccessState(grupos: grupos.left!)): emit(const GruposFailureState());  //Se mite el estado de SUCCESS o FAILURE
+    });
+
+    on<GrupoCreateLocal>((event,emit) async {
+      final newGrupo = Grupo.crearGrupo('', 'General', event.usuario.getId());
+      await NoteaDatabase.instance.createGrupo(newGrupo);
     });
   }
 

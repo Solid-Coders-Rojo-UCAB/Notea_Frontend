@@ -1,9 +1,12 @@
-// ignore_for_file: use_build_context_synchronously, sort_child_properties_last
+// ignore_for_file: use_build_context_synchronously, sort_child_properties_last, unnecessary_null_comparison
 import 'dart:convert';
+import 'package:connectivity_plus/connectivity_plus.dart';
+import 'package:notea_frontend/dominio/agregados/VOUsuario/apellidoUsuario.dart';
+import 'package:notea_frontend/dominio/agregados/VOUsuario/claveUsuario.dart';
+import 'package:notea_frontend/dominio/agregados/VOUsuario/emailUsuario.dart';
+import 'package:notea_frontend/dominio/agregados/VOUsuario/nombreUsuario.dart';
 import 'package:provider/provider.dart';
 
-import '../../dominio/repositorio/persistencia/repositorioPersistenciaUsuario.dart';
-import '../../infraestructura/moor/moor_db.dart';
 import 'HomeScreenWithDrawer.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -37,7 +40,7 @@ class _LoginScreenState extends State<LoginScreen> {
   void initState() {
     emailController = TextEditingController();
     passwordController = TextEditingController();
-    emailController.text = 'qwer@gmail.com';
+    emailController.text = 'qwert@gmail.com';
     passwordController.text = '12345678';
     super.initState();
       // hola();
@@ -54,15 +57,9 @@ class _LoginScreenState extends State<LoginScreen> {
     });
   }
 
-  // void hola() async {
-  //       final repositoryUsuario = Provider.of<RepositorioPersistenciaUsuario>(context);
-  //       await Future.delayed(const Duration(seconds: 2), () {});
-  //       print('---------------------aksdckkasjdkcjaksdjkcjaksdkckasdkc-');
-  //       print(repositoryUsuario.buscarUsuarioPorId('1'));
-  // }
-
   @override
   Widget build(BuildContext context) {
+    // final repositoryUsuario = Provider.of<RepositorioPersistenciaUsuario>(context);    usando el moor
     return BlocBuilder<UsuarioBloc, UsuarioState>( //siempre va el Bloc y el State
       builder: (context, state) {
         if (state is UsuarioLoadingState) {
@@ -134,7 +131,6 @@ class _LoginScreenState extends State<LoginScreen> {
                                         ),
                                       ),
                                       const SizedBox(height: 35),
-                                
                                       //Formulario para validación
                                       Form(
                                         key: _formKey,
@@ -155,12 +151,39 @@ class _LoginScreenState extends State<LoginScreen> {
                                               ),
                                               padding: const EdgeInsets.all(14),
                                               color : Theme.of(context).primaryColor,
-                                              onPressed: () {
-                                                BlocProvider.of<UsuarioBloc>(context).add(
-                                                  LoginEvent(
-                                                  email: emailController.text,
-                                                  password: passwordController.text,
-                                                ));
+                                              onPressed: () async {
+                                                var connectivityResult = await (Connectivity().checkConnectivity());
+                                                if (connectivityResult == ConnectivityResult.none) {
+                                                  ScaffoldMessenger.of(context).showSnackBar(
+                                                    const SnackBar(
+                                                      content: Text('No hay conexión a Internet, se verificará localmente.'),
+                                                      duration: Duration(seconds: 2),
+                                                    ),
+                                                  );
+                                                  BlocProvider.of<UsuarioBloc>(context).add(
+                                                    LoginEvent(
+                                                    email: emailController.text,
+                                                    password: passwordController.text,
+                                                    accion: 'local'
+                                                  ));
+                                                  // BlocProvider.of<UsuarioBloc>(context).add(PrintEvent(
+                                                  //   mensaje: 'hacerPrint',
+                                                  //   idUser: '861cc19d-5223-474c-9a20-55b16c992662',
+                                                  //   // mensaje: 'hacerPrint'
+                                                  // ));
+                                                }else{
+                                                  ScaffoldMessenger.of(context).showSnackBar(
+                                                    const SnackBar(
+                                                      content: Text('Hay conexion a Internet, se verificará con el servidor.'),
+                                                      duration: Duration(seconds: 2),
+                                                    ),
+                                                  );
+                                                  BlocProvider.of<UsuarioBloc>(context).add(
+                                                    LoginEvent(
+                                                    email: emailController.text,
+                                                    password: passwordController.text,
+                                                  ));
+                                                }
                                               },
                                             ),
                                             const SizedBox(height: 15),
