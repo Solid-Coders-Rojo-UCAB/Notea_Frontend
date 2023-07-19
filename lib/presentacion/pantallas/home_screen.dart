@@ -62,23 +62,19 @@ class _MessagesScreenState extends State<MessagesScreen> {
     return BlocBuilder<GrupoBloc, GrupoState>(
       builder: (context, state) {
         if (state is GruposFailureState) {
-          print('111111111');
           return const Center(child: Text('Error al cargar los grupos'));
         }
         if (state is GrupoInitialState) {
-          print('22222222222222');
 
           final grupoBloc = BlocProvider.of<GrupoBloc>(context);
           grupoBloc.add(GrupoCatchEvent(idUsuarioDueno: widget.usuario.id));
         }
         if (state is GruposSuccessState) {
-          print('333333333333333');
 
           grupos = state.grupos;
           return BlocBuilder<EtiquetaBloc, EtiquetaState>(            //BLOCK DE ETIQUETAS
             builder: (context, state){
               etiquetas = state.etiquetas;
-          print('44444444444444');
 
               return Scaffold(
                 key: _scaffoldKey,
@@ -90,8 +86,7 @@ class _MessagesScreenState extends State<MessagesScreen> {
                 ),
                 appBar: AppBar(
                   title: const Text('Inicio'),
-                  backgroundColor:
-                      const Color.fromARGB(255, 23, 100, 202),
+                  backgroundColor: const Color(0XFF21579C),
                   leading: IconButton(
                     icon: const Icon(Icons.menu),
                     onPressed: () {

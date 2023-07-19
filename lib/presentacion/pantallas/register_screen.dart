@@ -197,7 +197,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
       apellido: lastNameController.text,
       suscripcion: false,
     ));
-    await Future.delayed(const Duration(milliseconds: 500));
+    await Future.delayed(const Duration(milliseconds: 1500));
     if (grupoBloc.state.existeUsuario) {
       ScaffoldMessenger.of(context).showSnackBar(
         const SnackBar(

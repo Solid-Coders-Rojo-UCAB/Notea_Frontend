@@ -175,6 +175,7 @@ class _AccionesConNotaState extends State<AccionesConNota> {
                 Padding(
                   padding: const EdgeInsets.symmetric(horizontal: 16.0),
                   child: TextFormField(
+                    autofocus: false,
                     controller: _tituloController,
                     decoration: InputDecoration(
                       hintText: 'Ingrese el título de la nota',
@@ -384,7 +385,7 @@ class _AccionesConNotaState extends State<AccionesConNota> {
                           }
                           _regresar();
                         },
-                        backgroundColor: Colors.blue,
+                        backgroundColor: const Color(0XFFD6A319),
                         child: const Icon(
                           Icons.sd_storage_outlined,
                           color: Colors.white,
