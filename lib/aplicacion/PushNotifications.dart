@@ -7,6 +7,8 @@ import 'package:notea_frontend/presentacion/pantallas/login_screen.dart';
 
 class FirebaseAPI {
   final FirebaseMessaging firebaseMessaging = FirebaseMessaging.instance;
+  var naviKey = GlobalKey<NavigatorState>();
+
 
   void handleMessage(RemoteMessage? message) {
     if (message == null) {
@@ -24,7 +26,7 @@ class FirebaseAPI {
     );
     FirebaseMessaging.instance.getInitialMessage().then((handleMessage));
     FirebaseMessaging.onMessageOpenedApp.listen(handleMessage);
-    FirebaseMessaging.onBackgroundMessage(_firebaseMessagingBackGroundHandler);
+    FirebaseMessaging?.onBackgroundMessage(_firebaseMessagingBackGroundHandler);
   }
 
   Future<void> initFireNotifications() async {

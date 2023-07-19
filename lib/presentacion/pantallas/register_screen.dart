@@ -53,8 +53,11 @@ class _RegisterScreenState extends State<RegisterScreen> {
       if (state is UsuarioSuccessState) {
         return MessagesScreen(usuario: state.usuario);
       }
-      // if (state is UsuarioLoadingState) {
-      //   return const Center(child: CircularProgressIndicator());
+      // if (state is UsuarioFailureState) {
+      //    return const Scaffold(
+      //     resizeToAvoidBottomInset: true,
+      //     body: Center(child: Text('El usuario ya existe')),
+      //   );
       // }
       return Scaffold(
         resizeToAvoidBottomInset: true,
@@ -195,18 +198,16 @@ class _RegisterScreenState extends State<RegisterScreen> {
       suscripcion: false,
     ));
     await Future.delayed(const Duration(milliseconds: 500));
-    if (!grupoBloc.state.existeUsuario) {
-      //si el usuario ya existe
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(
-          content: Text("El usuario ya existe"),
-        ),
-      );
-      return;
-    } else {
+    if (grupoBloc.state.existeUsuario) {
       ScaffoldMessenger.of(context).showSnackBar(
         const SnackBar(
           content: Text("Usuario creado exitosamente"),
+        ),
+      );
+    } else {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(
+          content: Text("El usuario ya existe"),
         ),
       );
     }

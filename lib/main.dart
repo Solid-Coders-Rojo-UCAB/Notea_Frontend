@@ -15,7 +15,6 @@ import 'presentacion/pantallas/navigation_provider.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 
-final naviKey = GlobalKey<NavigatorState>();
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -46,7 +45,7 @@ class MyApp extends StatelessWidget {
       child: MaterialApp(
         debugShowCheckedModeBanner: false,
         title: 'Notea App',
-        navigatorKey: naviKey,
+        navigatorKey: FirebaseAPI().naviKey,
         routes: {
           '/login': (context) => const MyApp(),
         },

@@ -21,11 +21,15 @@ class UsuarioBloc extends  Bloc<UsuarioEvent, UsuarioState> {
       final repositorio = RepositorioUsuarioImpl(remoteDataSource: RemoteDataUsuarioImp(client: http.Client()));
       final usuario = await repositorio.loginUsuario(event.email, event.password);
 
-      usuario.isLeft() ?  emit(UsuarioSuccessState(usuario: usuario.left!))  //emitimos el estado de exito
-        : emit(const UsuarioFailureState()); //emitimos el estado de error
-      },
-
-    );
+      if (usuario.isLeft()) {
+        emit(UsuarioSuccessState(usuario: usuario.left!));  //emitimos el estado de exito
+      } else {
+        emit(const UsuarioFailureState()); //emitimos el estado de error
+        await Future.delayed(const Duration(milliseconds: 500));
+        emit(const UsuarioInitialState()); //volvemos al estado inicial
+      }
+    },
+  );
 
     on<RegisterEvent>((event, emit) async {
       emit(const UsuarioLoadingState());
