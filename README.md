@@ -78,10 +78,9 @@ $ flutter run
 | nombre del aporte | link del commit mas importante de ese aporte
 
 ## Librerías utilizadas para la realizacion de este proyecto:
-- https://pub.dev/packages/curved_navigation_bar
-- https://www.youtube.com/watch?v=TX2x41h47fE
-- https://pub.dev/packages/flutter_speed_dial
-- https://www.youtube.com/watch?v=YHNCYfqGrBY
-- https://www.youtube.com/watch?v=HIhRhvmF8q0
-- https://www.agora.io/en/
+- Firebase_core (ver: 2.15.0): https://pub.dev/packages/firebase_core
+- Firebase_messaggin(ver: 14.6.5): https://pub.dev/packages/firebase_messaging
+- Image_picket(ver: 1.0.1): https://pub.dev/packages/image_picker
+- Google_ml_kit(ver: 0.16.1): https://pub.dev/packages/google_ml_kit
+- AGREGAR LAS QUE HAN SIDO UTILIZADAS POR LOS DEMAS INTEGRANTES
 
