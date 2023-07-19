@@ -82,5 +82,5 @@ $ flutter run
 - Firebase_messaggin(ver: 14.6.5): https://pub.dev/packages/firebase_messaging
 - Image_picket(ver: 1.0.1): https://pub.dev/packages/image_picker
 - Google_ml_kit(ver: 0.16.1): https://pub.dev/packages/google_ml_kit
-- AGREGAR LAS QUE HAN SIDO UTILIZADAS POR LOS DEMAS INTEGRANTES
+- flutter_local_notifications (Ver: 15.1.0+1): https://pub.dev/packages/flutter_local_notifications
 
