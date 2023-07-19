@@ -44,6 +44,8 @@ dependencies:
   fluttertoast: ^8.2.2
   firebase_core: ^2.15.0
   firebase_messaging: ^14.6.5
+  flutter_painter: ^1.0.1
+  scribble: ^0.9.1
   
     #universal_io: ^2.2.2
 
