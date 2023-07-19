@@ -43,6 +43,8 @@ class MyDropdown extends StatefulWidget {
 class _MyDropdownState extends State<MyDropdown> {
   List<Nota>? notas = [];
   String cantNotas = '';
+  double? latitud;
+  double? longitud;
 
   Map<String, dynamic> convertStringToMap(String jsonString) {
     print('-----------------------------------------------------------dddddddddddd');
@@ -221,6 +223,8 @@ void handleDelete(Nota nota) {
                                         grupoNota: grupoTomado(widget.grupos, nota.getIdGrupoNota()),
                                         etiqeutasGeneral: widget.etiquetas, //ETIQUETAS GENERALES
                                         etiquetasNota: listaEtiquetasTomadas(widget.etiquetas, nota.getEtiquetas()),
+                                        latitud: nota.existeUbicacion() ? nota.getLatitud() : null,
+                                        longitud: nota.existeUbicacion() ? nota.getLongitud() : null,
                                         onDeletePressed: () {
                                           showDialog(
                                             context: context,

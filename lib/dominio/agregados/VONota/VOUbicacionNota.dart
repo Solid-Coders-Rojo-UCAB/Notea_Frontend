@@ -1,18 +1,18 @@
 class VOUbicacionNota {
-  int latitud;
-  int longitud;
+  double latitud;
+  double longitud;
 
   VOUbicacionNota(this.latitud, this.longitud);
 
-  static VOUbicacionNota crearUbicacionNota(int latitud, int longitud) {
+  static VOUbicacionNota crearUbicacionNota(double latitud, double longitud) {
     return VOUbicacionNota(latitud, longitud);
   }
 
-  int getLatitud() {
+  double getLatitud() {
     return latitud;
   }
 
-  int getLongitud() {
+  double getLongitud() {
     return longitud;
   }
 }

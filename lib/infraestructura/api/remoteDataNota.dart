@@ -176,12 +176,18 @@ class RemoteDataNotaImp implements RemoteDataNota {
       // Utiliza jsonEncode para convertir el mapa a una cadena JSON
       String contenidoJson = jsonEncode(item['contenido']);
 
+      VOUbicacionNota? ubicacion;
+      if (item.containsKey('ubicacion')) {
+        ubicacion = VOUbicacionNota(
+            item['ubicacion']['latitud'], item['ubicacion']['longitud']);
+      }
+
       Nota nota = Nota(
         titulo: VOTituloNota(item['titulo']),
         contenido: VOContenidoNota(contenidoJson),
         fechaCreacion: DateTime.parse(item['fechaCreacion']),
         estado: estado,
-        ubicacion: VOUbicacionNota(1111, 222222),
+        ubicacion: ubicacion,
         id: item['id'],
         idGrupo: VOIdGrupoNota(item['grupo']),
         etiquetas: VOIdEtiquetas(item['etiquetas']),

@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'dart:ffi';
 
 import 'package:flutter/material.dart';
 import 'package:geocoding/geocoding.dart';
@@ -13,7 +14,8 @@ import '../../dominio/agregados/Entidades/userLocation.dart';
 class MapaView extends StatefulWidget {
   double? latitud;
   double? longitud;
-  MapaView({super.key, this.latitud, this.longitud});
+  bool creando;
+  MapaView({super.key, required this.creando, this.latitud, this.longitud});
 
   @override
   State<MapaView> createState() => _MapaViewState();
@@ -22,7 +24,7 @@ class MapaView extends StatefulWidget {
 class _MapaViewState extends State<MapaView> {
   static AudioPlayer player = AudioPlayer();
 
-  static String alarmAudioPath = "birdSoundEdit.mp3";
+  static String alarmAudioPath = "audios/birdSoundEdit.mp3";
 
   LocationServices locationService = LocationServices();
   UserLocation? userLocation;
@@ -49,9 +51,7 @@ class _MapaViewState extends State<MapaView> {
   @override
   void initState() {
     super.initState();
-    if (widget.latitud == null || widget.longitud == null) {
-      widget.latitud = 0;
-      widget.longitud = 0;
+    if (widget.latitud == 0 || widget.longitud == 0) {
       userLocation = UserLocation(0, 0);
       SoloVer = false;
     } else {
@@ -74,10 +74,13 @@ class _MapaViewState extends State<MapaView> {
   Widget build(BuildContext context) {
     return Scaffold(
         appBar: AppBar(
+          automaticallyImplyLeading: false,
           title: const Text(
             "Mapa",
             style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold),
           ),
+          centerTitle: true,
+          backgroundColor: const Color(0xFF21579C),
         ),
         body: Column(
           children: [
@@ -110,7 +113,7 @@ class _MapaViewState extends State<MapaView> {
               Text(
                 "Ubicacion Actual: ${placemark.thoroughfare}, ${placemark.subAdministrativeArea}, ${placemark.locality} ",
                 style:
-                    const TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+                    const TextStyle(fontSize: 20, fontWeight: FontWeight.bold, color: Color(0xFF21579C)),
                 textAlign: TextAlign.center,
               ),
             const SizedBox(
@@ -120,20 +123,36 @@ class _MapaViewState extends State<MapaView> {
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 ElevatedButton(
+
+                    
                     onPressed: () {
                       Navigator.pop(context,
-                          [userLocation!.latitude, userLocation!.longitude]);
+                          [userLocation!.latitude , userLocation!.longitude]);
                     },
-                    child: const Text("Listo")),
+                    style:  ElevatedButton.styleFrom(
+                      backgroundColor: const Color(0xFF21579C),
+                      shape: const RoundedRectangleBorder(
+                        borderRadius: BorderRadius.all(Radius.circular(10)),
+                      ),
+                    ),
+                    child: const Text("Listo")
+                ),
                 const SizedBox(
                   width: 10,
                 ),
-                SoloVer == false
+                (SoloVer == false && widget.creando == true)
                     ? ElevatedButton(
                         onPressed: () {
-                          Navigator.pop(context, [0, 0]);
+                          Navigator.pop(context, [0.0, 0.0]);
                         },
-                        child: const Text("Cancelar"))
+                        style: ElevatedButton.styleFrom(
+                          backgroundColor: const Color(0xFF21579C),
+                          shape: const RoundedRectangleBorder(
+                            borderRadius: BorderRadius.all(Radius.circular(10)),
+                          ),
+                        ),
+                        child: const Text("Cancelar")
+                        )
                     : const SizedBox.shrink(),
               ],
             ),
@@ -142,8 +161,9 @@ class _MapaViewState extends State<MapaView> {
             ),
           ],
         ),
-        floatingActionButton: SoloVer == false
+        floatingActionButton: (SoloVer == false && widget.creando == true)
             ? FloatingActionButton(
+                heroTag: "btnLocation",
                 onPressed: () async {
                   placemark = await _getCurrentLocation();
                   player.play(AssetSource(alarmAudioPath));

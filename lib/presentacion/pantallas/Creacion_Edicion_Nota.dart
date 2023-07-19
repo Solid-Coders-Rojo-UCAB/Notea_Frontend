@@ -2,6 +2,7 @@
 
 import 'dart:convert';
 
+import 'package:geocoding/geocoding.dart';
 import 'package:http/http.dart' as http;
 import 'dart:typed_data';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -20,6 +21,7 @@ import 'package:notea_frontend/presentacion/widgets/ImageBlock.dart';
 import 'package:notea_frontend/presentacion/widgets/TareaBlock.dart';
 import 'package:notea_frontend/presentacion/widgets/TextBlock.dart';
 import '../../dominio/agregados/usuario.dart';
+import 'mapaView.dart';
 
 class AccionesConNota extends StatefulWidget {
   final String accion;
@@ -31,6 +33,8 @@ class AccionesConNota extends StatefulWidget {
   final String? titulo;
   final String? idNota;
   final List<dynamic>? contenidoTotal1;
+  final double? latitud;
+  final double? longitud;
   final Usuario usuario;
 
   const AccionesConNota(
@@ -44,6 +48,8 @@ class AccionesConNota extends StatefulWidget {
       this.grupoNota,
       this.etiquetasNota,
       required this.usuario,
+      this.latitud,
+      this.longitud
       })
       : super(key: key);
 
@@ -63,10 +69,25 @@ class _AccionesConNotaState extends State<AccionesConNota> {
   bool hayGrupo = false;
   bool hayEtiquetas = false;
 
+  List<double> ubicacionList = [0,0];
+  Placemark? placemark = Placemark();
+  String? ciudad;
+
   @override
   void initState() {
     super.initState();
     _tituloController = TextEditingController(text: widget.titulo ?? '');
+
+      ubicacionList = [widget.latitud ?? 0, widget.longitud ?? 0];
+
+    if (ubicacionList[0] != 0 && ubicacionList[1] != 0) {
+    WidgetsBinding.instance.addPostFrameCallback((_) async {
+        placemark = await _loadCurrentLocation();
+        setState(() {
+          ciudad = placemark!.locality;
+        });
+      });
+    }
   }
 
   @override
@@ -78,7 +99,12 @@ class _AccionesConNotaState extends State<AccionesConNota> {
   void pop(context) {
     _tituloController.dispose();
     context.read<NavigationProvider>().toMessagesScreen();
-    
+  }
+
+  Future<Placemark> _loadCurrentLocation() async {
+    print("load current location");
+    return (await placemarkFromCoordinates(
+        ubicacionList[0], ubicacionList[1]))[0]; 
   }
 
   //Traemos de la lista de Text, Image, Tarea ...Block los hijos para tener la informacion que conforma la nota
@@ -199,9 +225,54 @@ class _AccionesConNotaState extends State<AccionesConNota> {
                     ),
                   ),
                 ),
-                const SizedBox(height: 16.0),
+                const SizedBox(height: 12.0),
                 Column(
                   children: [
+                    (ubicacionList[0] != 0 || widget.accion == 'Creando Nota') ?
+                      ElevatedButton(
+                        onPressed: () async {
+                          ubicacionList = await Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                  builder: (context) => MapaView(
+                                        latitud: ubicacionList[0],
+                                        longitud: ubicacionList[1],
+                                        creando: widget.accion == 'Creando Nota' ? true : false,
+                                      )));
+                          if (ubicacionList[0] != 0 && ubicacionList[1] != 0) {
+                          placemark = await _loadCurrentLocation();
+                          ciudad = placemark!.locality;
+                          } else {
+                            ciudad = null;
+                          }
+                          setState(() {
+                            //update UI
+                          });
+                        },
+                        style: ElevatedButton.styleFrom(
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(32.0),
+                          ),
+                          backgroundColor: ciudad != null
+                              ? Color.fromARGB(255, 109, 231, 115)
+                              : const Color(0xFF21579C),
+                        ),
+                        child: SizedBox(
+                          width: ciudad != null
+                              ? ciudad!.length.toDouble() * 11
+                              : 80,
+                          child: Row(
+                            children: [
+                              const Icon(Icons.location_on_sharp),
+                              Padding(
+                                padding: const EdgeInsets.only(left: 8.0),
+                                child: ciudad != null
+                                    ? Text(ciudad!)
+                                    : const Text("Ubicacion"),
+                              ),
+                            ],
+                          ),
+                        )) : const Text(''),
                     Text(
                         'Etiquetas seleccionadas: ${recivedDataEitquetas!.length}'),
                     const SizedBox(height: 8.0),
@@ -283,6 +354,7 @@ class _AccionesConNotaState extends State<AccionesConNota> {
                     child: Align(
                       alignment: Alignment.bottomRight,
                       child: FloatingActionButton(
+                        heroTag: 'btnGuardar',
                         onPressed: () {
                           if (widget.accion == 'Creando Nota') {
                             BlocProvider.of<NotaBloc>(context).add(
@@ -291,6 +363,8 @@ class _AccionesConNotaState extends State<AccionesConNota> {
                                 listInfo: recivedDataList,
                                 grupo: receivedDataGrupo,
                                 etiquetas: recivedDataEitquetas,
+                                latitud: ubicacionList[0],
+                                longitud: ubicacionList[1],
                               ),
                             );
                           } else {

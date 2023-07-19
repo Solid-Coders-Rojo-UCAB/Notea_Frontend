@@ -33,7 +33,10 @@ class RepositorioNotaImpl implements INotaRepository {
     String titulo,
     Map<String, dynamic> listInfoContenido,
     List<String> etiquetas,
-    Grupo grupo) async {
+    Grupo grupo,
+    double? latitud,
+    double? longitud,
+    ) async {
 
       
       final now = DateTime.now();
@@ -41,12 +44,17 @@ class RepositorioNotaImpl implements INotaRepository {
           .format(now); // Formato de fecha 'dd/MM/yyyy'
       // List<File>? listaImagen= await imageToFile(listInfoContenido);
 
+      if (latitud == 0 || longitud == 0) {
+        latitud = null;
+        longitud = null;
+      }
+
       Map<String, dynamic> notaDTO = {
         "titulo": titulo,
         "fechaCreacion": datetimeString.toString(),
         "grupo": grupo.idGrupo,
-        "latitud": '40.0238823', //Colocar aca lo de la ubicacion
-        "longitud": '20.0238823',
+        "latitud": latitud, 
+        "longitud": longitud,
         "etiquetas": etiquetas,
         "contenido": listInfoContenido,
       };

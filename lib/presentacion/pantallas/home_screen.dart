@@ -35,7 +35,6 @@ class _MessagesScreenState extends State<MessagesScreen> {
 
   @override
   void initState() {
-    print('Entrando mi pana ');
 
     super.initState();
     WidgetsBinding.instance.addPostFrameCallback((_) {

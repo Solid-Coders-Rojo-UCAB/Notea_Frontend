@@ -18,6 +18,8 @@ class CartaWidget extends StatelessWidget {
   final List<Etiqueta>? etiquetasNota;
   final String? accion;
   final Usuario usuario;
+  final double? latitud;
+  final double? longitud;
 
   // final  Map<String, dynamic> contenidoTotal1;
   final  List<dynamic> contenidoTotal1;
@@ -42,6 +44,8 @@ class CartaWidget extends StatelessWidget {
     required this.habilitado,
     this.accion,
     required this.usuario,
+    this.latitud,
+    this.longitud,
   });
 
   @override
@@ -71,6 +75,8 @@ class CartaWidget extends StatelessWidget {
                   gruposGeneral: gruposGeneral,
                   grupoNota: grupoNota,
                   usuario: usuario,
+                  latitud: latitud,
+                  longitud: longitud,
                 )),
             );
           }else{

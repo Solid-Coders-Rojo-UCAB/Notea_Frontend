@@ -15,12 +15,16 @@ class CreateNotaEvent extends NotaEvent {
   final List<dynamic> listInfo;
   final dynamic grupo;
   final List<Etiqueta>? etiquetas;
+  final double? latitud;
+  final double? longitud;
   // final List<Grupo>? grupoGeneral;
   CreateNotaEvent({
     required this.tituloNota,
     required this.listInfo,
     required this.grupo,
     required this.etiquetas,
+    this.latitud,
+    this.longitud,
     // required this.grupoGeneral
   });
 }

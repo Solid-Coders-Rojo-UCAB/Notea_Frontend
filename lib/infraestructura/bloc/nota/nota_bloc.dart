@@ -28,6 +28,7 @@ class NotaBloc extends Bloc<NotaEvent, NotaState> {
       emit(const NotaInitialState());
       final repositorio = RepositorioNotaImpl(remoteDataSource: RemoteDataNotaImp(client: http.Client()));
       final notas = await repositorio.buscarNotasGrupos(event.grupos);
+      
       if(notas.isLeft()){             //Ver que les parece esta manera de devolver
        // if (notas.left!.isEmpty){
        //   emit(const CeroNotasFailureState());
@@ -96,7 +97,7 @@ class NotaBloc extends Bloc<NotaEvent, NotaState> {
     on<CreateNotaEvent>((event, emit) async {
       emit(const NotaInitialState());
       final repositorio = RepositorioNotaImpl(remoteDataSource: RemoteDataNotaImp(client: http.Client()));
-      final nota = await repositorio.crearNota(event.tituloNota, await mapContenidoCreando(event.listInfo), etiqeutasListId(event.etiquetas), event.grupo);
+      final nota = await repositorio.crearNota(event.tituloNota, await mapContenidoCreando(event.listInfo), etiqeutasListId(event.etiquetas), event.grupo, event.latitud, event.longitud);
 
       await Future.delayed(const Duration(milliseconds: 300));
       nota!.isLeft()

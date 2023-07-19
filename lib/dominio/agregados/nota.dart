@@ -11,7 +11,7 @@ class Nota {
   late VOTituloNota titulo;
   late VOContenidoNota contenido;     //Se supone que esto es una lista de cosas(CONTENIDOS, IMAGENES, TAREAS)
   late DateTime fechaCreacion;
-  late VOUbicacionNota ubicacion;
+  late VOUbicacionNota? ubicacion;
   late EstadoEnum estado;
   //late List<Tarea> tareas;
   late VOIdGrupoNota idGrupo;
@@ -22,7 +22,7 @@ class Nota {
     required this.contenido,
     required this.fechaCreacion,
     required this.estado,
-    required this.ubicacion,
+    this.ubicacion,
     required this.id,
     /*required this.tareas*/
     required this.idGrupo,
@@ -46,7 +46,7 @@ class Nota {
   }
 
   static Nota crearNota(String titulo, String contenido, DateTime fechaCreacion,
-      EstadoEnum estado, int latitud, int longitud, String id, String idGrupo, List<String> etiquetas) {
+      EstadoEnum estado, double latitud, double longitud, String id, String idGrupo, List<String> etiquetas) {
     return Nota(
       titulo: VOTituloNota.crearTituloNota(titulo),
       contenido: VOContenidoNota.crearContenidoNota(contenido),
@@ -80,19 +80,23 @@ class Nota {
     return estado.name;
   }
 
-  Map<String, int> getUbicacion() {
+  bool existeUbicacion() {
+    return ubicacion != null;
+  }
+
+  Map<String, double> getUbicacion() {
     return {
-      'latitud': ubicacion.getLatitud(),
-      'longitud': ubicacion.getLongitud(),
+      'latitud': ubicacion!.getLatitud(),
+      'longitud': ubicacion!.getLongitud(),
     };
   }
 
-  int getLatitud() {
-    return ubicacion.getLatitud();
+  double getLatitud() {
+    return ubicacion!.getLatitud();
   }
 
-  int getLongitud() {
-    return ubicacion.getLongitud();
+  double getLongitud() {
+    return ubicacion!.getLongitud();
   }
 
   List<dynamic> getEtiquetas(){

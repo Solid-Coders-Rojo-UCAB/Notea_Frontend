@@ -146,11 +146,11 @@ class _MENU_SCREENState extends State<MENU_SCREEN> {
                     );
                   },
                   child: Container(
-                    height: 40,
-                    width: 100,
+                    height: 50,
+                    width: 120,
                     alignment: Alignment.center,
                     padding:
-                        const EdgeInsets.all(8.5), // El padding está aquí ahora
+                        const EdgeInsets.all(4.5), // El padding está aquí ahora
                     decoration: BoxDecoration(
                       border: Border.all(color: Colors.red, width: 2.5),
                       borderRadius: BorderRadius.circular(15),
@@ -159,7 +159,7 @@ class _MENU_SCREENState extends State<MENU_SCREEN> {
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: const [
                         Icon(Icons.logout, color: Colors.red),
-                        SizedBox(width: 7),
+                        SizedBox(width: 1),
                         Text(
                           'Salir',
                           style: TextStyle(color: Colors.white, fontSize: 15),
