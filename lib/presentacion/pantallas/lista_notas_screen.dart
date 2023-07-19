@@ -282,9 +282,13 @@ void handleDelete(Nota nota) {
 List<Etiqueta> listaEtiquetasTomadas(List<Etiqueta>? listaEtiquetasGeneral, List<dynamic> listaEtiquetasId){
   List<Etiqueta> etiquetasCoincidentes = [];
 
-  for (Etiqueta etiqueta in listaEtiquetasGeneral!) {
-    if (listaEtiquetasId.contains(etiqueta.idEtiqueta)) {
-      etiquetasCoincidentes.add(etiqueta);
+  var listaEtiquetasGeneralAux = listaEtiquetasGeneral;
+
+  if (listaEtiquetasGeneralAux != null) {
+    for (Etiqueta etiqueta in listaEtiquetasGeneralAux) {
+      if (listaEtiquetasId.contains(etiqueta.idEtiqueta)) {
+        etiquetasCoincidentes.add(etiqueta);
+      }
     }
   }
   return etiquetasCoincidentes;
