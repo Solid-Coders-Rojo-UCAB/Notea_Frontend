@@ -9,16 +9,14 @@ _Miembros del proyecto_:
 - [José Nuñez](https://github.com/JosMeeh)
 - [Sergio Capon](https://github.com/SerCap98) 
 
+## Instalacion de dependecias de la aplicación
+```bash
+ $ flutter pub get
+```
+## Comando para correr la aplicación en Flutter
+```bash
+$ flutter run 
+```
 
+## Aportes mas significativos de cada integrante:
 
-
-
-## Comando para correr la aplicación Flutter
-
-### `flutter run -d chrome --web-port=9999`
-
-
-
-Por ahora tenemos conflicto con el backend, ya que nest nos bloquea las peticiones que vienen de [http://localhost:$$$$]
-por lo que se hizo una configuración para que las peticiones que entran por el [http://localhost:9999] siempre serán
-permitidas.
