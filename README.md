@@ -2,7 +2,7 @@
 Frontend for an AI integrated Notes App, developed in TypeScript (NestJs).
 
 ## Notea application
-_Miembros del proyecto:
+_Miembros del proyecto_:
 - [Andres Perez](https://github.com/andresperez0401)
 - [Angel Hernandez](https://github.com/Delta27222)
 - [Italo Visconti](https://github.com/italovisconti) 
