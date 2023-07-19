@@ -10,6 +10,8 @@ import 'package:flutter/services.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:notea_frontend/infraestructura/Repositorio/repositorioNotaImpl.dart';
 
+import '../pantallas/sketchScreen.dart';
+
 class ImageBlock extends StatefulWidget {
 
   String? nombre;
@@ -30,6 +32,7 @@ class ImageBlock extends StatefulWidget {
 
 class _ImageBlockState extends State<ImageBlock> {
   final ImagePicker _imagePicker = ImagePicker();
+
   Future<void> _pickImageFromGallery() async {
     final pickedImage = await _imagePicker.pickImage(source: ImageSource.gallery);
     if (pickedImage != null) {
@@ -48,6 +51,37 @@ class _ImageBlockState extends State<ImageBlock> {
       final base64Image = await convertir(File(pickedImage.path));
       widget.controller.setImage(widget.selectedImage, pickedImage.name, base64Image, null);
       widget.controller1.setImage(widget.selectedImage1, pickedImage.name, base64Image, null);
+    }
+  }
+
+  Future<void> _makeSketch() async {
+
+    final pickedImage = await Navigator.push(
+        context,
+        MaterialPageRoute(
+            builder: (context) => const sketchScreen(title: 'Dibuja 😎',)));
+
+    print('pickedImage -> '+ pickedImage);
+
+    if (pickedImage != null) {
+      setState(() {
+          widget.selectedImage = Image.file(
+          File(pickedImage),
+          fit: BoxFit.cover,
+          height: 380,
+        );
+
+        widget.selectedImage1 = Image.network(
+          pickedImage,
+          fit: BoxFit.cover,
+        );
+      });
+    
+      String name = 'sketch' + DateTime.now().toString();
+
+      final base64Image = await convertir(File(pickedImage));
+      widget.controller.setImage(widget.selectedImage, name, base64Image, null);
+      widget.controller1.setImage(widget.selectedImage1, name, base64Image, null);
     }
   }
 
@@ -119,23 +153,46 @@ class _ImageBlockState extends State<ImageBlock> {
         else
           Container(
             margin: const EdgeInsets.all(20),
-            child: ElevatedButton(
-              onPressed: _pickImageFromGallery,
-              style: ElevatedButton.styleFrom(
-                foregroundColor: Colors.white,
-                backgroundColor: Colors.blue,
-                padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(8),
+            child: Column(
+              children: [
+                ElevatedButton(
+                  onPressed: _pickImageFromGallery,
+                  style: ElevatedButton.styleFrom(
+                    foregroundColor: Colors.white,
+                    backgroundColor: Colors.blue,
+                    padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(8),
+                    ),
+                    elevation: 3,
+                  ),
+                  child: const Text(
+                    'Seleccionar imagen',
+                    style: TextStyle(
+                      fontSize: 16,
+                    ),
+                  ),
                 ),
-                elevation: 3,
-              ),
-              child: const Text(
-                'Seleccionar imagen',
-                style: TextStyle(
-                  fontSize: 16,
+                ElevatedButton(
+                  onPressed: _makeSketch,
+                  style: ElevatedButton.styleFrom(
+                    foregroundColor: Colors.white,
+                    backgroundColor: Colors.blue,
+                    padding: const EdgeInsets.symmetric(
+                        horizontal: 20, vertical: 10),
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(8),
+                    ),
+                    elevation: 3,
+                  ),
+                  child: const Text(
+                    'Hacer Sketch',
+                    style: TextStyle(
+                      fontSize: 16,
+                    ),
+                  ),
                 ),
-              ),
+              ],
             ),
           ),
       ],
