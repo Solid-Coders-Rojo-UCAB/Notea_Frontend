@@ -113,6 +113,7 @@ class _AnimatedButtonState extends State<AnimatedButton>
                     style: TextStyle(
                       fontSize: 18.0,
                       fontWeight: FontWeight.bold,
+                      color: Color(0xFF21579C)
                     ),
                     textAlign: TextAlign.center,
                   ),
@@ -149,6 +150,9 @@ class _AnimatedButtonState extends State<AnimatedButton>
                     onPressed: () {
                       Navigator.pop(context, selectedTags);
                     },
+                    style: ElevatedButton.styleFrom(
+                      backgroundColor: const Color(0xFF21579C),
+                    ),
                     child: const Text('Guardar'),
                   ),
                 ],
@@ -188,6 +192,7 @@ class _AnimatedButtonState extends State<AnimatedButton>
                     style: TextStyle(
                       fontSize: 18.0,
                       fontWeight: FontWeight.bold,
+                      color: Color(0xFF21579C)
                     ),
                     textAlign: TextAlign.center,
                   ),
@@ -221,6 +226,9 @@ class _AnimatedButtonState extends State<AnimatedButton>
                         Navigator.pop(context, selectedGrupo);
                       }
                     },
+                    style: ElevatedButton.styleFrom(
+                      backgroundColor: const Color(0xFF21579C),
+                    ),
                     child: const Text('Guardar'),
                   ),
                 ],
@@ -279,6 +287,7 @@ class _AnimatedButtonState extends State<AnimatedButton>
                   ),
                   padding: const EdgeInsets.all(10.0),
                   minimumSize: const Size(120, 60),
+                  backgroundColor: const Color(0xFF21579C),
                 ),
                 child: const Text('Etiquetas'),
               ),
@@ -301,6 +310,7 @@ class _AnimatedButtonState extends State<AnimatedButton>
                   ),
                   padding: const EdgeInsets.all(10.0),
                   minimumSize: const Size(120, 60),
+                  backgroundColor: const Color(0xFF21579C),
                 ),
                 child: const Text('Grupo'),
               ),
@@ -339,7 +349,7 @@ class _AnimatedButtonState extends State<AnimatedButton>
                 // }
               },
               shape: const CircleBorder(),
-              backgroundColor: Colors.blue,
+              backgroundColor: const Color(0xFF21579C),
               foregroundColor: Colors.white,
               elevation: 2.0,
               child: AnimatedIcon(

@@ -36,6 +36,7 @@ class FloatingButtonState extends State<MyFloatingButton> {
             MaterialPageRoute(builder: (context) => AccionesConNota(accion: 'Creando Nota', gruposGeneral: widget.grupos, etiquetasGeneral: widget.etiquetas, usuario: widget.usuario,)),
           );
         },
+        backgroundColor: const Color(0XFFD6A319),
         // child: const Icon(Icons.addchart_sharp),
         child: const Icon(Icons.post_add_rounded),
       ),
