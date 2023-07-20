@@ -3,6 +3,7 @@
 import 'package:flutter/material.dart';
 import 'package:notea_frontend/dominio/agregados/usuario.dart';
 import 'package:notea_frontend/presentacion/pantallas/Suscripcion_screen.dart';
+import 'package:notea_frontend/presentacion/pantallas/navigation_provider.dart';
 import 'dart:convert';
 import 'package:quill_html_editor/quill_html_editor.dart';
 import 'package:html/parser.dart' as htmlParser;

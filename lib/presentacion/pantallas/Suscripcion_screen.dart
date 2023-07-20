@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_zoom_drawer/flutter_zoom_drawer.dart';
+import 'package:notea_frontend/aplicacion/Notifications.dart';
 import 'package:notea_frontend/infraestructura/api/remoteDataUsuario.dart';
 import 'package:http/http.dart' as http;
+import 'package:notea_frontend/presentacion/pantallas/login_screen.dart';
 import '../../infraestructura/Repositorio/repositorioUsuarioImpl.dart';
 
 
@@ -412,7 +414,8 @@ class _DatosPagoState extends State<DatosPago> {
                     );
 
                     widget.mostrarDialogoExitoso();
-                    
+                    mostrarNotificacion("Bienvenido a eden!","Tus notas ahora, alcanzaran los cielos, con el estilo 😘😘");
+                    MaterialPageRoute(builder: (context) => const LoginScreen());
                   },
                   child: const Text('Confirmar'),
                 ),
@@ -447,3 +450,4 @@ class HeaderLabel extends StatelessWidget {
     );
   }
 }
+
