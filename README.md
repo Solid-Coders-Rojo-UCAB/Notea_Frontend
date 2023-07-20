@@ -1,5 +1,5 @@
 # Notea_frontend
-Frontend for an AI integrated Notes App, developed in TypeScript (NestJs).
+Frontend for an AI integrated Notes App, developed in Flutter (Dart).
 
 ## Notea application
 _Miembros del proyecto_:
