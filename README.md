@@ -40,7 +40,11 @@ $ flutter run
 ### _Italo Visconti_
 | Actividades                                                                                                            | Detalles de commit                                               |
 |----------------------------------------------------------------------------------------------------------------------|-------------------------------------------------------|
-| nombre del aporte | link del commit mas importante de ese aporte
+| Voz a Texto | https://github.com/Solid-Coders-Rojo-UCAB/Notea_Frontend/commit/11d52b830e992cf8fb9d1a764840f960752c7252
+| Ubicacion Agregada a la Not + Mapa | https://github.com/Solid-Coders-Rojo-UCAB/Notea_Frontend/commit/0a18b238a9e84deddfb300ef2ee23043eba4e579
+| Pizarra Agregada | https://github.com/Solid-Coders-Rojo-UCAB/Notea_Frontend/commit/bc4ae2d324512a8918b97197f77150a084789be0
+| Logica adaptado a Bloc + Peticion al Back | https://github.com/Solid-Coders-Rojo-UCAB/Notea_Frontend/commit/3915be7a63ea7c80597fd1ffa85d7cd7e42cfa50
+| Registro de Usuario | https://github.com/Solid-Coders-Rojo-UCAB/Notea_Frontend/commit/454fb7551d1a89143e224413a934f5e685266aa1
 
 
 
