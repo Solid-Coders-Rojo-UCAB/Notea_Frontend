@@ -106,16 +106,16 @@ class RemoteDataUsuarioImp implements RemoteDataUsuario {
       final body1 = {
         "fechaFin": fechaFin,
         "idUsuario": IdUsuario,
-        "Tipo": Tipo,
+        "tipo": Tipo,
       };
     } else if ((Tipo == 'PREMIUM' || Tipo == "FREE")) {
       final body1 = {
         "idUsuario": IdUsuario,
-        "Tipo": Tipo,
+        "tipo": Tipo,
       };
     }
     if (await const ConectivityCheck().checkConectivity()) {
-      final response = await client.put(
+      final response = await client.post(
         Uri.parse('${ApiConfig.apiBaseUrl}/suscripcion/cambiarTipo'),
         body: jsonEncode(body1),
         headers: <String, String>{
