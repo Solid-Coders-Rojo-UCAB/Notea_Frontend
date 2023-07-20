@@ -48,7 +48,7 @@ class _SuscripcionState extends State<Suscripcion> {
     return Scaffold(
        appBar: AppBar(
         title: const Text('Suscripcion'),
-        backgroundColor: const Color.fromARGB(255, 23, 100, 202),
+        backgroundColor:  const Color(0XFF21579C),
         leading: IconButton(
           icon: const Icon(Icons.menu),
           onPressed: () {
@@ -107,7 +107,7 @@ class _SuscripcionState extends State<Suscripcion> {
               ElevatedButton(
                 style: ButtonStyle(
                   backgroundColor: MaterialStateProperty.all<Color>(
-                    const Color.fromARGB(255, 20, 100, 165),
+                    const Color(0XFF21579C),
                   ),
                   shape: MaterialStateProperty.all<RoundedRectangleBorder>(
                     RoundedRectangleBorder(
@@ -129,10 +129,15 @@ class _SuscripcionState extends State<Suscripcion> {
                     },
                   );
                 },
-                child: const Text("Suscribirse"),
+                child: Container(
+                  padding: const EdgeInsets.all(6),
+                  child: const Text("Suscribirse",
+                    style: TextStyle(fontSize: 21),
+                  ),
+                ),
               ),
               const SizedBox(
-                width: 5,
+                width: 10,
               ),
 
             ],
@@ -154,13 +159,22 @@ class InfoSuscripciones extends StatelessWidget {
           height: 30,
         ),
         Container(
+          padding: const EdgeInsets.all(6),
           decoration: BoxDecoration(
             color: Colors.blue,
             border: Border.all(
               width: 6,
-              color: const Color.fromARGB(255, 27, 124, 203),
+              color: const Color(0XFF21579C),
             ),
             borderRadius: BorderRadius.circular(20),
+            boxShadow: [
+              BoxShadow(
+                color: const Color(0XFF21579C).withOpacity(0.5),
+                spreadRadius: 5,
+                blurRadius: 7,
+                offset: const Offset(0, 3), // changes position of shadow
+              ),
+            ],
           ),
           child: Column(
             children: const [
@@ -168,7 +182,7 @@ class InfoSuscripciones extends StatelessWidget {
                 'SUSCRIPCION FREEMIUM',
                 style: TextStyle(
                   color: Colors.black87,
-                  fontWeight: FontWeight.bold,
+                  fontWeight: FontWeight.w900,
                   fontSize: 20,
                 ),
               ),
@@ -200,9 +214,10 @@ class InfoSuscripciones extends StatelessWidget {
           ),
         ),
         const SizedBox(
-          height: 10,
+          height: 20,
         ),
         Container(
+          padding: const EdgeInsets.all(6),
           decoration: BoxDecoration(
             color: Colors.amberAccent,
             border: Border.all(
@@ -210,6 +225,14 @@ class InfoSuscripciones extends StatelessWidget {
               color: const Color.fromARGB(255, 212, 178, 53),
             ),
             borderRadius: BorderRadius.circular(20),
+              boxShadow: [
+              BoxShadow(
+                color: Colors.amberAccent.withOpacity(0.5),
+                spreadRadius: 5,
+                blurRadius: 7,
+                offset: const Offset(0, 3), // changes position of shadow
+              ),
+            ],
           ),
           child: Column(
             children: const [
@@ -225,7 +248,7 @@ class InfoSuscripciones extends StatelessWidget {
                 height: 8,
               ),
               Text(
-                "Lleva tus notas al siguiente nivel!\n Con la suscripcion IA podras extraer texto de tus imagenes y usar tu voz para escribir tus notas.\n No esperes mas y mejora tu suscripcion!",
+                "Lleva tus notas al siguiente nivel!\n Con la suscripcion IA podras extraer texto de tus imagenes y\n usar tu voz para escribir tus notas.\n No esperes mas y mejora tu suscripcion!",
                 textAlign: TextAlign.center,
                 style: TextStyle(
                   color: Colors.black87,

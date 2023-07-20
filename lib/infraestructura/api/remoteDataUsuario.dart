@@ -100,20 +100,21 @@ class RemoteDataUsuarioImp implements RemoteDataUsuario {
   @override
   Future<Either<String, Exception>> SuscribeUsuarioApi(
       String IdUsuario, String Tipo, DateTime? fechaFin) async {
-    final body1 = {};
+    var body1 = {};
 
     if (fechaFin != null && (Tipo == 'PREMIUM' || Tipo == "FREE")) {
-      final body1 = {
+       body1 = {
         "fechaFin": fechaFin,
         "idUsuario": IdUsuario,
         "tipo": Tipo,
       };
     } else if ((Tipo == 'PREMIUM' || Tipo == "FREE")) {
-      final body1 = {
+       body1 = {
         "idUsuario": IdUsuario,
         "tipo": Tipo,
       };
     }
+
     if (await const ConectivityCheck().checkConectivity()) {
       final response = await client.post(
         Uri.parse('${ApiConfig.apiBaseUrl}/suscripcion/cambiarTipo'),
