@@ -34,6 +34,7 @@ $ flutter run
 | Contenido de la nota se enviado al API | https://github.com/Solid-Coders-Rojo-UCAB/Notea_Frontend/commit/3cde106ad3b52799e4594a3e8efa73aa66562b8d
 | Guardando imagenes de Xfile a base64  | https://github.com/Solid-Coders-Rojo-UCAB/Notea_Frontend/commit/d3ec5f6e89b9080f810a55d0f9b19a507d880288
 | Edicion de la nota | https://github.com/Solid-Coders-Rojo-UCAB/Notea_Frontend/commit/fca44595d20dce08ae582633588b7fc34c5a3d39
+| SQFLITE - para posble futura persistencia | https://github.com/Solid-Coders-Rojo-UCAB/Notea_Frontend/commit/b596c96de073a1e455d4335060dcba4c14bbafe7
 
 ### _Italo Visconti_
 | Actividades                                                                                                            | Detalles de commit                                               |
@@ -60,9 +61,9 @@ $ flutter run
 | nombre del aporte | link del commit mas importante de ese aporte
 
 ## Librerías utilizadas para la realizacion de este proyecto:
-- Firebase_core (ver: 2.15.0): https://pub.dev/packages/firebase_core
-- Firebase_messaggin(ver: 14.6.5): https://pub.dev/packages/firebase_messaging
-- Image_picket(ver: 1.0.1): https://pub.dev/packages/image_picker
-- Google_ml_kit(ver: 0.16.1): https://pub.dev/packages/google_ml_kit
-- flutter_local_notifications (Ver: 15.1.0+1): https://pub.dev/packages/flutter_local_notifications
+- [Firebase_core (ver: 2.15.0)](https://pub.dev/packages/firebase_core)
+- [Firebase_messaggin(ver: 14.6.5)](https://pub.dev/packages/firebase_messaging)
+- [Image_picket(ver: 1.0.1)](https://pub.dev/packages/image_picker)
+- [Google_ml_kit(ver: 0.16.1)](https://pub.dev/packages/google_ml_kit)
+- [flutter_local_notifications (Ver: 15.1.0+1)](https://pub.dev/packages/flutter_local_notifications)
 
