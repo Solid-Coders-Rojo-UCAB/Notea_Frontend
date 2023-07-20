@@ -78,4 +78,9 @@ $ flutter run
 - [https://pub.dev/packages/uuid](https://pub.dev/packages/uuid)
 - [https://pub.dev/packages/flutter_bloc/versions/8.1.1](https://pub.dev/packages/flutter_bloc/versions/8.1.1)
 - [https://pub.dev/packages/flutter_quill/versions/7.2.0/install](https://pub.dev/packages/flutter_quill/versions/7.2.0/install)
+- - [Scribble (ver: 0.9.1)](https://pub.dev/packages/scribble/example)
+- [Geolocator (ver: 9.0.2)](https://pub.dev/packages/geolocator)
+- [Geocoding (ver: 2.1.0)](https://pub.dev/packages/geocoding)
+- [Google_Maps_Flutter (2.3.0)](https://pub.dev/packages/google_maps_flutter)
+- [Speech_To_Text (ver: 6.1.1)](https://pub.dev/packages/speech_to_text)
 
