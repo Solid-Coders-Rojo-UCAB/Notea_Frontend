@@ -60,9 +60,9 @@ $ flutter run
 | nombre del aporte | link del commit mas importante de ese aporte
 
 ## Librerías utilizadas para la realizacion de este proyecto:
-- Firebase_core (ver: 2.15.0): https://pub.dev/packages/firebase_core
-- Firebase_messaggin(ver: 14.6.5): https://pub.dev/packages/firebase_messaging
-- Image_picket(ver: 1.0.1): https://pub.dev/packages/image_picker
-- Google_ml_kit(ver: 0.16.1): https://pub.dev/packages/google_ml_kit
-- flutter_local_notifications (Ver: 15.1.0+1): https://pub.dev/packages/flutter_local_notifications
+- [Firebase_core (ver: 2.15.0)](https://pub.dev/packages/firebase_core)
+- [Firebase_messaggin(ver: 14.6.5)](https://pub.dev/packages/firebase_messaging)
+- [Image_picket(ver: 1.0.1)](https://pub.dev/packages/image_picker)
+- [Google_ml_kit(ver: 0.16.1)](https://pub.dev/packages/google_ml_kit)
+- [flutter_local_notifications (Ver: 15.1.0+1)](https://pub.dev/packages/flutter_local_notifications)
 
