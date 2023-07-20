@@ -17,13 +17,20 @@ class MENU_SCREEN extends StatefulWidget {
 class _MENU_SCREENState extends State<MENU_SCREEN> {
   int _selectedOption = 0;
 
-  final List<String> _options = ['Inicio','Etiquetas','Grupos','Papelera', 'Cuenta', 'Ajustes'];
+  final List<String> _options = [
+    'Inicio',
+    'Etiquetas',
+    'Grupos',
+    'Papelera',
+    'Cuenta',
+    'Ajustes'
+  ];
   final List<IconData> _icons = [
     Icons.home,
     Icons.auto_fix_high_sharp,
     Icons.all_inbox,
     Icons.delete,
-    Icons.account_circle,
+    Icons.upgrade,
     Icons.settings
   ];
 
@@ -77,7 +84,6 @@ class _MENU_SCREENState extends State<MENU_SCREEN> {
                   ),
                 ),
               ),
-               
             ),
             const SizedBox(height: 10),
             SizedBox(
@@ -101,15 +107,21 @@ class _MENU_SCREENState extends State<MENU_SCREEN> {
                             _selectedOption = index;
                           });
                           if (index == 0) {
-                       context.read<NavigationProvider>().toMessagesScreen();
+                            context
+                                .read<NavigationProvider>()
+                                .toMessagesScreen();
                           }
                           if (index == 3) {
                             List<Grupo>? grupos =
                                 context.read<GrupoBloc>().state.grupos;
                             navigationProvider.toPapelera(grupos!);
                           }
-                            if (index == 1) {
+                          if (index == 1) {
                             navigationProvider.toEtiquetasScreen();
+                          }
+                          if (index == 4) {
+                          
+                            navigationProvider.toSuscripcionScreen();
                           }
                         },
                       ),

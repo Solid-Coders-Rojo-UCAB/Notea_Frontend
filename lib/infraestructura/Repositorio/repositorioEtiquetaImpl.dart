@@ -20,7 +20,6 @@ class RepositorioEtiquetaImpl implements IEtiquetaRepository {
   @override
   Future<Either<int, Exception>> crearEtiqueta(
       Map<String, dynamic> etiquetaDTO) async {
-
     var result = await remoteDataSource.crearEtiquetaApi(etiquetaDTO);
     return result;
   }
@@ -28,6 +27,11 @@ class RepositorioEtiquetaImpl implements IEtiquetaRepository {
   @override
   Future<Either<int, Exception>> deleteEtiqueta(String etiquetaId) async {
     final result = await remoteDataSource.deleteEtiquetaApi(etiquetaId);
+    return result;
+  }
+   @override
+  Future<Either<int, Exception>> patchEtiqueta(Map<String, dynamic> etiquetaDTO) async {
+    final result = await remoteDataSource.patchEtiquetaApi(etiquetaDTO);
     return result;
   }
 }

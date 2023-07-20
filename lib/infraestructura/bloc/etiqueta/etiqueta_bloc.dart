@@ -50,5 +50,20 @@ class EtiquetaBloc extends Bloc<EtiquetaEvent, EtiquetaState> {
         emit(EtiquetaCreateFailureState());
       }
     });
+
+    on<EtiquetaPatchEvent>((event, emit) async {
+      final repositorio = RepositorioEtiquetaImpl(
+          remoteDataSource: RemoteDataEtiquetaImp(client: http.Client()));
+      final resultado = await repositorio.patchEtiqueta({
+        'id': event.id,
+        'nombre': event.nombre,
+        'color': event.color,
+      });
+      if (resultado.isLeft()) {
+        emit(EtiquetaPatchSuccessState());
+      } else {
+        emit(EtiquetaPatchFailureState());
+      }
+    });
   }
 }

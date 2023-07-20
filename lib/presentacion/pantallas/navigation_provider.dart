@@ -6,18 +6,17 @@ import 'package:notea_frontend/presentacion/pantallas/etiquetas_screen.dart';
 import '../../dominio/agregados/grupo.dart';
 import 'papelera_screen.dart';
 import 'home_screen.dart';
+import 'Suscripcion_screen.dart';
 import 'package:notea_frontend/dominio/agregados/usuario.dart';
 
 class NavigationProvider with ChangeNotifier {
   final Usuario usuario;
   Widget _currentScreen;
 
-
-
-  NavigationProvider({required this.usuario}) : _currentScreen = MessagesScreen(usuario: usuario);
+  NavigationProvider({required this.usuario})
+      : _currentScreen = MessagesScreen(usuario: usuario);
 
   Widget get currentScreen => _currentScreen;
-
 
   set currentScreen(Widget screen) {
     _currentScreen = screen;
@@ -28,14 +27,29 @@ class NavigationProvider with ChangeNotifier {
     _currentScreen = MessagesScreen(usuario: usuario);
     notifyListeners();
   }
-  
+
   void toPapelera(List<Grupo> grupos) {
-    _currentScreen = Papelera(grupos: grupos, usuario: usuario, etiquetas: [Etiqueta(idEtiqueta: 'idEtiqueta', nombre: VONombreEtiqueta('Etiqueta'), color: VOColorEtiqueta('AMBER'), idUsuario: '2912iuuui')],);
-    notifyListeners();
-  }
-    void toEtiquetasScreen() {
-    _currentScreen = EtiquetasScreen(usuario:usuario);
+    _currentScreen = Papelera(
+      grupos: grupos,
+      usuario: usuario,
+      etiquetas: [
+        Etiqueta(
+            idEtiqueta: 'idEtiqueta',
+            nombre: VONombreEtiqueta('Etiqueta'),
+            color: VOColorEtiqueta('AMBER'),
+            idUsuario: '2912iuuui')
+      ],
+    );
     notifyListeners();
   }
 
+  void toEtiquetasScreen() {
+    _currentScreen = EtiquetasScreen(usuario: usuario);
+    notifyListeners();
+  }
+
+  void toSuscripcionScreen() {
+    _currentScreen = Suscripcion(idUsuario: usuario.getId());
+    notifyListeners();
+  }
 }
