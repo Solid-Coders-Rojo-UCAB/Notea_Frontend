@@ -59,7 +59,9 @@ $ flutter run
 ### _Sergio Capon_
 | Actividades                                                                                                            | Detalles de commit                                               |
 |----------------------------------------------------------------------------------------------------------------------|-------------------------------------------------------|
-| Agregado nuevo drawer |(https://github.com/Solid-Coders-Rojo-UCAB/Notea_Frontend/commit/0ae2d42d396e7492de3d75855dd6e5f3f28aa591)
+| Agregado nuevo drawer |https://github.com/Solid-Coders-Rojo-UCAB/Notea_Frontend/commit/0ae2d42d396e7492de3d75855dd6e5f3f28aa591
+| Screen grupos |https://github.com/Solid-Coders-Rojo-UCAB/Notea_Frontend/commit/a4f111d236d04d311bf0fcce397fa28959b99efa
+| Finalizada la screen de etiquetas |https://github.com/Solid-Coders-Rojo-UCAB/Notea_Frontend/commit/765ffc7c6fac19a00ed69e3cebfc646b5257c21f
 
 ## Librerías utilizadas para la realizacion de este proyecto:
 - [Firebase_core (ver: 2.15.0)](https://pub.dev/packages/firebase_core)
