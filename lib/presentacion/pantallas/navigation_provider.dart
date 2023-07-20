@@ -48,7 +48,7 @@ class NavigationProvider with ChangeNotifier {
     notifyListeners();
   }
 
-  void toESuscripcionScreen() {
+  void toSuscripcionScreen() {
     _currentScreen = Suscripcion(idUsuario: usuario.getId());
     notifyListeners();
   }

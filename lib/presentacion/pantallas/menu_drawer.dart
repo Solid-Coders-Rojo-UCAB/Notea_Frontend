@@ -121,7 +121,7 @@ class _MENU_SCREENState extends State<MENU_SCREEN> {
                           }
                           if (index == 4) {
                           
-                            navigationProvider.toESuscripcionScreen();
+                            navigationProvider.toSuscripcionScreen();
                           }
                         },
                       ),
