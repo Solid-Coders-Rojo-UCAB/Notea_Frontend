@@ -29,7 +29,7 @@ $ flutter run
 ### _Angel Hernandez_
 | Actividades                                                                                                            | Detalles de commit                                               |
 |----------------------------------------------------------------------------------------------------------------------|-------------------------------------------------------|
-| Agregado el segmento de Bloc de las notas | [link del commit mas importante de ese aporte](https://github.com/Solid-Coders-Rojo-UCAB/Notea_Frontend/commit/6c6d209149d0610d2275a831f9cb9de2a5f41a9c)
+| Agregado el segmento de Bloc de las notas | https://github.com/Solid-Coders-Rojo-UCAB/Notea_Frontend/commit/6c6d209149d0610d2275a831f9cb9de2a5f41a9c
 | Agregando la vista de la lista de Grupos con sus respectivas notas | https://github.com/Solid-Coders-Rojo-UCAB/Notea_Frontend/commit/a053a1c2f4e9dbb2ea9212f151af996dc162d2d7
 | Funcionamiendo de creacion de la nota | https://github.com/Solid-Coders-Rojo-UCAB/Notea_Frontend/commit/454a740b777cd0f0ea10d5be211e4754826c51ef
 | Contenido de la nota se enviado al API | https://github.com/Solid-Coders-Rojo-UCAB/Notea_Frontend/commit/3cde106ad3b52799e4594a3e8efa73aa66562b8d
