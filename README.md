@@ -40,7 +40,11 @@ $ flutter run
 ### _Italo Visconti_
 | Actividades                                                                                                            | Detalles de commit                                               |
 |----------------------------------------------------------------------------------------------------------------------|-------------------------------------------------------|
-| nombre del aporte | link del commit mas importante de ese aporte
+| Voz a Texto | https://github.com/Solid-Coders-Rojo-UCAB/Notea_Frontend/commit/11d52b830e992cf8fb9d1a764840f960752c7252
+| Ubicacion Agregada a la Not + Mapa | https://github.com/Solid-Coders-Rojo-UCAB/Notea_Frontend/commit/0a18b238a9e84deddfb300ef2ee23043eba4e579
+| Pizarra Agregada | https://github.com/Solid-Coders-Rojo-UCAB/Notea_Frontend/commit/bc4ae2d324512a8918b97197f77150a084789be0
+| Logica adaptado a Bloc + Peticion al Back | https://github.com/Solid-Coders-Rojo-UCAB/Notea_Frontend/commit/3915be7a63ea7c80597fd1ffa85d7cd7e42cfa50
+| Registro de Usuario | https://github.com/Solid-Coders-Rojo-UCAB/Notea_Frontend/commit/454fb7551d1a89143e224413a934f5e685266aa1
 
 
 
@@ -59,7 +63,11 @@ $ flutter run
 ### _Sergio Capon_
 | Actividades                                                                                                            | Detalles de commit                                               |
 |----------------------------------------------------------------------------------------------------------------------|-------------------------------------------------------|
-| nombre del aporte | link del commit mas importante de ese aporte
+| Agregado nuevo drawer |https://github.com/Solid-Coders-Rojo-UCAB/Notea_Frontend/commit/0ae2d42d396e7492de3d75855dd6e5f3f28aa591
+| Screen grupos |https://github.com/Solid-Coders-Rojo-UCAB/Notea_Frontend/commit/a4f111d236d04d311bf0fcce397fa28959b99efa
+| Finalizada la screen de etiquetas |https://github.com/Solid-Coders-Rojo-UCAB/Notea_Frontend/commit/765ffc7c6fac19a00ed69e3cebfc646b5257c21f
+| Archivo de cofiguracion |https://github.com/Solid-Coders-Rojo-UCAB/Notea_Frontend/commit/543584b04a10ad5772afaec5676a67e53ea0e895
+| Parche |https://github.com/Solid-Coders-Rojo-UCAB/Notea_Frontend/commit/19a7ad8cff42c326f154c22878b190e2dce11f9c
 
 ## Librerías utilizadas para la realizacion de este proyecto:
 - [Firebase_core (ver: 2.15.0)](https://pub.dev/packages/firebase_core)
