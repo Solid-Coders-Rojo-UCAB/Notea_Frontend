@@ -24,3 +24,23 @@ class EtiquetasSuccessState extends EtiquetaState {
 class EtiquetasFailureState extends EtiquetaState {
   const EtiquetasFailureState() : super(existeEtiqueta: false, etiquetas: null);
 }
+
+class EtiquetaDeleteSuccessState extends EtiquetaState {
+  const EtiquetaDeleteSuccessState() : super(existeEtiqueta: false, etiquetas: null);
+}
+
+class EtiquetaDeleteFailureState extends EtiquetaState {
+  final String message;
+
+  const EtiquetaDeleteFailureState({required this.message}) : super(existeEtiqueta: false, etiquetas: null);
+}
+
+
+class EtiquetaCreateSuccessState extends EtiquetaState {
+
+
+}
+class EtiquetaCreateFailureState extends EtiquetaState {
+
+  
+}

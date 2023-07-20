@@ -8,6 +8,18 @@ class EtiquetaCatchEvent extends EtiquetaEvent {
 
   EtiquetaCatchEvent({required this.idUsuarioDueno});
 }
+class EtiquetaDeleteEvent extends EtiquetaEvent {
+  final String etiquetaId;
+ 
+
+  EtiquetaDeleteEvent({required this.etiquetaId});
+}
+class EtiquetaCreateEvent extends EtiquetaEvent {
+  final String nombre;
+  final String color;
+  final String idUsuarioDueno;
+  EtiquetaCreateEvent({required this.nombre, required this.color, required this.idUsuarioDueno});
+}
 
 class EtiquetaReload extends EtiquetaEvent {
   EtiquetaReload();

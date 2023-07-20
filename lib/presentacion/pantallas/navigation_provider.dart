@@ -34,7 +34,7 @@ class NavigationProvider with ChangeNotifier {
     notifyListeners();
   }
     void toEtiquetasScreen() {
-    _currentScreen = EtiquetasScreen();
+    _currentScreen = EtiquetasScreen(usuario:usuario);
     notifyListeners();
   }
 
