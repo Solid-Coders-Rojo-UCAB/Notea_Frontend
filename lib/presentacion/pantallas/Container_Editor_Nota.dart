@@ -2,6 +2,7 @@
 
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:notea_frontend/dominio/agregados/usuario.dart';
 import 'package:notea_frontend/presentacion/widgets/ImageBlock.dart';
 import 'package:notea_frontend/presentacion/widgets/TareaBlock.dart';
 import 'package:notea_frontend/presentacion/widgets/TextBlock.dart';
@@ -10,14 +11,11 @@ import 'package:notea_frontend/presentacion/widgets/textOptions.dart';
 
 
 class ContainerEditorNota extends StatefulWidget {
-  // final List<dynamic>? contenidoTotal;
-
   final  List<dynamic>? contenidoTotal1;
-  // final  Map<String, dynamic>? contenidoTotal1;
-
+  final Usuario usuario;
   final Function(String, List<dynamic>) onDataReceived;
 
-  const ContainerEditorNota({super.key, required this.onDataReceived, this.contenidoTotal1});
+  const ContainerEditorNota({super.key, required this.onDataReceived, this.contenidoTotal1, required this.usuario});
 
   @override
   _ContainerEditorNotaState createState() => _ContainerEditorNotaState();
@@ -49,7 +47,7 @@ class _ContainerEditorNotaState extends State<ContainerEditorNota> {
         if (item.containsKey('texto')) {
           var cuerpo = item['texto']['cuerpo'];
           _children.add(
-            TextBlocPrueba3(cuerpo: cuerpo, id: id,),           //Aca se agrega el texblock que indica el contenido
+            TextBlocPrueba3(cuerpo: cuerpo, id: id,  usuario: widget.usuario,),           //Aca se agrega el texblock que indica el contenido
           );
         } else if (item.containsKey('imagen')) {
           var imagen = item['imagen'];
@@ -66,11 +64,8 @@ class _ContainerEditorNotaState extends State<ContainerEditorNota> {
 
     }else {
       _children.add(
-        TextBlocPrueba3(),           //Ahora esto maneja lo de los estilos mis oabna 
+        TextBlocPrueba3( usuario: widget.usuario,),           //Ahora esto maneja lo de los estilos mis oabna 
       );
-      // _children.add(
-      //   TareaBlock(),           //Ahora esto maneja lo de los estilos mis oabna 
-      // );
     }
     reload();
     sendDataToWrapperWidget();
@@ -107,11 +102,11 @@ class _ContainerEditorNotaState extends State<ContainerEditorNota> {
         setState(() {
         for (var i = 0; i < _children.length; i++) {
           if (FocusScope.of(context).focusedChild == _children[i].focus) {  //Estas parado en el TextBlock seleccionado
-            _children.insert(i + 1, TextBlocPrueba3());                       //Le insertas a _children un nuevo TextBlock
+            _children.insert(i + 1, TextBlocPrueba3( usuario: widget.usuario,));                       //Le insertas a _children un nuevo TextBlock
             _children[i + 1].focus.requestFocus();                          //y ahora selecciona el focus del nuevo TextBlock
           }
         }
-        _children.insert(_children.length + 1, TextBlocPrueba3());
+        _children.insert(_children.length + 1, TextBlocPrueba3( usuario: widget.usuario,));
       });
       }
     }
@@ -204,7 +199,7 @@ class _ContainerEditorNotaState extends State<ContainerEditorNota> {
                       setState(() {
                         if (value == 'text_block') {
                           _children.add(
-                            TextBlocPrueba3(),           //Ahora esto maneja lo de los estilos mis oabna
+                            TextBlocPrueba3( usuario: widget.usuario,),           //Ahora esto maneja lo de los estilos mis oabna
                           );
                         }else if (value == 'image_block') {
                           _children.add(ImageBlock());

@@ -104,7 +104,7 @@ class _AccionesConNotaState extends State<AccionesConNota> {
   Future<Placemark> _loadCurrentLocation() async {
     print("load current location");
     return (await placemarkFromCoordinates(
-        ubicacionList[0], ubicacionList[1]))[0]; 
+        ubicacionList[0], ubicacionList[1]))[0];
   }
 
   //Traemos de la lista de Text, Image, Tarea ...Block los hijos para tener la informacion que conforma la nota
@@ -222,6 +222,7 @@ class _AccionesConNotaState extends State<AccionesConNota> {
                       child: ContainerEditorNota(
                         onDataReceived: handleDataReceived,
                         contenidoTotal1: widget.contenidoTotal1,
+                        usuario: widget.usuario,
                       ),
                     ),
                   ),

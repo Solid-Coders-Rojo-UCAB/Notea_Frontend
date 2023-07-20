@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_zoom_drawer/flutter_zoom_drawer.dart';
 import 'package:provider/provider.dart';
-import 'navigation_provider.dart'; 
-import 'menu_drawer.dart'; 
+import 'navigation_provider.dart';
+import 'menu_drawer.dart';
 import 'package:notea_frontend/dominio/agregados/usuario.dart';
 
 class HomeScreenWithDrawer extends StatelessWidget {

@@ -1,6 +1,8 @@
 // ignore_for_file: use_key_in_widget_constructors, must_be_immutable
 
 import 'package:flutter/material.dart';
+import 'package:notea_frontend/dominio/agregados/usuario.dart';
+import 'package:notea_frontend/presentacion/pantallas/Suscripcion_screen.dart';
 import 'dart:convert';
 import 'package:quill_html_editor/quill_html_editor.dart';
 import 'package:html/parser.dart' as htmlParser;
@@ -12,7 +14,8 @@ import 'package:notea_frontend/aplicacion/ImagenATexto.dart';
 class TextBlocPrueba3 extends StatefulWidget {
   String? cuerpo;
   String? id;
-  TextBlocPrueba3({Key? key, this.cuerpo, this.id});
+  Usuario usuario;
+  TextBlocPrueba3({Key? key, this.cuerpo, this.id, required this.usuario});
   @override
   State<TextBlocPrueba3> createState() => _TextBlocPrueba3();
   final QuillEditorController _editorKey = QuillEditorController();
@@ -31,38 +34,92 @@ class _TextBlocPrueba3 extends State<TextBlocPrueba3> {
   }
 
   void customAction(String action) {
-    if (action == 'action1') {
-      getEditorValue()!.then((textoNota) {
-        String text = htmlParser.parse(textoNota).documentElement!.text;
-        Navigator.push(
-          context,
-          MaterialPageRoute(
-            builder: (context) => SpeechToTextScreen(textoNota: text),
-          ),
-        ).then((value) {
-          if (value != null) {
-            setState(() {
-              // Lógica para actualizar el estado con el valor devuelto de SpeechToTextScreen
-              widget._editorKey.setText(value);
-            });
-          }
+      if (action == 'action1') {
+        getEditorValue()!.then((textoNota) {
+          String text = htmlParser.parse(textoNota).documentElement!.text;
+          Navigator.push(
+            context,
+            MaterialPageRoute(
+              builder: (context) => SpeechToTextScreen(textoNota: text),
+            ),
+          ).then((value) {
+            if (value != null) {
+              setState(() {
+                // Lógica para actualizar el estado con el valor devuelto de SpeechToTextScreen
+                widget._editorKey.setText(value);
+              });
+            }
+          });
         });
-      });
-    } else if (action == 'action2') {
-      setState(() async {
-        Future<String> future = imagenATexto().EscanearTexto(
-            await ImagePicker().pickImage(source: ImageSource.gallery));
-        String textoEscaneado = await future;
-        widget._editorKey.setText(textoEscaneado);
-      });
-    } else if (action == 'action3') {
-      setState(() async {
-        Future<String> future = imagenATexto().EscanearTexto(
-            await ImagePicker().pickImage(source: ImageSource.camera));
-        String textoEscaneado = await future;
-        widget._editorKey.setText(textoEscaneado);
-      });
-    }
+      } else if (action == 'action2') {
+        setState(() async {
+          Future<String> future = imagenATexto().EscanearTexto(
+              await ImagePicker().pickImage(source: ImageSource.gallery));
+          String textoEscaneado = await future;
+          widget._editorKey.setText(textoEscaneado);
+        });
+      } else if (action == 'action3') {
+        setState(() async {
+          Future<String> future = imagenATexto().EscanearTexto(
+              await ImagePicker().pickImage(source: ImageSource.camera));
+          String textoEscaneado = await future;
+          widget._editorKey.setText(textoEscaneado);
+        });
+      }
+  }
+
+
+  void mostrarAlertDialog(BuildContext context) {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: const Text('Error, usuario no PREMIUM 😯'),
+          content: const Text('No posee las caracteristicas premium, lo inivtamos a suscribirse.'),
+          actions: [
+            TextButton(
+              onPressed: () {
+                // Aquí puedes agregar lógica para la primera acción del botón
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (context) => Suscripcion(idUsuario: widget.usuario.getId())), // Navega a la nueva pantalla
+                );
+              },
+              style: ButtonStyle(
+                backgroundColor: MaterialStateProperty.all<Color>(Colors.blue), // Color de fondo del botón
+                shape: MaterialStateProperty.all<RoundedRectangleBorder>(
+                  RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(8.0), // Radio de borde del botón (ajusta según tu preferencia)
+                  ),
+                ),
+              ),
+              child: const Text(
+                'Ir a Suscirbir',
+                style: TextStyle(color: Colors.white), // Estilo de texto para el botón
+              ),
+            ),
+            TextButton(
+              onPressed: () {
+                // Aquí puedes agregar lógica para la primera acción del botón
+                Navigator.of(context).pop(); // Cierra el modal
+              },
+              style: ButtonStyle(
+                backgroundColor: MaterialStateProperty.all<Color>(Color.fromARGB(255, 243, 33, 33)), // Color de fondo del botón
+                shape: MaterialStateProperty.all<RoundedRectangleBorder>(
+                  RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(8.0), // Radio de borde del botón (ajusta según tu preferencia)
+                  ),
+                ),
+              ),
+              child: const Text(
+                'Cancelar',
+                style: TextStyle(color: Colors.white), // Estilo de texto para el botón
+              ),
+            ),
+          ],
+        );
+      },
+    );
   }
 
   final customToolBarList = [
@@ -99,7 +156,7 @@ class _TextBlocPrueba3 extends State<TextBlocPrueba3> {
                     1, // Establece el ancho al 90% del padre
                 decoration: BoxDecoration(
                   border: Border.all(
-                    color: Color.fromARGB(255, 158, 158, 158),
+                    color: const Color.fromARGB(255, 158, 158, 158),
                     width: 1.0,
                   ),
                   borderRadius: BorderRadius.circular(8.0),
@@ -127,7 +184,13 @@ class _TextBlocPrueba3 extends State<TextBlocPrueba3> {
                               child: Text('Escanear una foto'),
                             ),
                           ],
-                          onSelected: customAction,
+                          onSelected: (value){
+                            if(widget.usuario.isSuscribed()) {
+                              customAction(value);
+                            }else{
+                              mostrarAlertDialog(context);
+                            }
+                          },
                         ),
                         Expanded(
                           child: Padding(
@@ -201,4 +264,5 @@ class _TextBlocPrueba3 extends State<TextBlocPrueba3> {
       ),
     );
   }
+
 }
