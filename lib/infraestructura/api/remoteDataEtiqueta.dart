@@ -16,6 +16,8 @@ abstract class RemoteDataEtiqueta {
   Future<Either<int, Exception>> crearEtiquetaApi(
       Map<String, dynamic> jsonString);
   Future<Either<int, Exception>> deleteEtiquetaApi(String etiquetaId);
+  Future<Either<int, Exception>> patchEtiquetaApi(
+      Map<String, dynamic> jsonString);
 }
 
 class RemoteDataEtiquetaImp implements RemoteDataEtiqueta {
@@ -66,13 +68,37 @@ class RemoteDataEtiquetaImp implements RemoteDataEtiqueta {
   }
 
   @override
-  Future<Either<int, Exception>> deleteEtiquetaApi(String etiquetaId) async {
+  Future<Either<int, Exception>> patchEtiquetaApi(
+      Map<String, dynamic> jsonString) async {
     if (await const ConectivityCheck().checkConectivity()) {
 
+      final response = await client.patch(
+        Uri.parse('${ApiConfig.apiBaseUrl}/etiqueta'),
+        body: jsonEncode(jsonString),
+        headers: <String, String>{
+          'Content-Type': 'application/json; charset=UTF-8',
+        },
+      );
+
+      if (response.statusCode == 200) {
+        return Either.left(response.statusCode);
+      } else {
+        return Either.right(
+            Exception("Error al modificar la etiqueta en el servidor"));
+      }
+    } else {
+      return Either.right(Exception(
+          "No hay conexión a internet")); //guardado en la base de datos local
+    }
+  }
+
+  @override
+  Future<Either<int, Exception>> deleteEtiquetaApi(String etiquetaId) async {
+    if (await const ConectivityCheck().checkConectivity()) {
       final response = await client.delete(
         Uri.parse('${ApiConfig.apiBaseUrl}/etiqueta/$etiquetaId'),
       );
-  
+
       if (response.statusCode == 200) {
         return Either.left(response.statusCode);
       } else {

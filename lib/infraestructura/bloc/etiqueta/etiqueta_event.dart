@@ -21,6 +21,14 @@ class EtiquetaCreateEvent extends EtiquetaEvent {
   EtiquetaCreateEvent({required this.nombre, required this.color, required this.idUsuarioDueno});
 }
 
+class EtiquetaPatchEvent extends EtiquetaEvent {
+  final String id;
+  final String nombre;
+  final String color;
+
+  EtiquetaPatchEvent({required this.id, required this.nombre, required this.color});
+}
+
 class EtiquetaReload extends EtiquetaEvent {
   EtiquetaReload();
 }

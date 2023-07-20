@@ -8,4 +8,6 @@ abstract class IEtiquetaRepository {
   Future<Either<int, Exception>> crearEtiqueta(
       Map<String, dynamic> etiquetaDTO);
   Future<Either<int, Exception>> deleteEtiqueta(String etiquetaId);
+  Future<Either<int, Exception>> patchEtiqueta(
+      Map<String, dynamic> etiquetaDTO);
 }

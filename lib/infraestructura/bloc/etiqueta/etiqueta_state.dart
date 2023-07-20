@@ -27,6 +27,8 @@ class EtiquetasFailureState extends EtiquetaState {
 
 class EtiquetaDeleteSuccessState extends EtiquetaState {
   const EtiquetaDeleteSuccessState() : super(existeEtiqueta: false, etiquetas: null);
+
+ 
 }
 
 class EtiquetaDeleteFailureState extends EtiquetaState {
@@ -37,10 +39,20 @@ class EtiquetaDeleteFailureState extends EtiquetaState {
 
 
 class EtiquetaCreateSuccessState extends EtiquetaState {
+  
 
 
 }
 class EtiquetaCreateFailureState extends EtiquetaState {
+
+  
+}
+class EtiquetaPatchSuccessState extends EtiquetaState {
+ 
+
+
+}
+class EtiquetaPatchFailureState extends EtiquetaState {
 
   
 }

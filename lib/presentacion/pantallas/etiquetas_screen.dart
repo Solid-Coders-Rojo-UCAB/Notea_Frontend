@@ -15,7 +15,8 @@ class EtiquetasScreen extends StatefulWidget {
 }
 
 class _EtiquetasScreenState extends State<EtiquetasScreen> {
-  final TextEditingController _nombreEtiquetaController = TextEditingController();
+  final TextEditingController _nombreEtiquetaController =
+      TextEditingController();
 
   @override
   void initState() {
@@ -70,6 +71,94 @@ class _EtiquetasScreenState extends State<EtiquetasScreen> {
     }
   }
 
+  void _showEditDialog(
+      String etiquetaId, String nombreActual, String colorActual) {
+    Color currentColor = getColor(colorActual);
+    _nombreEtiquetaController.text = nombreActual;
+
+    showDialog(
+      context: context,
+      builder: (context) {
+        return StatefulBuilder(
+          builder: (context, setState) {
+            return Center(
+              child: SingleChildScrollView(
+                child: AlertDialog(
+                  title: const Text('Editar'),
+                  content: Column(
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      TextField(
+                        controller: _nombreEtiquetaController,
+                        decoration: const InputDecoration(
+                            hintText: 'Nombre de la etiqueta'),
+                      ),
+                      const SizedBox(height: 20),
+                      ElevatedButton(
+                        style: ElevatedButton.styleFrom(
+                          backgroundColor: const Color.fromARGB(
+                              255, 23, 100, 202), // background color
+                        ),
+                        onPressed: () {
+                          showDialog(
+                            context: context,
+                            builder: (BuildContext context) {
+                              return AlertDialog(
+                                titlePadding: const EdgeInsets.all(0.0),
+                                contentPadding: const EdgeInsets.all(0.0),
+                                content: SingleChildScrollView(
+                                  child: BlockPicker(
+                                    pickerColor: currentColor,
+                                    onColorChanged: (Color color) {
+                                      setState(() {
+                                        currentColor = color;
+                                      });
+                                    },
+                                  ),
+                                ),
+                              );
+                            },
+                          );
+                        },
+                        child: const Text('Seleccionar color'),
+                      ),
+                      const SizedBox(height: 20),
+                      CircleAvatar(
+                        backgroundColor: currentColor,
+                        radius: 20,
+                      ),
+                    ],
+                  ),
+                  actions: <Widget>[
+                    TextButton(
+                      child: const Text('Cancelar'),
+                      onPressed: () {
+                        Navigator.of(context).pop();
+                      },
+                    ),
+                    TextButton(
+                      child: const Text('Guardar'),
+                      onPressed: () {
+                        context.read<EtiquetaBloc>().add(
+                              EtiquetaPatchEvent(
+                                id: etiquetaId,
+                                nombre: _nombreEtiquetaController.text,
+                                color: convertColorToEnum(currentColor),
+                              ),
+                            );
+                        Navigator.of(context).pop();
+                      },
+                    ),
+                  ],
+                ),
+              ),
+            );
+          },
+        );
+      },
+    );
+  }
+
   void _showAddDialog() {
     Color currentColor = Colors.blue;
     showDialog(
@@ -86,8 +175,8 @@ class _EtiquetasScreenState extends State<EtiquetasScreen> {
                     children: [
                       TextField(
                         controller: _nombreEtiquetaController,
-                        decoration:
-                            const InputDecoration(hintText: 'Nombre de la etiqueta'),
+                        decoration: const InputDecoration(
+                            hintText: 'Nombre de la etiqueta'),
                       ),
                       const SizedBox(height: 20),
                       ElevatedButton(
@@ -168,100 +257,117 @@ class _EtiquetasScreenState extends State<EtiquetasScreen> {
           },
         ),
       ),
-      body: BlocBuilder<EtiquetaBloc, EtiquetaState>(
-        builder: (context, state) {
-          if (state is EtiquetaInitialState) {
-            return const Center(child: CircularProgressIndicator());
-          } else if (state is EtiquetaDeleteSuccessState) {
-            WidgetsBinding.instance.addPostFrameCallback((_) {
-              context
-                  .read<EtiquetaBloc>()
-                  .add(EtiquetaCatchEvent(idUsuarioDueno: widget.usuario.id));
-            });
-            return Container();
-          } else if (state is EtiquetaCreateSuccessState) {
-            WidgetsBinding.instance.addPostFrameCallback((_) {
-              context
-                  .read<EtiquetaBloc>()
-                  .add(EtiquetaCatchEvent(idUsuarioDueno: widget.usuario.id));
-            });
-            return Container();
-          } else if (state is EtiquetasSuccessState) {
-            return Padding(
-              padding: const EdgeInsets.only(bottom: 80),
-              child: ListView.builder(
-                itemCount: state.etiquetas.length,
-                itemBuilder: (context, index) {
-                  final etiqueta = state.etiquetas[index];
-                  return Card(
-                    child: ListTile(
-                      leading: CircleAvatar(
-                        backgroundColor: getColor(etiqueta.getColorEtiqueta()),
-                        radius: 15,
+      body: Padding(
+        padding: const EdgeInsets.only(top: 8.0),
+        child: BlocBuilder<EtiquetaBloc, EtiquetaState>(
+          builder: (context, state) {
+            if (state is EtiquetaInitialState) {
+              return const Center(child: CircularProgressIndicator());
+            } else if (state is EtiquetaDeleteSuccessState) {
+              WidgetsBinding.instance.addPostFrameCallback((_) {
+                context
+                    .read<EtiquetaBloc>()
+                    .add(EtiquetaCatchEvent(idUsuarioDueno: widget.usuario.id));
+              });
+              return Container();
+            } else if (state is EtiquetaPatchSuccessState) {
+              WidgetsBinding.instance.addPostFrameCallback((_) {
+                context
+                    .read<EtiquetaBloc>()
+                    .add(EtiquetaCatchEvent(idUsuarioDueno: widget.usuario.id));
+              });
+              return Container();
+            } else if (state is EtiquetaCreateSuccessState) {
+              WidgetsBinding.instance.addPostFrameCallback((_) {
+                context
+                    .read<EtiquetaBloc>()
+                    .add(EtiquetaCatchEvent(idUsuarioDueno: widget.usuario.id));
+              });
+              return Container();
+            } else if (state is EtiquetasSuccessState) {
+              return Padding(
+                padding: const EdgeInsets.only(bottom: 80),
+                child: ListView.builder(
+                  itemCount: state.etiquetas.length,
+                  itemBuilder: (context, index) {
+                    final etiqueta = state.etiquetas[index];
+                    return Card(
+                      child: ListTile(
+                        leading: CircleAvatar(
+                          backgroundColor: getColor(etiqueta.getColorEtiqueta()),
+                          radius: 15,
+                        ),
+                        title: Text(
+                          etiqueta.getNombreEtiqueta(),
+                          style: const TextStyle(fontSize: 18),
+                        ),
+                        trailing: Row(
+                          mainAxisSize: MainAxisSize.min,
+                          children: <Widget>[
+                            IconButton(
+                              icon: const Icon(Icons.edit),
+                              onPressed: () {
+                                _showEditDialog(
+                                  etiqueta.idEtiqueta,
+                                  etiqueta.getNombreEtiqueta(),
+                                  etiqueta.getColorEtiqueta(),
+                                );
+                              },
+                            ),
+                            IconButton(
+                              icon: const Icon(Icons.delete),
+                              onPressed: () {
+                                showDialog(
+                                  context: context,
+                                  builder: (BuildContext context) {
+                                    return AlertDialog(
+                                      title: const Text('Confirmar eliminación'),
+                                      content: const Text(
+                                          '¿Estás seguro de que quieres eliminar esta etiqueta?'),
+                                      actions: <Widget>[
+                                        TextButton(
+                                          child: const Text('Cancelar'),
+                                          onPressed: () {
+                                            Navigator.of(context).pop();
+                                          },
+                                        ),
+                                        TextButton(
+                                          child: const Text('Eliminar'),
+                                          onPressed: () {
+                                            context.read<EtiquetaBloc>().add(
+                                                  EtiquetaDeleteEvent(
+                                                    etiquetaId:
+                                                        etiqueta.idEtiqueta,
+                                                  ),
+                                                );
+                                            Navigator.of(context).pop();
+                                          },
+                                        ),
+                                      ],
+                                    );
+                                  },
+                                );
+                              },
+                            ),
+                          ],
+                        ),
                       ),
-                      title: Text(
-                        etiqueta.getNombreEtiqueta(),
-                        style: const TextStyle(fontSize: 18),
-                      ),
-                      trailing: Row(
-                        mainAxisSize: MainAxisSize.min,
-                        children: <Widget>[
-                          IconButton(
-                            icon: const Icon(Icons.edit),
-                            onPressed: () {
-                              // Aquí puedes agregar la lógica para editar la etiqueta
-                            },
-                          ),
-                          IconButton(
-                            icon: const Icon(Icons.delete),
-                            onPressed: () {
-                              showDialog(
-                                context: context,
-                                builder: (BuildContext context) {
-                                  return AlertDialog(
-                                    title: const Text('Confirmar eliminación'),
-                                    content: const Text('¿Estás seguro de que quieres eliminar esta etiqueta?'),
-                                    actions: <Widget>[
-                                      TextButton(
-                                        child: const Text('Cancelar'),
-                                        onPressed: () {
-                                          Navigator.of(context).pop();
-                                        },
-                                      ),
-                                      TextButton(
-                                        child: const Text('Eliminar'),
-                                        onPressed: () {
-                                          context.read<EtiquetaBloc>().add(
-                                            EtiquetaDeleteEvent(
-                                              etiquetaId: etiqueta.idEtiqueta,
-                                            ),
-                                          );
-                                          Navigator.of(context).pop();
-                                        },
-                                      ),
-                                    ],
-                                  );
-                                },
-                              );
-                            },
-                          ),
-                        ],
-                      ),
-                    ),
-                  );
-                },
-              ),
-            );
-          } else {
-            return const Center(child: Text('Ocurrió un error'));
-          }
-        },
+                    );
+                  },
+                ),
+              );
+            } else {
+              return const Center(child: Text('Ocurrió un error'));
+            }
+          },
+        ),
       ),
       floatingActionButton: FloatingActionButton(
         backgroundColor: const Color.fromARGB(255, 23, 100, 202),
-        child: const Icon(Icons.add),
         onPressed: _showAddDialog,
+        child: const Icon(Icons.add),
       ),
+      floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
     );
   }
 }
