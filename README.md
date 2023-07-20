@@ -67,4 +67,7 @@ $ flutter run
 - [Image_picket(ver: 1.0.1)](https://pub.dev/packages/image_picker)
 - [Google_ml_kit(ver: 0.16.1)](https://pub.dev/packages/google_ml_kit)
 - [flutter_local_notifications (Ver: 15.1.0+1)](https://pub.dev/packages/flutter_local_notifications)
+- [https://pub.dev/packages/uuid](https://pub.dev/packages/uuid)
+- [https://pub.dev/packages/flutter_bloc/versions/8.1.1](https://pub.dev/packages/flutter_bloc/versions/8.1.1)
+- [https://pub.dev/packages/flutter_quill/versions/7.2.0/install](https://pub.dev/packages/flutter_quill/versions/7.2.0/install)
 
