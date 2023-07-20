@@ -24,6 +24,7 @@ $ flutter run
 |----------------------------------------------------------------------------------------------------------------------|-------------------------------------------------------|
 | Mover Notas a Papelera y creacion pantalla papelera | https://github.com/Solid-Coders-Rojo-UCAB/Notea_Frontend/commit/830af6de755f82d31a1c8dc0f2798ba806757cf4#diff-377e084fd300c1cfa520004b9abfc4a8dc16426d773b68caa733e96180fac611
 | Implementacion de recuperar nota a lista notas y eliminar nota permanentemente en papelera | https://github.com/Solid-Coders-Rojo-UCAB/Notea_Frontend/commit/830af6de755f82d31a1c8dc0f2798ba806757cf4#diff-377e084fd300c1cfa520004b9abfc4a8dc16426d773b68caa733e96180fac611
+|Bloc (eventos y estados) para modificar el estado de la nota | https://github.com/Solid-Coders-Rojo-UCAB/Notea_Frontend/commit/b058f069d33b387c9db994bf3990e50eb51f156c
 
 ### _Angel Hernandez_
 | Actividades                                                                                                            | Detalles de commit                                               |
