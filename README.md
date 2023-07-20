@@ -59,7 +59,7 @@ $ flutter run
 ### _Sergio Capon_
 | Actividades                                                                                                            | Detalles de commit                                               |
 |----------------------------------------------------------------------------------------------------------------------|-------------------------------------------------------|
-| nombre del aporte | link del commit mas importante de ese aporte
+| Agregado nuevo drawer | [link del commit mas importante de ese aporte](https://github.com/Solid-Coders-Rojo-UCAB/Notea_Frontend/commit/0ae2d42d396e7492de3d75855dd6e5f3f28aa591)
 
 ## Librerías utilizadas para la realizacion de este proyecto:
 - [Firebase_core (ver: 2.15.0)](https://pub.dev/packages/firebase_core)
