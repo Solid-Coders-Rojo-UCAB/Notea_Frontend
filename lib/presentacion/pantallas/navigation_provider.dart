@@ -4,6 +4,7 @@ import 'package:notea_frontend/dominio/agregados/VOEtiqueta/nombreEtiqueta.dart'
 import 'package:notea_frontend/dominio/agregados/etiqueta.dart';
 import 'package:notea_frontend/presentacion/pantallas/etiquetas_screen.dart';
 import '../../dominio/agregados/grupo.dart';
+import 'grupo_screen.dart';
 import 'papelera_screen.dart';
 import 'home_screen.dart';
 import 'Suscripcion_screen.dart';
@@ -50,6 +51,11 @@ class NavigationProvider with ChangeNotifier {
 
   void toSuscripcionScreen() {
     _currentScreen = Suscripcion(idUsuario: usuario.getId());
+    notifyListeners();
+  }
+
+    void toGrupoScreen() {
+    _currentScreen = GruposScreen(usuario: usuario);
     notifyListeners();
   }
 }

@@ -15,12 +15,18 @@ class RepositorioGrupoImpl implements IGrupoRepository {
   }
 
   @override
-  Future<Either<int, Exception>> crearGrupo(Grupo grupo) async {
-    Map<String, dynamic> grupoDTO = {
-      "idUsuario": grupo.idUsuario,
-      "nombre": grupo.getNombre(),
-    };
+  Future<Either<int, Exception>> crearGrupo(Map<String, dynamic> grupoDTO) async {
     var result = await remoteDataSource.crearGrupoApi(grupoDTO);
+    return result;
+
+  } @override
+    Future<Either<int, Exception>> patchGrupo(Map<String, dynamic> grupoDTO,String id) async {
+    var result = await remoteDataSource.patchGrupoApi(grupoDTO,id);
+    return result;
+  }
+     @override
+    Future<Either<int, Exception>> deleteGrupo(String id) async {
+    var result = await remoteDataSource.deleteGrupoApi(id);
     return result;
   }
 }

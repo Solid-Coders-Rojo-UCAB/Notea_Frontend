@@ -120,8 +120,10 @@ class _MENU_SCREENState extends State<MENU_SCREEN> {
                             navigationProvider.toEtiquetasScreen();
                           }
                           if (index == 4) {
-                          
                             navigationProvider.toSuscripcionScreen();
+                          }
+                          if (index == 2) {
+                            navigationProvider.toGrupoScreen();
                           }
                         },
                       ),

@@ -24,6 +24,44 @@ class GrupoBloc extends  Bloc<GrupoEvent, GrupoState> {
       await Future.delayed(const Duration(milliseconds: 300));
       grupos.isLeft() ?  emit(GruposSuccessState(grupos: grupos.left!)): emit(const GruposFailureState());  //Se mite el estado de SUCCESS o FAILURE
     });
+
+     on<GrupoCreateEvent>((event, emit) async {
+      final repositorio = RepositorioGrupoImpl(
+          remoteDataSource: RemoteDataGrupoImp(client: http.Client()));
+      final resultado = await repositorio.crearGrupo({
+        'nombre': event.nombre,
+        'idUsuario': event.idUsuario,
+      });
+      if (resultado.isLeft()) {
+        emit(GrupoCreateSuccessState());
+      } else {
+        emit(GrupoCreateFailureState());
+      }
+    });
+    on<GrupoDeleteEvent>((event, emit) async {
+      final repositorio = RepositorioGrupoImpl(
+          remoteDataSource: RemoteDataGrupoImp(client: http.Client()));
+      final resultado = await repositorio.deleteGrupo(event.grupoId);
+      if (resultado.isLeft()) {
+        emit( GrupoDeleteSuccessState());
+      } else {
+        emit(GrupoDeleteFailureState());
+      }
+    });
+       on<GrupoPatchEvent>((event, emit) async {
+      final repositorio = RepositorioGrupoImpl(
+          remoteDataSource: RemoteDataGrupoImp(client: http.Client()));
+      final resultado = await repositorio.patchGrupo({
+        'id': event.id,
+        'nombre': event.nombre,
+        'idUsuario': event.idUsuario
+      },event.id);
+      if (resultado.isLeft()) {
+        emit(GrupoPatchSuccessState());
+      } else {
+        emit(GrupoPatchFailureState());
+      }
+    });
   }
 
 }

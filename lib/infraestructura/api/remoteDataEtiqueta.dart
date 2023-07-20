@@ -46,8 +46,6 @@ class RemoteDataEtiquetaImp implements RemoteDataEtiqueta {
   Future<Either<int, Exception>> crearEtiquetaApi(
       Map<String, dynamic> jsonString) async {
     if (await const ConectivityCheck().checkConectivity()) {
-      print(jsonString);
-      print(jsonEncode(jsonString));
       final response = await client.post(
         Uri.parse('${ApiConfig.apiBaseUrl}/etiqueta'),
         body: jsonEncode(jsonString),
@@ -59,7 +57,7 @@ class RemoteDataEtiquetaImp implements RemoteDataEtiqueta {
         return Either.left(response.statusCode);
       } else {
         return Either.right(
-            Exception("Error al crear el grupo en el servidor"));
+            Exception("Error al crear la etiqueta en el servidor"));
       }
     } else {
       return Either.right(Exception(

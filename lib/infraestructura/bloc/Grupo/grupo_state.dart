@@ -24,3 +24,34 @@ class GruposSuccessState extends GrupoState {
 class GruposFailureState extends GrupoState {
   const GruposFailureState() : super(existeGrupo: false, grupos: null);
 }
+
+class GrupoDeleteSuccessState extends GrupoState {
+ 
+
+ 
+}
+
+class GrupoDeleteFailureState extends GrupoState {
+ 
+
+}
+
+
+class GrupoCreateSuccessState extends GrupoState {
+  
+
+
+}
+class GrupoCreateFailureState extends GrupoState {
+
+  
+}
+class GrupoPatchSuccessState extends GrupoState {
+ 
+
+
+}
+class GrupoPatchFailureState extends GrupoState {
+
+  
+}

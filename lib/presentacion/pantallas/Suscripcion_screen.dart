@@ -47,7 +47,7 @@ class _SuscripcionState extends State<Suscripcion> {
   Widget build(BuildContext context) {
     return Scaffold(
        appBar: AppBar(
-        title: const Text('Suscripcion'),
+        title: const Text('Cuenta'),
         backgroundColor: const Color.fromARGB(255, 23, 100, 202),
         leading: IconButton(
           icon: const Icon(Icons.menu),
