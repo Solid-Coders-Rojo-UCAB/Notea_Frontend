@@ -1,13 +1,15 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_zoom_drawer/flutter_zoom_drawer.dart';
 import 'package:notea_frontend/infraestructura/api/remoteDataUsuario.dart';
 import 'package:http/http.dart' as http;
 import '../../infraestructura/Repositorio/repositorioUsuarioImpl.dart';
-import 'Succes_Screen.dart';
+
 
 class Suscripcion extends StatefulWidget {
   final String idUsuario;
-  const Suscripcion({super.key, required this.idUsuario});
+
+  const Suscripcion({Key? key, required this.idUsuario});
 
   @override
   _SuscripcionState createState() => _SuscripcionState();
@@ -19,17 +21,49 @@ class _SuscripcionState extends State<Suscripcion> {
   final TipoSuscripciones = ['1 mes', '6 meses', '12 meses'];
   final PrecioSuscripciones = ['7 Usd', '36 Usd', ' 50 Usd'];
 
+  void _mostrarDialogoExitoso() {
+    showDialog<void>(
+      context: context,
+      barrierDismissible: false,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: const Text('Suscripción realizada con éxito'),
+          content: const Text('¡Tu suscripción se ha realizado exitosamente!'),
+          actions: <Widget>[
+            TextButton(
+              child: const Text('Aceptar'),
+              onPressed: () {
+                Navigator.of(context).pop();
+                Navigator.pop(context); // Cerrar el menú de pago
+              },
+            ),
+          ],
+        );
+      },
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+       appBar: AppBar(
+        title: const Text('Suscripcion'),
+        backgroundColor: const Color.fromARGB(255, 23, 100, 202),
+        leading: IconButton(
+          icon: const Icon(Icons.menu),
+          onPressed: () {
+            ZoomDrawer.of(context)!.toggle();
+          },
+        ),
+      ),
       backgroundColor: Colors.white,
       body: Column(
         children: [
-          SizedBox(
+          const SizedBox(
             height: 15,
           ),
-          InfoSuscripciones(),
-          SizedBox(
+          const InfoSuscripciones(),
+          const SizedBox(
             height: 20,
           ),
           Text(
@@ -40,7 +74,7 @@ class _SuscripcionState extends State<Suscripcion> {
               fontSize: 15,
             ),
           ),
-          SizedBox(
+          const SizedBox(
             height: 10,
           ),
           Expanded(
@@ -63,7 +97,7 @@ class _SuscripcionState extends State<Suscripcion> {
                 );
               },
               separatorBuilder: (context, index) {
-                return Divider();
+                return const Divider();
               },
             ),
           ),
@@ -71,40 +105,36 @@ class _SuscripcionState extends State<Suscripcion> {
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
               ElevatedButton(
-                  style: ButtonStyle(
-                      backgroundColor: MaterialStateProperty.all<Color>(
-                          Color.fromARGB(255, 20, 100, 165)),
-                      shape: MaterialStateProperty.all<RoundedRectangleBorder>(
-                          RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(18.0),
-                              side: BorderSide(
-                                  color: Color.fromARGB(255, 20, 100, 165))))),
-                  onPressed: () {
-                    showModalBottomSheet(
-                        context: context,
-                        builder: (BuildContext context) {
-                          return DatosPago(
-                            idSuscriptor: widget.idUsuario,
-                          );
-                        });
-                  },
-                  child: const Text("Suscribirse")),
-              SizedBox(
+                style: ButtonStyle(
+                  backgroundColor: MaterialStateProperty.all<Color>(
+                    const Color.fromARGB(255, 20, 100, 165),
+                  ),
+                  shape: MaterialStateProperty.all<RoundedRectangleBorder>(
+                    RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(18.0),
+                      side: const BorderSide(
+                        color: Color.fromARGB(255, 20, 100, 165),
+                      ),
+                    ),
+                  ),
+                ),
+                onPressed: () {
+                  showModalBottomSheet(
+                    context: context,
+                    builder: (BuildContext context) {
+                      return DatosPago(
+                        idSuscriptor: widget.idUsuario,
+                        mostrarDialogoExitoso: _mostrarDialogoExitoso,
+                      );
+                    },
+                  );
+                },
+                child: const Text("Suscribirse"),
+              ),
+              const SizedBox(
                 width: 5,
               ),
-              ElevatedButton(
-                  style: ButtonStyle(
-                      backgroundColor: MaterialStateProperty.all<Color>(
-                          Color.fromARGB(255, 20, 100, 165)),
-                      shape: MaterialStateProperty.all<RoundedRectangleBorder>(
-                          RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(18.0),
-                              side: BorderSide(
-                                  color: Color.fromARGB(255, 20, 100, 165))))),
-                  onPressed: () {
-                    Navigator.pop(context);
-                  },
-                  child: const Text('Regresar'))
+
             ],
           ),
         ],
@@ -114,24 +144,26 @@ class _SuscripcionState extends State<Suscripcion> {
 }
 
 class InfoSuscripciones extends StatelessWidget {
-  const InfoSuscripciones({
-    super.key,
-  });
+  const InfoSuscripciones({Key? key});
 
   @override
   Widget build(BuildContext context) {
     return Column(
       children: [
-        SizedBox(
+        const SizedBox(
           height: 30,
         ),
         Container(
-            decoration: BoxDecoration(
-                color: Colors.blue,
-                border: Border.all(
-                    width: 6, color: Color.fromARGB(255, 27, 124, 203)),
-                borderRadius: BorderRadius.circular(20)),
-            child: Column(children: const [
+          decoration: BoxDecoration(
+            color: Colors.blue,
+            border: Border.all(
+              width: 6,
+              color: const Color.fromARGB(255, 27, 124, 203),
+            ),
+            borderRadius: BorderRadius.circular(20),
+          ),
+          child: Column(
+            children: const [
               Text(
                 'SUSCRIPCION FREEMIUM',
                 style: TextStyle(
@@ -164,63 +196,83 @@ class InfoSuscripciones extends StatelessWidget {
                   fontSize: 10,
                 ),
               ),
-            ])),
-        SizedBox(
+            ],
+          ),
+        ),
+        const SizedBox(
           height: 10,
         ),
         Container(
-            decoration: BoxDecoration(
-                color: Colors.amberAccent,
-                border: Border.all(
-                    width: 6, color: Color.fromARGB(255, 212, 178, 53)),
-                borderRadius: BorderRadius.circular(20)),
-            child: Column(
-              children: const [
-                Text(
-                  'SUSCRIPCIÓN IA',
-                  style: TextStyle(
-                    color: Colors.black87,
-                    fontWeight: FontWeight.bold,
-                    fontSize: 20,
-                  ),
+          decoration: BoxDecoration(
+            color: Colors.amberAccent,
+            border: Border.all(
+              width: 6,
+              color: const Color.fromARGB(255, 212, 178, 53),
+            ),
+            borderRadius: BorderRadius.circular(20),
+          ),
+          child: Column(
+            children: const [
+              Text(
+                'SUSCRIPCIÓN IA',
+                style: TextStyle(
+                  color: Colors.black87,
+                  fontWeight: FontWeight.bold,
+                  fontSize: 20,
                 ),
-                SizedBox(
-                  height: 8,
+              ),
+              SizedBox(
+                height: 8,
+              ),
+              Text(
+                "Lleva tus notas al siguiente nivel!\n Con la suscripcion IA podras extraer texto de tus imagenes y usar tu voz para escribir tus notas.\n No esperes mas y mejora tu suscripcion!",
+                textAlign: TextAlign.center,
+                style: TextStyle(
+                  color: Colors.black87,
+                  fontWeight: FontWeight.bold,
+                  fontSize: 14,
                 ),
-                Text(
-                  "Lleva tus notas al siguiente nivel!\n Con la suscripcion IA podras extraer texto de tus imagenes y usar tu voz para escribir tus notas.\n No esperes mas y mejora tu suscripcion!",
-                  textAlign: TextAlign.center,
-                  style: TextStyle(
-                    color: Colors.black87,
-                    fontWeight: FontWeight.bold,
-                    fontSize: 14,
-                  ),
-                ),
-                SizedBox(
-                  height: 8,
-                ),
-              ],
-            )),
+              ),
+              SizedBox(
+                height: 8,
+              ),
+            ],
+          ),
+        ),
       ],
     );
   }
 }
 
-//WIDGETS CREADOS PARA ESTA VENTANA
-//Meter esto en una archivo a parte de widgets
 class DatosPago extends StatefulWidget {
   final String idSuscriptor;
+  final void Function() mostrarDialogoExitoso;
 
-  const DatosPago({super.key, required this.idSuscriptor});
+  const DatosPago({
+    Key? key,
+    required this.idSuscriptor,
+    required this.mostrarDialogoExitoso,
+  });
+
   @override
   State<DatosPago> createState() => _DatosPagoState();
 }
 
 class _DatosPagoState extends State<DatosPago> {
-  final TextEditingController _NumeroTarjeta = new TextEditingController();
-  final TextEditingController _NombreTarjeta = new TextEditingController();
-  final TextEditingController _CVV = new TextEditingController();
-  final TextEditingController _Fecha = new TextEditingController();
+  final TextEditingController _NumeroTarjeta = TextEditingController();
+  final TextEditingController _NombreTarjeta = TextEditingController();
+  final TextEditingController _CVV = TextEditingController();
+  final TextEditingController _Fecha = TextEditingController();
+
+  @override
+  void dispose() {
+    _NumeroTarjeta.dispose();
+    _NombreTarjeta.dispose();
+    _CVV.dispose();
+    _Fecha.dispose();
+    super.dispose();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -232,13 +284,14 @@ class _DatosPagoState extends State<DatosPago> {
             TextFormField(
               controller: _NombreTarjeta,
               decoration: const InputDecoration(
-                  labelText: 'Nombre de beneficiario',
-                  border: OutlineInputBorder(),
-                  contentPadding: EdgeInsets.all(8)),
+                labelText: 'Nombre de beneficiario',
+                border: OutlineInputBorder(),
+                contentPadding: EdgeInsets.all(8),
+              ),
               maxLines: 1,
               inputFormatters: <TextInputFormatter>[
                 FilteringTextInputFormatter.deny(RegExp('[0-9]')),
-                LengthLimitingTextInputFormatter(20)
+                LengthLimitingTextInputFormatter(20),
               ],
             ),
             const SizedBox(
@@ -247,9 +300,10 @@ class _DatosPagoState extends State<DatosPago> {
             TextFormField(
               controller: _NumeroTarjeta,
               decoration: const InputDecoration(
-                  labelText: "Ingrese numero de tarjeta",
-                  border: OutlineInputBorder(),
-                  contentPadding: EdgeInsets.all(8)),
+                labelText: "Ingrese numero de tarjeta",
+                border: OutlineInputBorder(),
+                contentPadding: EdgeInsets.all(8),
+              ),
               maxLines: 1,
               inputFormatters: <TextInputFormatter>[
                 FilteringTextInputFormatter.digitsOnly,
@@ -266,9 +320,10 @@ class _DatosPagoState extends State<DatosPago> {
                   child: TextFormField(
                     controller: _CVV,
                     decoration: const InputDecoration(
-                        labelText: "CVV",
-                        border: OutlineInputBorder(),
-                        contentPadding: EdgeInsets.all(8)),
+                      labelText: "CVV",
+                      border: OutlineInputBorder(),
+                      contentPadding: EdgeInsets.all(8),
+                    ),
                     maxLines: 1,
                     inputFormatters: <TextInputFormatter>[
                       FilteringTextInputFormatter.digitsOnly,
@@ -284,10 +339,11 @@ class _DatosPagoState extends State<DatosPago> {
                   child: TextFormField(
                     controller: _Fecha,
                     decoration: const InputDecoration(
-                        labelText: "F.Vencimiento",
-                        border: OutlineInputBorder(),
-                        contentPadding: EdgeInsets.all(8),
-                        hintText: 'DD/MM/YYYY'),
+                      labelText: "F.Vencimiento",
+                      border: OutlineInputBorder(),
+                      contentPadding: EdgeInsets.all(8),
+                      hintText: 'DD/MM/YYYY',
+                    ),
                     maxLines: 1,
                     inputFormatters: <TextInputFormatter>[
                       FilteringTextInputFormatter.allow(RegExp("[0-9/]")),
@@ -304,38 +360,39 @@ class _DatosPagoState extends State<DatosPago> {
               mainAxisAlignment: MainAxisAlignment.end,
               children: [
                 ElevatedButton(
-                    style: ButtonStyle(
-                        backgroundColor: MaterialStateProperty.all<Color>(
-                            Color.fromARGB(255, 20, 100, 165)),
-                        shape:
-                            MaterialStateProperty.all<RoundedRectangleBorder>(
-                                RoundedRectangleBorder(
-                                    borderRadius: BorderRadius.circular(18.0),
-                                    side: BorderSide(
-                                        color: Color.fromARGB(
-                                            255, 20, 100, 165))))),
-                    onPressed: () async {
-                      String IdUser = widget.idSuscriptor;
-                      String TipoSus =
-                          "PREMIUM"; // REALIZA OTRA LISTA CON INDEX PARA FREE Y PARA PREMIUM
-                      DateTime? fechaFinal =
-                          null; //OBTENER UNA FECHA DE FINALIZACION (OPCIONAL NO ME VOY A MATAR)
-                      print(IdUser);
-
-                      final repositorio = RepositorioUsuarioImpl(
-                          remoteDataSource:
-                              RemoteDataUsuarioImp(client: http.Client()));
-                      final usuario = await repositorio.suscriptionusuario(
-                          IdUser, TipoSus, fechaFinal);
-                      //BUSCAR AQUI
-
-                      Navigator.of(context).push(
-                        MaterialPageRoute(
-                          builder: (context) => const sucess(),
+                  style: ButtonStyle(
+                    backgroundColor: MaterialStateProperty.all<Color>(
+                      const Color.fromARGB(255, 20, 100, 165),
+                    ),
+                    shape: MaterialStateProperty.all<RoundedRectangleBorder>(
+                      RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(18.0),
+                        side: const BorderSide(
+                          color: Color.fromARGB(255, 20, 100, 165),
                         ),
-                      );
-                    },
-                    child: const Text('Confirmar')),
+                      ),
+                    ),
+                  ),
+                  onPressed: () async {
+                    String IdUser = widget.idSuscriptor;
+                    String TipoSus = "PREMIUM";
+                    DateTime? fechaFinal;
+
+                    final repositorio = RepositorioUsuarioImpl(
+                      remoteDataSource: RemoteDataUsuarioImp(client: http.Client()),
+                    );
+
+                    final usuario = await repositorio.suscriptionusuario(
+                      IdUser,
+                      TipoSus,
+                      fechaFinal,
+                    );
+
+                    widget.mostrarDialogoExitoso();
+                    
+                  },
+                  child: const Text('Confirmar'),
+                ),
               ],
             ),
           ],
@@ -343,20 +400,13 @@ class _DatosPagoState extends State<DatosPago> {
       ),
     );
   }
-
-  @override
-  void dispose() {
-    _NombreTarjeta.dispose();
-    _NumeroTarjeta.dispose();
-    super.dispose();
-  }
 }
 
-//Meter esto en una archivo a parte de widgets
 class HeaderLabel extends StatelessWidget {
   final String headerText;
+
   const HeaderLabel({
-    super.key,
+    Key? key,
     required this.headerText,
   });
 

@@ -9,7 +9,7 @@ class ApiConfig {
       return 'https://noteabackend-production.up.railway.app';
     } else {
       if (Platform.isAndroid) {
-        return 'http://192.168.0.107:3000';
+        return 'http://10.0.2.2:3000';
         //return 'http://192.168.1.2:3000'; //para usar la compu como server
       } else {
         return 'http://localhost:3000'; // fallback para otros sistemas operativos
